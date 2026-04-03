@@ -20,7 +20,7 @@ export default function HomeBanner() {
       </div>
       {/* Content overlay */}
       <div className='relative z-10 h-full flex items-end justify-start text-start mx-5 md:mx-11.5 py-15'>
-        <p className='font-heading text-[40px] md:text-[70px] lg:text-[100px] font-bold w-full text-white'>
+        <p className='font-heading text-[40px] md:text-[70px] lg:text-[120px] font-bold w-full text-white'>
           A better way to feel clean.
         </p>
       </div>

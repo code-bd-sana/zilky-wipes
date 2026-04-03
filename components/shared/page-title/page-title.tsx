@@ -32,7 +32,7 @@ export default function PageTitle({
         {title ? (
           <h2
             className={cn(
-              "font-heading text-5xl text-(--text-primary) font-bold md:text-[50px]",
+              "font-heading text-5xl text-(--text-primary) font-bold md:text-[58px]",
               titleClassName,
             )}>
             {title}
@@ -42,7 +42,7 @@ export default function PageTitle({
         {subtitle ? (
           <p
             className={cn(
-              "font-mono text-xl text-(--text-secondary) md:text-[27px] pt-3",
+              "font-mono text-xl text-(--text-secondary) md:text-[28px] pt-3",
               isCenter ? "mx-auto max-w-full" : "w-full",
               subtitleClassName,
             )}>
