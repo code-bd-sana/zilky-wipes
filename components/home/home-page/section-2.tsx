@@ -1,18 +1,29 @@
 import PageTitle from "@/components/shared/page-title/page-title";
 import { Button } from "@/components/ui/button";
 
-export default function Section1() {
+export default function Section2() {
   return (
-    <section className='mx-5 md:mx-10 lg:mx-20 xl:mx-40 mt-20 md:mt-40'>
+    <section className='mx-5 md:mx-10 lg:mx-20 xl:mx-40 mt-20 md:mt-50'>
       <div className='flex flex-col lg:flex-row justify-between gap-x-10 gap-y-20 items-center'>
+        <div className='w-full max-w-180'>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster='home/banner.png'
+            className='w-full h-auto aspect-37/45 rounded-[40px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
+            <source src='home/section2.mp4' type='video/mp4' />
+            Your browser does not support the video tag.
+          </video>
+        </div>
         <div>
           <PageTitle
-            title='.....Because dry paper was never the answer!'
+            title='Made for real bathrooms. And real bodies.'
             titleClassName='max-w-250!'
             subtitle={[
-              "Water cleans. Dry paper spreads.",
-              "ZilkyWipes leaves you genuinely clean — safely,",
-              "gently, responsibly.",
+              "Everyday moments. Private spaces.",
+              "ZilkyWipes, exactly where it belongs.",
             ]}
             subtitleClassName='mt-8 text-[24px]!'
           />
@@ -24,18 +35,6 @@ export default function Section1() {
               Subscribe & Save
             </Button>
           </div>
-        </div>
-        <div className='w-full max-w-180'>
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster='home/banner.png'
-            className='w-full h-auto aspect-37/45 rounded-[40px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
-            <source src='home/section1.mp4' type='video/mp4' />
-            Your browser does not support the video tag.
-          </video>
         </div>
       </div>
     </section>
