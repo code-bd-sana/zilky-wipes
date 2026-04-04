@@ -1,4 +1,17 @@
-export default function ShopHeader() {
+import {
+  type ShopCategory,
+  shopCategoryFilters,
+} from "@/constants/shop-products";
+
+type ShopHeaderProps = {
+  activeCategory: ShopCategory;
+  onCategoryChange: (category: ShopCategory) => void;
+};
+
+export default function ShopHeader({
+  activeCategory,
+  onCategoryChange,
+}: ShopHeaderProps) {
   return (
     <section className='bg-white'>
       <div className='mx-5 md:mx-11.5 min-h-44 pt-18 pb-5 md:min-h-52 md:pt-20 md:pb-7'>
@@ -10,15 +23,23 @@ export default function ShopHeader() {
             </h1>
 
             <div className='flex flex-wrap items-center gap-2 md:justify-end'>
-              <button className='rounded-full bg-(--text-primary) px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1f3f71]'>
-                Starter Kit
-              </button>
-              <button className='rounded-full border border-(--text-primary)/35 px-4 py-2 text-sm font-medium text-(--text-primary) transition-colors hover:bg-white/80'>
-                Refill
-              </button>
-              <button className='rounded-full border border-(--text-primary)/35 px-4 py-2 text-sm font-medium text-(--text-primary) transition-colors hover:bg-white/80'>
-                Bundles
-              </button>
+              {shopCategoryFilters.map((filter) => {
+                const isActive = activeCategory === filter.value;
+
+                return (
+                  <button
+                    key={filter.value}
+                    type='button'
+                    onClick={() => onCategoryChange(filter.value)}
+                    className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-(--text-primary) text-white"
+                        : "border border-(--text-primary)/35 text-(--text-primary) hover:bg-white/80"
+                    }`}>
+                    {filter.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { Toaster } from "@/components/ui/sonner";
 import { Jost, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -28,7 +29,10 @@ export default function RootLayout({
     <html
       lang='en'
       className={`${jost.variable} ${playfairDisplay.variable} h-full antialiased`}>
-      <body className='min-h-full flex flex-col font-sans'>{children}</body>
+      <body className='min-h-full flex flex-col font-sans'>
+        {children}
+        <Toaster richColors position='top-right' />
+      </body>
     </html>
   );
 }
