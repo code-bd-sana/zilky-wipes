@@ -2,6 +2,7 @@
 
 import ShopHeader from "@/components/home/shop/shop-header";
 import ShopProductsGrid from "@/components/home/shop/shop-products-grid";
+import ShopVideoSection from "@/components/home/shop/shop-video-section";
 import { type ShopCategory, shopProducts } from "@/constants/shop-products";
 import { useMemo, useState } from "react";
 
@@ -22,6 +23,7 @@ export default function Shop() {
         onCategoryChange={setActiveCategory}
       />
       <ShopProductsGrid products={filteredProducts} />
+      <ShopVideoSection />
     </div>
   );
 }
