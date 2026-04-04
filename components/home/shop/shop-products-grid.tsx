@@ -14,7 +14,7 @@ export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
             key={id}
             productId={id}
             {...product}
-            imageLoading={index === 0 ? "eager" : "lazy"}
+            imageLoading={index < 3 ? "eager" : "lazy"}
           />
         ))}
       </div>

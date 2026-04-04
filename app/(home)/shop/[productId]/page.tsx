@@ -1,4 +1,5 @@
-import { shopProducts } from "@/constants/shop-products";
+import ProductDetailsView from "@/components/home/shop/product-details-view";
+import { productDetailsByCategory, shopProducts } from "@/constants/shop-products";
 
 type ProductDetailsPageProps = {
   params: Promise<{ productId: string }>;
@@ -22,10 +23,9 @@ export default async function ProductDetailsPage({
   }
 
   return (
-    <section className='mx-5 pt-30 md:mx-11.5'>
-      <h1 className='font-heading text-4xl text-(--text-primary) md:text-6xl'>
-        {product.name} (ID: {product.id})
-      </h1>
-    </section>
+    <ProductDetailsView
+      product={product}
+      details={productDetailsByCategory[product.category]}
+    />
   );
 }
