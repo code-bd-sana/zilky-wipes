@@ -27,7 +27,7 @@ export default function Navbar() {
           className={`justify-self-start text-3xl font-medium transition-colors ${
             isHome
               ? "text-white/90 hover:text-white"
-              : "text-(--text-primary)/80 hover:text-(--text-primary)"
+              : "text-(--text-primary)"
           }`}>
           Menu
         </button>
@@ -39,13 +39,13 @@ export default function Navbar() {
         ) : null}
 
         {isShop ? (
-          <div className='justify-self-end flex items-center gap-5 text-sm text-(--text-primary)'>
+          <div className='justify-self-end flex items-center gap-5 text-xl text-(--text-primary)'>
             <button
               aria-label='Search'
-              className='inline-flex items-center justify-center text-(--text-primary)/80 transition-colors hover:text-(--text-primary)'>
+              className='inline-flex items-center justify-center text-(--text-primary) transition-colors'>
               <Search className='h-4 w-4' />
             </button>
-            <button className='font-medium text-(--text-primary)/90 transition-colors hover:text-(--text-primary)'>
+            <button className='font-medium text-(--text-primary) transition-colors'>
               Cart (01)
             </button>
           </div>
