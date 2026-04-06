@@ -1,4 +1,4 @@
-// import Footer from "@/components/shared/footer";
+import Footer from "@/components/shared/footer";
 import Navbar from "@/components/shared/navbar";
 
 export default function Layout({
@@ -12,7 +12,7 @@ export default function Layout({
         <Navbar />
       </div>
       <main className='relative z-10'>{children}</main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

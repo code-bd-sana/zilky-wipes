@@ -84,6 +84,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --shop-card-bg: #fbfaf9;
+  --shop-card-hover-bg: #234471;
+  --shop-badge-border: #f2f2f2;
+  --shop-badge-text: #474747;
+  --shop-pagination-text: #979191;
+  --cart-overlay-bg: rgba(0, 0, 0, 0.12);
+  --cart-panel-bg: #1d3a5f;
+  --cart-muted-text: #8da2bf;
 }
 
 @layer base {

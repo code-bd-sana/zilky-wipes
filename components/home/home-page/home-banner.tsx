@@ -16,7 +16,7 @@ export default function HomeBanner() {
         </video>
 
         {/* Dark overlay for text contrast */}
-        <div className='absolute inset-0 bg-black/55 md:bg-black/35' />
+        <div className='absolute inset-0 ' />
       </div>
       {/* Content overlay */}
       <div className='relative z-10 h-full flex items-end justify-start text-start mx-5 md:mx-11.5 py-15'>

@@ -1,6 +1,6 @@
-import PageTitle from "../shared/page-title/page-title";
-import ProductCard from "../shared/product-card/product-card";
+import PageTitle from "@/components/shared/page-title/page-title";
 import { wipesData } from "./wipes-data";
+import ProductCard from "@/components/shared/product-card/product-card";
 
 export default function ShopeWipes() {
   return (
