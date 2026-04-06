@@ -127,7 +127,7 @@ export default function ProductCard({
         </button>
       </div>
 
-      <div className='flex flex-col gap-2 px-4 pb-5 pt-1' onClick={handleOpenDetails}>
+      <div className='flex flex-col gap-2 pb-5 pt-1' onClick={handleOpenDetails}>
         <div>
           <h3 className='text-xl md:text-2xl leading-snug text-(--text-primary)'>
             {name}
@@ -138,7 +138,7 @@ export default function ProductCard({
         </div>
 
         {tags.length > 0 ? (
-          <div className='flex flex-wrap gap-1'>
+          <div className='flex flex-wrap gap-2'>
             {tags.map((tag, index) => (
               <span
                 key={`${tag}-${index}`}

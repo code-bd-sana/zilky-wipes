@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 import { Toaster } from "@/components/ui/sonner";
-import { Jost, Playfair_Display } from "next/font/google";
+import { Jost } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const jost = Jost({
@@ -9,10 +10,10 @@ const jost = Jost({
   subsets: ["latin"],
 });
 
-const playfairDisplay = Playfair_Display({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+const malibu = localFont({
+  src: "../public/font/Malibu/Malibu Sunday Serif.ttf",
+  variable: "--font-malibu",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export default function RootLayout({
   return (
     <html
       lang='en'
-      className={`${jost.variable} ${playfairDisplay.variable} h-full antialiased`}>
+      className={`${jost.variable} ${malibu.variable} h-full antialiased`}>
       <body className='min-h-full flex flex-col font-sans'>
         {children}
         <Toaster richColors position='top-right' />
