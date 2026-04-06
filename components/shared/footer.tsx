@@ -3,6 +3,7 @@
 import type { MouseEvent } from "react";
 import Link from "next/link";
 import PageTitle from "./page-title/page-title";
+import { Button } from "../ui/button";
 
 const pagesLinks = [
   { label: "Home", href: "/" },
@@ -102,16 +103,14 @@ const Footer = () => {
             subtitleClassName='mt-2 px-2 text-[24px]! text-white!'
           />
           <div className='flex flex-row justify-start gap-x-6 mt-8 mb-20'>
-            <button
-              type='button'
+            <Button
               className='bg-white px-6 py-4 text-base md:text-xl rounded-full text-(--text-primary) shadow-sm hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300 cursor-pointer font-semibold'>
               Shop ZilkyWipes
-            </button>
-            <button
-              type='button'
+            </Button>
+            <Button
               className='bg-transparent border-2 border-white text-white px-6 py-4 text-base md:text-xl rounded-full shadow-sm hover:bg-white hover:text-(--text-primary) hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-white/40 transition-all duration-300'>
               Subscribe & Save
-            </button>
+            </Button>
           </div>
         </div>
 
