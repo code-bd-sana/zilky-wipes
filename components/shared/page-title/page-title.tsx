@@ -34,7 +34,7 @@ export default function PageTitle({
         {title || titleContent ? (
           <h2
             className={cn(
-              "font-heading text-5xl text-(--text-primary) font-bold md:text-[58px]",
+              "font-heading text-5xl text-(--text-primary) md:text-[58px]",
               titleClassName,
             )}>
             {titleContent ?? title}

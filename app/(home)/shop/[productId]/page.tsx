@@ -1,4 +1,5 @@
 import ProductDetailsView from "@/components/home/shop/product-details-view";
+import ShopListingSection from "@/components/home/shop/shop-listing-section";
 import { productDetailsByCategory, shopProducts } from "@/constants/shop-products";
 
 type ProductDetailsPageProps = {
@@ -23,9 +24,16 @@ export default async function ProductDetailsPage({
   }
 
   return (
-    <ProductDetailsView
-      product={product}
-      details={productDetailsByCategory[product.category]}
-    />
+    <>
+      <ProductDetailsView
+        product={product}
+        details={productDetailsByCategory[product.category]}
+      />
+      <ShopListingSection
+        titleContent='Related Products'
+        footerImageSrc='/home/shop/shop-details.png'
+        footerImageAlt='Related products footer image'
+      />
+    </>
   );
 }

@@ -49,7 +49,7 @@ export const shopProducts: ShopProduct[] = [
     name: "EcoClean Towels\u2122",
     price: 10.5,
     tags: ["Reusable", "Compostable", "Towel", "Non-toxic", "Biodegradable"],
-    subscribeLabel: "Price: $24.00",
+    subscribeLabel: "Subscribe & Save 15%",
   },
   {
     id: "3",
@@ -79,7 +79,7 @@ export const shopProducts: ShopProduct[] = [
     name: "EcoClean Towels\u2122",
     price: 10.5,
     tags: ["Reusable", "Compostable", "Towel", "Non-toxic", "Biodegradable"],
-    subscribeLabel: "Price: $24.00",
+    subscribeLabel: "Subscribe & Save 15%",
   },
   {
     id: "6",
@@ -109,7 +109,7 @@ export const shopProducts: ShopProduct[] = [
     name: "EcoClean Towels\u2122",
     price: 10.5,
     tags: ["Reusable", "Compostable", "Towel", "Non-toxic", "Biodegradable"],
-    subscribeLabel: "Price: $24.00",
+    subscribeLabel: "Subscribe & Save 15%",
   },
   {
     id: "9",
@@ -145,7 +145,7 @@ export const shopProducts: ShopProduct[] = [
     name: "EcoClean Towels\u2122",
     price: 10.5,
     tags: ["Reusable", "Compostable", "Towel", "Non-toxic", "Biodegradable"],
-    subscribeLabel: "Price: $24.00",
+    subscribeLabel: "Subscribe & Save 15%",
   },
   {
     id: "12",

@@ -16,6 +16,7 @@ export default function ProductDetailsView({
   details,
 }: ProductDetailsViewProps) {
   const [quantity, setQuantity] = useState(1);
+  const totalPrice = product.price * quantity;
   const [openSectionTitle, setOpenSectionTitle] = useState(
     details.sections[0]?.title ?? "",
   );
@@ -34,12 +35,13 @@ export default function ProductDetailsView({
     });
   };
 
+
   return (
     <section
-      className='mx-5 flex min-h-dvh flex-col md:mx-12.5 pb-8'
+        className='mx-5 flex min-h-dvh flex-col md:mx-12.5 pb-6 md:pb-8'
       style={{ paddingTop: "5.5rem" }}>
-      <div className='grid flex-1 grid-cols-1 gap-6 lg:grid-cols-[1fr_1fr]'>
-        <div className='relative min-h-[50vh] bg-(--shop-card-bg) lg:min-h-0 lg:h-full'>
+        <div className='grid flex-1 grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[1fr_1fr]'>
+          <div className='relative min-h-[38vh] sm:min-h-[45vh] bg-(--shop-card-bg) lg:min-h-0 lg:h-full'>
           <Image
             src={product.image}
             alt={product.imageAlt}
@@ -47,21 +49,21 @@ export default function ProductDetailsView({
             quality={100}
             loading='eager'
             sizes='(min-width: 1024px) 50vw, 100vw'
-            className='object-contain p-10 md:p-14'
+              className='object-contain p-6 sm:p-8 md:p-14'
           />
         </div>
 
         <div className='flex h-full flex-col'>
           <div>
-            <h1 className='font-heading text-5xl font-bold leading-none text-(--text-primary) md:text-6xl'>
+              <h1 className='font-heading text-4xl sm:text-5xl font-bold leading-none text-(--text-primary) md:text-6xl'>
               {product.name}
             </h1>
-            <p className='pt-4 text-lg leading-relaxed text-(--text-secondary) md:text-2xl'>
+              <p className='pt-3 md:pt-4 text-base sm:text-lg leading-relaxed text-(--text-secondary) md:text-2xl'>
               {details.headlineDescription}
             </p>
           </div>
 
-          <div className='flex flex-1 items-center py-6'>
+            <div className='flex flex-1 items-center py-4 md:py-6'>
             <div className='w-full '>
               {details.sections.map((section) => {
                 const isOpen = section.title === openSectionTitle;
@@ -71,7 +73,7 @@ export default function ProductDetailsView({
                     <button
                       type='button'
                       onClick={() => setOpenSectionTitle(section.title)}
-                      className='flex w-full items-center justify-between pt-3 pb-4 text-left text-lg text-(--text-primary) md:text-2xl'>
+                        className='flex w-full items-center justify-between pt-3 pb-3 md:pb-4 text-left text-base sm:text-lg text-(--text-primary) md:text-2xl'>
                       <span>{section.title}</span>
                       {isOpen ? (
                         <X className='h-5 w-5' />
@@ -81,7 +83,7 @@ export default function ProductDetailsView({
                     </button>
 
                     {isOpen ? (
-                      <p className='pb-6 leading-relaxed text-(--text-secondary)'>
+                      <p className='pb-4 md:pb-6 text-sm sm:text-base leading-relaxed text-(--text-secondary)'>
                         {section.content}
                       </p>
                     ) : null}
@@ -92,20 +94,20 @@ export default function ProductDetailsView({
           </div>
 
           <div className='space-y-4'>
-            <div className='flex h-14 md:h-18 px-6 py-5 items-center justify-between rounded-full border-2 border-(--text-primary) text-(--text-primary)'>
+              <div className='flex h-12 sm:h-14 md:h-18 px-4 sm:px-5 md:px-6 items-center justify-between rounded-full border-2 border-(--text-primary) text-(--text-primary)'>
               <button
                 type='button'
                 aria-label='Decrease quantity'
                 onClick={handleDecrease}
-                className='text-3xl leading-none'>
+                  className='leading-none'>
                 <Minus className='h-5 w-5' />
               </button>
-              <span className='text-3xl leading-none'>{quantity}</span>
+                <span className='text-2xl sm:text-3xl leading-none'>{quantity}</span>
               <button
                 type='button'
                 aria-label='Increase quantity'
                 onClick={handleIncrease}
-                className='text-3xl leading-none'>
+                  className='leading-none'>
                 <Plus className='h-5 w-5' />
               </button>
             </div>
@@ -113,8 +115,8 @@ export default function ProductDetailsView({
             <button
               type='button'
               onClick={handleAddToCart}
-              className='flex h-14 md:h-18 text-lg md:text-2xl px-6 py-5 w-full items-center justify-between rounded-full bg-(--text-primary) text-white'>
-              <span>${product.price.toFixed(2)}</span>
+                className='flex h-12 sm:h-14 md:h-18 text-base sm:text-lg md:text-2xl px-4 sm:px-5 md:px-6 w-full items-center justify-between rounded-full bg-(--text-primary) text-white'>
+              <span>${totalPrice.toFixed(2)}</span>
               <span className='font-medium'>Add to Cart</span>
             </button>
           </div>
