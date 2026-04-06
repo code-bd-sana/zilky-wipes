@@ -5,7 +5,7 @@ type TitleAlign = "start" | "center";
 export interface PageTitleProps {
   title?: string;
   titleContent?: React.ReactNode;
-  subtitle?: string;
+  subtitle?: string[];
   align?: TitleAlign;
   className?: string;
   titleClassName?: string;
@@ -34,37 +34,26 @@ export default function PageTitle({
         {title || titleContent ? (
           <h2
             className={cn(
-              "font-heading text-4xl md:text-6xl text-(--text-primary) font-bold md:text-[58px]",
+              "font-heading text-5xl text-(--text-primary) font-bold md:text-[58px]",
               titleClassName,
             )}>
             {titleContent ?? title}
           </h2>
         ) : null}
 
-        {subtitle ? (
-          Array.isArray(subtitle) ? (
-            <div
-              className={cn(
-                "font-mono text-lg text-(--text-secondary) md:text-[28px] pt-3",
-                isCenter ? "mx-auto max-w-full" : "w-full",
-                subtitleClassName,
-              )}>
-              {subtitle.map((line, index) => (
-                <p key={index} className='leading-relaxed md:-m-2'>
-                  {line}
-                </p>
-              ))}
-            </div>
-          ) : (
-            <p
-              className={cn(
-                "font-mono text-lg text-(--text-secondary) md:text-[28px] pt-3",
-                isCenter ? "mx-auto max-w-full" : "w-full",
-                subtitleClassName,
-              )}>
-              {subtitle}
-            </p>
-          )
+        {subtitle?.length ? (
+          <div
+            className={cn(
+              "font-mono text-lg text-(--text-secondary) md:text-[28px] pt-3",
+              isCenter ? "mx-auto max-w-full" : "w-full",
+              subtitleClassName,
+            )}>
+            {subtitle.map((line, index) => (
+              <p key={index} className='leading-relaxed md:-m-2'>
+                {line}
+              </p>
+            ))}
+          </div>
         ) : null}
       </div>
     </section>
