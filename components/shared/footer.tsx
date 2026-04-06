@@ -101,15 +101,15 @@ const Footer = () => {
             ]}
             subtitleClassName='mt-2 px-2 text-[24px]! text-white!'
           />
-          <div className='flex flex-col md:flex-row justify-start gap-x-6 mt-8'>
+          <div className='flex flex-col md:flex-row justify-start gap-x-6 mt-8 mb-20'>
             <button
               type='button'
-              className='bg-white px-8 py-6 text-xl rounded-full text-(--text-primary) shadow-sm hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300 cursor-pointer'>
+              className='bg-white px-6 py-4 text-xl rounded-full text-(--text-primary) shadow-sm hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300 cursor-pointer font-semibold'>
               Shop ZilkyWipes
             </button>
             <button
               type='button'
-              className='bg-transparent border-2 border-white text-white px-8 py-6 text-xl rounded-full shadow-sm hover:bg-white hover:text-(--text-primary) hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-white/40 transition-all duration-300'>
+              className='bg-transparent border-2 border-white text-white px-6 py-4 text-xl rounded-full shadow-sm hover:bg-white hover:text-(--text-primary) hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-white/40 transition-all duration-300'>
               Subscribe & Save
             </button>
           </div>
@@ -224,7 +224,7 @@ const Footer = () => {
 
           {/* GET NOTIFIED */}
           <div>
-            <h4 className='text-[32px] font-semibold text-white mb-4'>
+            <h4 className='text-[32px] font-semibold text-white mb-4 font-heading'>
               Get Notified
             </h4>
             <div className='relative max-w-full'>
@@ -243,7 +243,7 @@ const Footer = () => {
         </div>
 
         {/* DIVIDER */}
-        <div className='w-full h-px bg-gray-100 my-10' />
+        <div className='w-full h-px bg-[#FFFFFF7A] my-8 mt-30' />
         {/* BOTTOM */}
         <p className='text-[22px] text-white'>
           ZilkyWipes was created for everyday hygiene, done better. We make
@@ -256,9 +256,9 @@ const Footer = () => {
         </p>
 
         {/* DIVIDER */}
-        <div className='w-full h-px bg-gray-100 my-10' />
+        <div className='w-full h-px bg-[#FFFFFF7A] mt-10' />
 
-        <div className='text-start text-[14px] font-interFont'>
+        <div className='text-start text-[14px] font-interFont mt-4'>
           <p className=' text-white text-base'>
             All rights reserved by: ZilkyWipes© 2025
           </p>
