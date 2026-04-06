@@ -92,6 +92,9 @@
   --cart-overlay-bg: rgba(0, 0, 0, 0.12);
   --cart-panel-bg: #1d3a5f;
   --cart-muted-text: #8da2bf;
+  --checkout-panel-bg: #f8f8f8;
+  --checkout-divider: #e2e2e2;
+  --checkout-muted-text: #8e8e8e;
 }
 
 @layer base {

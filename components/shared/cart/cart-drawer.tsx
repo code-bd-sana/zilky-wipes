@@ -2,6 +2,7 @@
 
 import { ChevronDown, Minus, Plus, TicketPercent } from "lucide-react";
 import { useEffect } from "react";
+import Link from "next/link";
 
 type CartDrawerProps = {
   open: boolean;
@@ -85,12 +86,12 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
         </button>
 
         <div className="mt-auto">
-          <button
-            type="button"
-            className="h-12 sm:h-14 w-full rounded-full bg-white text-base sm:text-lg md:text-xl font-medium text-(--text-primary)"
-          >
+          <Link
+            href='/checkout'
+            onClick={onClose}
+            className='inline-flex h-12 sm:h-14 w-full items-center justify-center rounded-full bg-white text-base sm:text-lg md:text-xl font-medium text-(--text-primary)'>
             Proceed to Checkout
-          </button>
+          </Link>
         </div>
       </aside>
     </div>
