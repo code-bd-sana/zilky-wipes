@@ -71,7 +71,7 @@ export default function CheckoutRightPanel() {
         <input
           type='text'
           placeholder='Discount Code'
-          className='text-base flex-1 rounded-[6px] border border-transparent bg-white p-3 text-(--checkbox-muted-subtext) placeholder:text-(--checkout-muted-text) focus:outline-none focus:ring-1 focus:ring-(--text-primary)'
+          className='text-base flex-1 rounded-[6px] border border-transparent bg-white p-3 text-(--checkbox-muted-text) focus:outline-none focus:ring-1 focus:ring-(--text-primary)'
         />
         <button
           type='button'
