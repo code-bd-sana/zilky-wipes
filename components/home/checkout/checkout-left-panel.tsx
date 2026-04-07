@@ -81,9 +81,9 @@ export default function CheckoutLeftPanel() {
   const billingAddressId = useId();
 
   return (
-    <aside className='mx-auto w-full px-6 py-4 md:px-12.5 md:py-8'>
+    <aside className='mx-auto w-full px-4 py-6 sm:px-6 md:px-8 md:py-8 lg:px-12.5'>
       <form
-        className='space-y-16'
+        className='space-y-10 md:space-y-12 lg:space-y-16'
         autoComplete='on'
         noValidate
         onSubmit={handleSubmit(onSubmit)}>
@@ -357,7 +357,7 @@ export default function CheckoutLeftPanel() {
           </p>
 
           <div className='overflow-hidden rounded-[8px] border border-(--checkout-divider)'>
-            <label className='flex cursor-pointer items-center justify-between border-b border-(--checkout-divider) bg-[#FEF4F4] px-3 py-3'>
+            <label className='flex flex-wrap items-center justify-between gap-2 border-b border-(--checkout-divider) bg-[#FEF4F4] px-3 py-3'>
               <span className='flex items-center gap-2'>
                 <input
                   type='radio'
@@ -370,7 +370,7 @@ export default function CheckoutLeftPanel() {
                 </span>
               </span>
 
-              <span className='flex items-center gap-1'>
+              <span className='ml-auto flex items-center gap-1 sm:ml-0'>
                 <span className='rounded-lg border border-(--checkout-divider) bg-white px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-[#3556a7]'>
                   VISA
                 </span>
@@ -469,7 +469,7 @@ export default function CheckoutLeftPanel() {
 
         <button
           type='submit'
-          className='w-full rounded-full bg-(--text-primary) px-6 py-5 text-2xl text-white transition hover:opacity-95'>
+          className='w-full rounded-full bg-(--text-primary) px-6 py-4 text-xl text-white transition hover:opacity-95 sm:py-5 sm:text-2xl'>
           Pay Now
         </button>
       </form>

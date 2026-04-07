@@ -96,11 +96,11 @@ const Footer = () => {
           <PageTitle
             align='start'
             title='Running out shouldn’t be part of your mental load.'
-            titleClassName='text-white!'
+            titleClassName='text-white! text-2xl MD:TEXT-4XL!'
             subtitle={[
               "With Subscribe & Save, ZilkyWipes arrives on your schedule — monthly or bi-monthly — with preferred pricing.",
             ]}
-            subtitleClassName='mt-2 px-2 text-[24px]! text-white!'
+            subtitleClassName='mt-2 px-2 text-base! md:text-2xl text-white!'
           />
           <div className='flex flex-row justify-start gap-x-6 mt-8 mb-20'>
             <Button
@@ -118,19 +118,19 @@ const Footer = () => {
         <div
           className='
             grid
-            grid-cols-1
+            grid-cols-2
             gap-12
-            sm:grid-cols-2
+            md:grid-cols-3
+            md:gap-20
             lg:grid-cols-5
-            lg:gap-20
           '>
           {/* Pages */}
           <div>
-            <h4 className='text-[32px] font-semibold text-white mb-4 font-heading'>
+            <h4 className='text-3xl font-semibold text-white mb-4 font-heading'>
               Pages
             </h4>
 
-            <ul className='flex flex-col gap-2.5 text-[24px] text-white'>
+            <ul className='flex flex-col gap-2.5 text-xl text-white'>
               {pagesLinks.map((item) => (
                 <li key={item.href} className='-mt-1'>
                   <Link
@@ -145,11 +145,11 @@ const Footer = () => {
 
           {/* Links */}
           <div>
-            <h4 className='text-[32px] font-semibold text-white mb-4 font-heading'>
+            <h4 className='text-3xl font-semibold text-white mb-4 font-heading'>
               Links
             </h4>
 
-            <ul className='flex flex-col gap-2.5 text-[24px] text-white md:max-w-55'>
+            <ul className='flex flex-col gap-2.5 text-xl text-white md:max-w-55'>
               {linkLinks.map((item) => (
                 <li key={item.id} className='-mt-1'>
                   <a
@@ -165,11 +165,11 @@ const Footer = () => {
 
           {/* AFFILIATE */}
           <div>
-            <h4 className='text-[32px] font-semibold text-white mb-4 font-heading'>
+            <h4 className='text-3xl font-semibold text-white mb-4 font-heading'>
               Affiliates
             </h4>
 
-            <ul className='flex flex-col gap-3 text-[24px] text-white'>
+            <ul className='flex flex-col gap-3 text-xl text-white'>
               {affiliateItems.map((item) => {
                 return (
                   <li
@@ -194,11 +194,11 @@ const Footer = () => {
 
           {/* OTHERS */}
           <div>
-            <h4 className='text-[32px] font-semibold text-white mb-4 font-heading'>
+            <h4 className='text-3xl font-semibold text-white mb-4 font-heading'>
               Others
             </h4>
 
-            <ul className='flex flex-col gap-3 text-[24px] text-white'>
+            <ul className='flex flex-col gap-3 text-xl text-white'>
               {otherItems.map((item) => {
                 return (
                   <li
@@ -222,8 +222,8 @@ const Footer = () => {
           </div>
 
           {/* GET NOTIFIED */}
-          <div>
-            <h4 className='text-[32px] font-semibold text-white mb-4 font-heading'>
+          <div className="col-span-2 lg:col-span-1">
+            <h4 className='text-3xl font-semibold text-white mb-4 font-heading'>
               Get Notified
             </h4>
             <div className='relative max-w-full'>
