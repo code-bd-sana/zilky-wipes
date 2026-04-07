@@ -20,9 +20,10 @@ export default function Navbar() {
             : isShop
               ? "bg-transparent"
               : "border-b border-black/10 bg-white/90 backdrop-blur"
-        }`}>
+        }`}
+        style={{ height: "var(--navbar-height)" }}>
         <nav
-          className={`mx-5 md:mx-12.5 grid items-center py-5 md:py-8 ${
+          className={`mx-5 md:mx-12.5 grid h-full items-center ${
             isShop ? "grid-cols-2" : "grid-cols-3"
           } ${
             isHome ? "text-white" : "text-(--text-primary)"

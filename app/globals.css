@@ -115,6 +115,7 @@
   --checkout-divider: #e2e2e2;
   --checkout-muted-text: #474747;
   --checkbox-muted-subtext: #979191;
+  --navbar-height: 6.25rem;
 }
 
 @layer base {
