@@ -10,7 +10,7 @@ export default function CheckoutPage() {
         <div className='bg-white lg:min-h-[calc(100dvh-var(--navbar-height))]'>
           <CheckoutLeftPanel />
         </div>
-        <div className='bg-(--checkout-panel-bg) lg:min-h-[calc(100dvh-var(--navbar-height))]'>
+        <div className='bg-(--checkout-panel-bg) lg:sticky lg:top-(--navbar-height) lg:h-[calc(100dvh-var(--navbar-height))] lg:overflow-y-auto'>
           <CheckoutRightPanel />
         </div>
       </div>

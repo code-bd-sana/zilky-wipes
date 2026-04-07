@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Lock, Package, Search, Store, Truck } from "lucide-react";
+import { ChevronDown, Lock, Search, Store, Truck } from "lucide-react";
 import { useId } from "react";
 import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 

@@ -30,7 +30,7 @@ const checkoutItems: CheckoutItem[] = [
 
 export default function CheckoutRightPanel() {
   return (
-    <aside className='flex flex-col bg-(--checkout-panel-bg) py-8 pl-8 pr-12.5 lg:min-h-[calc(100dvh-var(--navbar-height))]'>
+    <aside className='flex flex-col bg-(--checkout-panel-bg) py-8 pl-8 pr-12.5 lg:h-full'>
       <h2 className='font-heading text-xl text-(--text-primary) md:text-3xl pb-8'>
         Items
       </h2>
