@@ -1,7 +1,8 @@
 "use client";
 
+import CheckoutSuccessModal from "@/components/home/checkout/checkout-success-modal";
 import { ChevronDown, Lock, Search, Store, Truck } from "lucide-react";
-import { useId } from "react";
+import { useId, useState } from "react";
 import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 
 type DeliveryMethod = "ship" | "pickup";
@@ -32,6 +33,7 @@ const inputBaseClass =
   "w-full rounded-[8px] border border-(--checkout-divider) bg-white px-3 py-4 text-base text-(--checkout-muted-text) placeholder:text-(--checkbox-muted-subtext) focus:border-(--text-primary) focus:outline-none";
 
 export default function CheckoutLeftPanel() {
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const { register, control, handleSubmit } = useForm<CheckoutFormValues>({
     mode: "onBlur",
     reValidateMode: "onChange",
@@ -59,7 +61,9 @@ export default function CheckoutLeftPanel() {
   });
   const deliveryMethod = useWatch({ control, name: "deliveryMethod" });
 
-  const onSubmit: SubmitHandler<CheckoutFormValues> = () => {};
+  const onSubmit: SubmitHandler<CheckoutFormValues> = () => {
+    setIsSuccessModalOpen(true);
+  };
 
   const emailId = useId();
   const marketingId = useId();
@@ -473,6 +477,11 @@ export default function CheckoutLeftPanel() {
           Pay Now
         </button>
       </form>
+
+      <CheckoutSuccessModal
+        open={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+      />
     </aside>
   );
 }
