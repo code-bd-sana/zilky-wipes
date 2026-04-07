@@ -4,7 +4,7 @@ import AddressPayment from "@/components/account/profile/address-payment";
 import AdjustSubscription from "@/components/account/profile/adjust-subscription";
 import RecentOrder from "@/components/account/profile/recent-order";
 
-export default function Account() {
+export default function Profile() {
   return (
     <>
       <AccountTitle />
