@@ -1,5 +1,6 @@
 "use client";
 
+import CheckoutReviewModal from "@/components/home/checkout/checkout-review-modal";
 import CheckoutSuccessModal from "@/components/home/checkout/checkout-success-modal";
 import { ChevronDown, Lock, Search, Store, Truck } from "lucide-react";
 import { useId, useState } from "react";
@@ -34,6 +35,7 @@ const inputBaseClass =
 
 export default function CheckoutLeftPanel() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const { register, control, handleSubmit } = useForm<CheckoutFormValues>({
     mode: "onBlur",
     reValidateMode: "onChange",
@@ -62,7 +64,13 @@ export default function CheckoutLeftPanel() {
   const deliveryMethod = useWatch({ control, name: "deliveryMethod" });
 
   const onSubmit: SubmitHandler<CheckoutFormValues> = () => {
+    setIsReviewModalOpen(false);
     setIsSuccessModalOpen(true);
+  };
+
+  const handleOpenReviewModal = () => {
+    setIsSuccessModalOpen(false);
+    setIsReviewModalOpen(true);
   };
 
   const emailId = useId();
@@ -481,6 +489,12 @@ export default function CheckoutLeftPanel() {
       <CheckoutSuccessModal
         open={isSuccessModalOpen}
         onClose={() => setIsSuccessModalOpen(false)}
+        onOpenReview={handleOpenReviewModal}
+      />
+
+      <CheckoutReviewModal
+        open={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
       />
     </aside>
   );

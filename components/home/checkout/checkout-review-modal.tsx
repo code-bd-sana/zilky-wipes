@@ -1,19 +1,18 @@
 "use client";
 
+import { Paperclip } from "lucide-react";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
-type CheckoutSuccessModalProps = {
+type CheckoutReviewModalProps = {
   open: boolean;
   onClose: () => void;
-  onOpenReview: () => void;
 };
 
-export default function CheckoutSuccessModal({
+export default function CheckoutReviewModal({
   open,
   onClose,
-  onOpenReview,
-}: CheckoutSuccessModalProps) {
+}: CheckoutReviewModalProps) {
   useEffect(() => {
     if (!open || typeof document === "undefined") {
       return;
@@ -54,46 +53,57 @@ export default function CheckoutSuccessModal({
       className='fixed inset-0 z-120 flex items-center justify-center bg-black/10 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6'
       role='dialog'
       aria-modal='true'
-      aria-label='Checkout success'
+      aria-label='Checkout review'
       onClick={onClose}>
       <div
-        className='flex h-100 md:h-150 max-h-[calc(100dvh-2rem)] w-full max-w-160 flex-col overflow-y-auto bg-(--text-primary) p-4 sm:p-6'
+        className='flex h-100 md:h-175 max-h-[calc(100dvh-2rem)] w-full max-w-150 flex-col overflow-y-auto bg-(--text-primary) p-4 sm:p-6'
         onClick={(event) => event.stopPropagation()}>
         <div className='flex flex-col gap-4 sm:gap-6'>
           <h2
             className='font-heading leading-none text-white'
             style={{ fontSize: "clamp(2.25rem, 7.5vw, 60px)" }}>
-            You&apos;re all set.
+            How does it feel so far?
           </h2>
 
           <p className='text-white' style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-            Would you consider subscribing to our products? Subscription reduce
-            costs 15% from one time buying.
+            Your experience matters to us.
+            <br />
+            Good or bad - we&apos;re listening.
+            <br />
+            It helps us do better.
           </p>
 
-          <a
-            href='#'
-            className='underline underline-offset-4 text-white'
-            onClick={(event) => event.preventDefault()}
-            style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-            See subscription benifits here {"->"}
-          </a>
+          <label htmlFor='checkout-review' className='sr-only'>
+            Write your experience
+          </label>
+          <textarea
+            id='checkout-review'
+            placeholder='Write your experience'
+            className='min-h-24 w-full rounded-[6px] border border-white/70 bg-transparent p-3 text-white placeholder:text-white/70 focus:outline-none focus:ring-1 focus:ring-white/70'
+          />
 
           <button
             type='button'
-            onClick={onOpenReview}
-            className='underline underline-offset-4 text-left text-white'
-            style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-            Tell us about this product here {"->"}
+            className='inline-flex w-fit items-center gap-2 text-white underline underline-offset-4'
+            style={{ fontSize: "clamp(0.875rem, 2.5vw, 16px)" }}>
+            Upload File, Doc, Image
+            <Paperclip className='h-3.5 w-3.5' />
           </button>
         </div>
 
         <button
           type='button'
           onClick={onClose}
-          className='mt-auto rounded-full bg-white px-6 py-4 text-(--text-primary)'
+          className='mt-auto w-full rounded-full bg-white px-6 py-4 text-(--text-primary)'
           style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-          Track your order
+          Submit Feedback
+        </button>
+
+        <button
+          type='button'
+          className='mt-3 text-center text-white underline underline-offset-4'
+          style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
+          Refer a Friend
         </button>
       </div>
     </div>,
