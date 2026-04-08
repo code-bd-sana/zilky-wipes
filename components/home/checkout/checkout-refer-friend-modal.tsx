@@ -3,17 +3,17 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
-type CheckoutSuccessModalProps = {
+type CheckoutReferFriendModalProps = {
   open: boolean;
   onClose: () => void;
-  onOpenReview: () => void;
 };
 
-export default function CheckoutSuccessModal({
+const referralLink = "https://www.figma.com/design/Imion...";
+
+export default function CheckoutReferFriendModal({
   open,
   onClose,
-  onOpenReview,
-}: CheckoutSuccessModalProps) {
+}: CheckoutReferFriendModalProps) {
   useEffect(() => {
     if (!open || typeof document === "undefined") {
       return;
@@ -45,6 +45,14 @@ export default function CheckoutSuccessModal({
     };
   }, [open, onClose]);
 
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(referralLink);
+    } catch {
+      // Ignore clipboard errors in unsupported contexts.
+    }
+  };
+
   if (!open || typeof document === "undefined") {
     return null;
   }
@@ -54,47 +62,37 @@ export default function CheckoutSuccessModal({
       className='fixed inset-0 z-120 flex items-center justify-center bg-black/10 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6'
       role='dialog'
       aria-modal='true'
-      aria-label='Checkout success'
+      aria-label='Refer a friend'
       onClick={onClose}>
       <div
-        className='flex h-100 md:h-150 max-h-[calc(100dvh-2rem)] w-full max-w-160 flex-col overflow-y-auto bg-(--text-primary) p-4 sm:p-6'
+        className='flex h-100 md:h-150 max-h-[calc(100dvh-2rem)] w-full max-w-150 flex-col bg-(--text-primary) p-4 sm:p-6'
         onClick={(event) => event.stopPropagation()}>
         <div className='flex flex-col gap-4 sm:gap-6'>
           <h2
             className='font-heading leading-none text-white'
             style={{ fontSize: "clamp(2.25rem, 7.5vw, 60px)" }}>
-            You&apos;re all set.
+            Refer a friend
           </h2>
 
           <p className='text-white' style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-            Would you consider subscribing to our products? Subscription reduce
-            costs 15% from one time buying.
+            Invite your friends and let them know about the benifits of using
+            zilkey wipes.
           </p>
-
-          <a
-            href='#'
-            className='underline underline-offset-4 text-white'
-            onClick={(event) => event.preventDefault()}
-            style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-            See subscription benifits here {"->"}
-          </a>
-
-          <button
-            type='button'
-            onClick={onOpenReview}
-            className='underline underline-offset-4 text-left text-white'
-            style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-            Tell us about this product here {"->"}
-          </button>
         </div>
 
-        <button
-          type='button'
-          onClick={onClose}
-          className='mt-auto rounded-full bg-white px-6 py-4 text-(--text-primary)'
-          style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-          Track your order
-        </button>
+        <div className='mt-auto rounded-full bg-white px-4 py-3 sm:px-6 sm:py-4'>
+          <div className='flex items-center justify-between gap-3'>
+            <p className='truncate text-(--text-primary)/70 text-xs sm:text-sm md:text-base'>
+              {referralLink}
+            </p>
+            <button
+              type='button'
+              onClick={handleCopyLink}
+              className='shrink-0 text-(--text-primary) text-sm md:text-2xl'>
+              Copy link
+            </button>
+          </div>
+        </div>
       </div>
     </div>,
     document.body

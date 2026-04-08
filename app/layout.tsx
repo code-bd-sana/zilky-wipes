@@ -25,7 +25,7 @@ export default function RootLayout({
       className={`${jost.variable} h-full antialiased`}>
       <body className='min-h-full flex flex-col font-sans'>
         {children}
-        <Toaster richColors position='top-right' />
+        <Toaster richColors position='bottom-left' />
       </body>
     </html>
   );
