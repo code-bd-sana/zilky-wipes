@@ -1,6 +1,7 @@
 export type ShopProduct = {
   id: string;
   category: ShopCategory;
+  purchaseType?: ShopPurchaseType;
   image: string;
   imageAlt: string;
   name: string;
@@ -10,6 +11,7 @@ export type ShopProduct = {
 };
 
 export type ShopCategory = "starter-kit" | "refill" | "bundles";
+export type ShopPurchaseType = "one-time" | "subscription";
 
 export type ProductDetailSection = {
   title: string;
@@ -28,6 +30,14 @@ export const shopCategoryFilters: Array<{
   { label: "Starter Kit", value: "starter-kit" },
   { label: "Refill", value: "refill" },
   { label: "Bundles", value: "bundles" },
+];
+
+export const shopPurchaseTypeTabs: Array<{
+  label: string;
+  value: ShopPurchaseType;
+}> = [
+  { label: "One Time", value: "one-time" },
+  { label: "Subscription", value: "subscription" },
 ];
 
 export const shopProducts: ShopProduct[] = [
@@ -64,6 +74,7 @@ export const shopProducts: ShopProduct[] = [
   {
     id: "4",
     category: "starter-kit",
+    purchaseType: "subscription",
     image: "/home/wipe.png",
     imageAlt: "ZilkyWipes roll",
     name: "ZilkyWipes\u2122 Roll",
@@ -74,6 +85,7 @@ export const shopProducts: ShopProduct[] = [
   {
     id: "5",
     category: "refill",
+    purchaseType: "subscription",
     image: "/home/wipe.png",
     imageAlt: "EcoClean Towels",
     name: "EcoClean Towels\u2122",
@@ -84,6 +96,7 @@ export const shopProducts: ShopProduct[] = [
   {
     id: "6",
     category: "bundles",
+    purchaseType: "subscription",
     image: "/home/wipe.png",
     imageAlt: "NatureSoft Wipes",
     name: "NatureSoft Wipes\u2122",
@@ -130,6 +143,7 @@ export const shopProducts: ShopProduct[] = [
   {
     id: "10",
     category: "starter-kit",
+    purchaseType: "subscription",
     image: "/home/wipe.png",
     imageAlt: "ZilkyWipes roll",
     name: "ZilkyWipes\u2122 Roll",
@@ -140,6 +154,7 @@ export const shopProducts: ShopProduct[] = [
   {
     id: "11",
     category: "refill",
+    purchaseType: "subscription",
     image: "/home/wipe.png",
     imageAlt: "EcoClean Towels",
     name: "EcoClean Towels\u2122",
@@ -150,6 +165,7 @@ export const shopProducts: ShopProduct[] = [
   {
     id: "12",
     category: "bundles",
+    purchaseType: "subscription",
     image: "/home/wipe.png",
     imageAlt: "NatureSoft Wipes",
     name: "NatureSoft Wipes\u2122",

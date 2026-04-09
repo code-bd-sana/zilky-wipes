@@ -3,7 +3,11 @@
 import ShopHeader from "@/components/home/shop/shop-header";
 import ShopProductsGrid from "@/components/home/shop/shop-products-grid";
 import ShopVideoSection from "@/components/home/shop/shop-video-section";
-import { type ShopCategory, shopProducts } from "@/constants/shop-products";
+import {
+  type ShopCategory,
+  type ShopPurchaseType,
+  shopProducts,
+} from "@/constants/shop-products";
 import { useMemo, useState } from "react";
 
 type ShopListingSectionProps = {
@@ -17,18 +21,28 @@ export default function ShopListingSection({
   footerImageSrc,
   footerImageAlt,
 }: ShopListingSectionProps) {
+  const [activePurchaseType, setActivePurchaseType] = useState<ShopPurchaseType>(
+    "one-time",
+  );
   const [activeCategory, setActiveCategory] = useState<ShopCategory>(
     "starter-kit",
   );
 
   const filteredProducts = useMemo(
-    () => shopProducts.filter((product) => product.category === activeCategory),
-    [activeCategory],
+    () =>
+      shopProducts.filter(
+        (product) =>
+          (product.purchaseType ?? "one-time") === activePurchaseType &&
+          product.category === activeCategory,
+      ),
+    [activeCategory, activePurchaseType],
   );
 
   return (
     <>
       <ShopHeader
+        activePurchaseType={activePurchaseType}
+        onPurchaseTypeChange={setActivePurchaseType}
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
         titleContent={titleContent}

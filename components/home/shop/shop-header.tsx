@@ -1,16 +1,22 @@
 import {
   type ShopCategory,
+  type ShopPurchaseType,
   shopCategoryFilters,
+  shopPurchaseTypeTabs,
 } from "@/constants/shop-products";
 import PageTitle from "@/components/shared/page-title/page-title";
 
 type ShopHeaderProps = {
+  activePurchaseType: ShopPurchaseType;
+  onPurchaseTypeChange: (purchaseType: ShopPurchaseType) => void;
   activeCategory: ShopCategory;
   onCategoryChange: (category: ShopCategory) => void;
   titleContent?: React.ReactNode;
 };
 
 export default function ShopHeader({
+  activePurchaseType,
+  onPurchaseTypeChange,
   activeCategory,
   onCategoryChange,
   titleContent,
@@ -26,8 +32,28 @@ export default function ShopHeader({
               titleContent={
                 titleContent ?? (
                   <>
-                    One Time <span className='px-1 text-[#9aa6b8]'>/</span>
-                    <span className='text-[#8291a8]'> Subscription</span>
+                    {shopPurchaseTypeTabs.map((tab, index) => {
+                      const isActive = activePurchaseType === tab.value;
+
+                      return (
+                        <span key={tab.value}>
+                          <button
+                            type='button'
+                            onClick={() => onPurchaseTypeChange(tab.value)}
+                            aria-pressed={isActive}
+                            className={`transition-colors ${
+                              isActive
+                                ? "text-(--text-primary)"
+                                : "text-[#8291a8]"
+                            }`}>
+                            {tab.label}
+                          </button>
+                          {index < shopPurchaseTypeTabs.length - 1 ? (
+                            <span className='px-1 text-[#9aa6b8]'>/</span>
+                          ) : null}
+                        </span>
+                      );
+                    })}
                   </>
                 )
               }
