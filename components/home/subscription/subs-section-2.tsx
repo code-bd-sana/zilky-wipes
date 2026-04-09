@@ -1,29 +1,32 @@
+import Image from "next/image";
 import PageTitle from "@/components/shared/page-title/page-title";
 import { Button } from "@/components/ui/button";
 
-export default function Section2() {
+export default function SubsSection2() {
   return (
-    <section className='mx-5 md:mx-10 lg:mx-20 xl:mx-40 mt-20 md:mt-50'>
+    <section className='mx-5 md:mx-10 lg:mx-20 xl:mx-40 mt-20 md:mt-45'>
       <div className='flex flex-col lg:flex-row justify-between gap-x-10 xl:gap-x-20 gap-y-12 md:gap-y-16 lg:gap-y-20 items-center'>
-        <div className='w-full max-w-170 lg:max-w-180'>
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster='/home/banner.png'
-            className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
-            <source src='/home/section2.mp4' type='video/mp4' />
-            Your browser does not support the video tag.
-          </video>
+        {/* Left Content */}
+        <div className='relative w-full max-w-170 lg:max-w-180 aspect-37/45 overflow-hidden rounded-[36px] sm:rounded-[72px] lg:rounded-[120px]'>
+          <Image
+            src='/home/subscription/subscription-2.png'
+            alt='Subscription preview'
+            fill
+            priority
+            quality={100}
+            sizes='(min-width: 1536px) 720px, (min-width: 1024px) 45vw, 92vw'
+            className='object-cover'
+          />
         </div>
-        <div className='w-full max-w-180 lg:max-w-170'>
+
+        {/* Right Content */}
+        <div className='w-full max-w-180 lg:max-w-160'>
           <PageTitle
-            title='Made for real bathrooms. And real bodies.'
-            titleClassName='max-w-250! text-[40px]! leading-[1.1]! md:text-[56px]!'
+            title='Choose your rhythm.'
+            titleClassName='max-w-180! mx-auto text-[40px]! leading-[1.1]! md:text-[56px]!'
             subtitle={[
-              "Everyday moments. Private spaces.",
-              "ZilkyWipes, exactly where it belongs.",
+              " Monthly delivery / Bi-monthly delivery",
+              "You can change this anytime.",
             ]}
             subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]!'
           />

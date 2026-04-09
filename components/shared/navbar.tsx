@@ -3,34 +3,41 @@
 import CartDrawer from "@/components/shared/cart/cart-drawer";
 import { Search } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isShop = pathname.startsWith("/shop");
+
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 10);
+    }
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
       <header
         className={`fixed inset-x-0 top-0 z-50 w-full ${
-          isHome
-            ? ""
-            : isShop
-              ? "bg-transparent"
-              : "border-b border-black/10 bg-white/90 backdrop-blur"
+          scrolled
+            ? "border-b border-black/10 bg-white/50 backdrop-blur"
+            : "bg-transparent"
         }`}
         style={{ height: "var(--navbar-height)" }}>
         <nav
           className={`mx-5 md:mx-12.5 grid h-full items-center ${
             isShop ? "grid-cols-2" : "grid-cols-3"
-          } ${
-            isHome ? "text-white" : "text-(--text-primary)"
-          }`}>
+          } ${isHome && !scrolled ? "text-white" : "text-(--text-primary)"}`}>
           <button
             className={`justify-self-start text-xl sm:text-2xl md:text-3xl font-medium transition-colors ${
-              isHome
+              isHome && !scrolled
                 ? "text-white/90 hover:text-white"
                 : "text-(--text-primary)"
             }`}>
