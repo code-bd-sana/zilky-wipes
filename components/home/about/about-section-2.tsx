@@ -1,11 +1,36 @@
 import PageTitle from "@/components/shared/page-title/page-title";
+import SplitContentSection from "@/components/shared/split-content-section";
 import { Button } from "@/components/ui/button";
 
 export default function AboutSection2() {
   return (
-    <section className='mx-5 md:mx-10 lg:mx-20 xl:mx-40 mt-20 md:mt-50'>
-      <div className='flex flex-col lg:flex-row justify-between gap-x-10 xl:gap-x-20 gap-y-12 md:gap-y-16 lg:gap-y-20 items-center'>
-        <div className='w-full max-w-170 lg:max-w-180'>
+    <section>
+      <SplitContentSection
+        desktopDirection='media-content'
+        sectionClassName='md:mt-50'
+        content={
+          <>
+            <PageTitle
+              title="Questions, feedback, or just curious? we'd love to hear from you."
+              titleClassName='max-w-250! text-[40px]! leading-[1.1]! md:text-[56px]!'
+              subtitle={[
+                "Your experience matters to us.",
+                "Good or bad - we're listening.",
+                "It helps us do better.",
+              ]}
+              subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]!'
+            />
+            <div className='flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-8'>
+              <Button className='w-full sm:w-auto bg-(--text-primary) px-6 md:px-8 py-5 md:py-6 text-lg md:text-xl rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300'>
+                Shop ZilkyWipes
+              </Button>
+              <Button className='w-full sm:w-auto bg-white border-2 border-(--text-primary) text-(--text-primary) px-6 md:px-8 py-5 md:py-6 text-lg md:text-xl rounded-full shadow-sm hover:bg-(--text-primary) hover:text-white hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300'>
+                Subscribe & Save
+              </Button>
+            </div>
+          </>
+        }
+        media={
           <video
             autoPlay
             loop
@@ -16,29 +41,8 @@ export default function AboutSection2() {
             <source src='/home/section2.mp4' type='video/mp4' />
             Your browser does not support the video tag.
           </video>
-        </div>
-
-        <div className='w-full max-w-180 lg:max-w-170'>
-          <PageTitle
-            title="Questions, feedback, or just curious? we'd love to hear from you."
-            titleClassName='max-w-250! text-[40px]! leading-[1.1]! md:text-[56px]!'
-            subtitle={[
-              "Your experience matters to us.",
-              "Good or bad - we're listening.",
-              "It helps us do better.",
-            ]}
-            subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]!'
-          />
-          <div className='flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-8'>
-            <Button className='w-full sm:w-auto bg-(--text-primary) px-6 md:px-8 py-5 md:py-6 text-lg md:text-xl rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300'>
-              Shop ZilkyWipes
-            </Button>
-            <Button className='w-full sm:w-auto bg-white border-2 border-(--text-primary) text-(--text-primary) px-6 md:px-8 py-5 md:py-6 text-lg md:text-xl rounded-full shadow-sm hover:bg-(--text-primary) hover:text-white hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300'>
-              Subscribe & Save
-            </Button>
-          </div>
-        </div>
-      </div>
+        }
+      />
     </section>
   );
 }

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function HaveQuestions() {
   return (
-    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-100 py-20'>
+    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 py-20'>
       <div className='bg-[#FBFAF9] border border-[#F2F2F2] rounded-[10px] py-8'>
         <div className=''>
           <PageTitle

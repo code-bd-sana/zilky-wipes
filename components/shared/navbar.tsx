@@ -20,6 +20,13 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const isShopPage = pathname === "/shop";
+  const isActiveLink = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -84,7 +91,11 @@ export default function Navbar() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className='text-lg lg:text-2xl font-medium leading-none text-[#1D3A5F] transition-opacity hover:opacity-80'>
+                  className={`text-lg lg:text-2xl leading-none text-[#1D3A5F] transition-opacity hover:opacity-80 ${
+                    isActiveLink(item.href)
+                      ? "font-bold underline decoration-2 underline-offset-8"
+                      : "font-medium"
+                  }`}>
                   {item.label}
                 </Link>
               ))}
@@ -114,7 +125,11 @@ export default function Navbar() {
                     key={item.label}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className='rounded-xl px-3 py-2 text-base font-medium text-[#1D3A5F] transition-colors hover:bg-black/5'>
+                    className={`rounded-xl px-3 py-2 text-base text-[#1D3A5F] transition-colors hover:bg-black/5 ${
+                      isActiveLink(item.href)
+                        ? "font-bold underline decoration-2 underline-offset-4"
+                        : "font-medium"
+                    }`}>
                     {item.label}
                   </Link>
                 ))}

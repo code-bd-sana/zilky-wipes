@@ -9,7 +9,7 @@ export default function AccountFooter() {
 
   return (
     <>
-      <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-100 mt-6 md:mt-16 mb-7 border-t border-[#E5E5E5] pt-6'>
+      <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 mt-6 md:mt-16 mb-7 border-t border-[#E5E5E5] pt-6'>
         <div className='flex justify-between items-center'>
           <Link
             href='/help'

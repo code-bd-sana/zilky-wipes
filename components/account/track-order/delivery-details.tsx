@@ -1,6 +1,6 @@
 export default function DeliveryDetails() {
   return (
-    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-100 my-6 md:my-12'>
+    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 my-6 md:my-12'>
       <div className='mt-6 md:mt-12'>
         <div className='mt-8'>
           <p className='text-[#979191]'>Delivery Address</p>

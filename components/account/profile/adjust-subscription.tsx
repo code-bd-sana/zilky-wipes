@@ -67,7 +67,7 @@ export default function AdjustSubscription() {
   };
 
   return (
-    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-100'>
+    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150'>
       <div className='bg-[#FBFAF9] p-4 border border-[#E5E5E5] rounded-[8px] mt-4'>
         <p className='text-[#979191] text-base'>Adjust Your Subscription</p>
 

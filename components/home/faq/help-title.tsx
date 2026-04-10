@@ -8,12 +8,12 @@ export default function HelpTitle() {
       <div className='my-8 pt-8'>
         <PageTitle
           align='center'
-          title='How can we help?'
-          titleClassName='text-[#474747]!'
+          title='Everything you need to know.'
+          titleClassName='text-[#474747]! max-w-120! mx-auto!'
           subtitle={[
             "Find answers to common questions about your subscription",
           ]}
-          subtitleClassName='text-[#979191]! text-base! mt-6'
+          subtitleClassName='text-[#979191]! text-base! mt-5'
         />
       </div>
       <div className='mx-auto flex w-full max-w-90 justify-center -mt-2'>
@@ -22,7 +22,7 @@ export default function HelpTitle() {
             <Search color='#FFFFFF' size={24} />
           </div>
           <Input
-            placeholder='Search for help...'
+            placeholder='Search for the answer you are looking for...'
             className='w-full rounded-full border border-(--text-primary) bg-(--text-primary) pl-12 pr-4 py-2 text-[#999999] focus:ring-2 focus:ring-[#FFFFFF7A] focus:ring-offset-2 focus:ring-offset---(--text-primary)'
           />
         </div>

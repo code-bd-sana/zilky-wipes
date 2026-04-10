@@ -22,7 +22,7 @@ export default function Product() {
     },
   ];
   return (
-    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-100  pt-20'>
+    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150  pt-20'>
       <p className='text-[#979191] border-b border-[#F2F2F2] pb-2'>
         Product Questions
       </p>

@@ -32,7 +32,7 @@ export default function DeliveryTrack() {
     },
   ];
   return (
-    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-100 my-6 md:my-12'>
+    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 my-6 md:my-12'>
       <div className='mb-6'>
         <p className='text-[#979191]'>Order Tracking</p>
         <p className='text-(--text-primary) text-3xl font-heading font-semibold'>
