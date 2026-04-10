@@ -141,7 +141,7 @@ export default function PageTitle({
                     initial={{ backgroundPosition: "-200% 0%" }}
                     animate={{ backgroundPosition: "200% 0%" }}
                     transition={{
-                      duration: 1.6,
+                      duration: 2,
                       ease: "easeInOut",
                     }}
                     className="absolute inset-0 z-20 pointer-events-none bg-clip-text text-transparent"
