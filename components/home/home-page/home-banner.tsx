@@ -11,9 +11,9 @@ export default function HomeBanner() {
           loop
           muted
           playsInline
-          poster='/home/banner.png'
+          poster='/ZilkyWipes/banner.png'
           className='absolute inset-0 w-full h-full object-cover'>
-          <source src='home/banner.mp4' type='video/mp4' />
+          <source src='/ZilkyWipes/hero.mp4' type='video/mp4' />
           Your browser does not support the video tag.
         </video>
 
