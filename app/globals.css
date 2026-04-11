@@ -116,7 +116,13 @@
   --checkout-muted-text: #474747;
   --checkbox-muted-subtext: #979191;
   --checkbox-muted-foreground: #64748B;
-  --navbar-height: 6.25rem;
+  --navbar-height: 4.25rem;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --navbar-height: 6.25rem;
+  }
 }
 
 @layer base {

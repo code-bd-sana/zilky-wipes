@@ -242,9 +242,9 @@ const Footer = () => {
         </div>
 
         {/* DIVIDER */}
-        <div className='w-full h-px bg-[#FFFFFF7A] my-8 mt-30' />
+        <div className='w-full h-px bg-[#FFFFFF7A] my-8 mt-10 md:mt-30' />
         {/* BOTTOM */}
-        <p className='text-[22px] text-white'>
+        <p className='text-base md:text-2xl text-white'>
           ZilkyWipes was created for everyday hygiene, done better. We make
           flushable, biodegradable wet wipes on a roll — designed to replace dry
           paper with something gentler, cleaner, and more considered. No harsh

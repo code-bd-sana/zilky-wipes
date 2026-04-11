@@ -15,7 +15,7 @@ const checkoutItems: CheckoutItem[] = [
     name: "NatureSoft Wipes\u2122",
     quantity: 1,
     price: 20,
-    image: "/home/wipe.png",
+    image: "/ZilkyWipes/p.png",
     imageAlt: "NatureSoft Wipes",
   },
   {
@@ -23,7 +23,7 @@ const checkoutItems: CheckoutItem[] = [
     name: "NatureSoft Wipes\u2122",
     quantity: 1,
     price: 20,
-    image: "/home/wipe.png",
+    image: "/ZilkyWipes/p2.png",
     imageAlt: "NatureSoft Wipes",
   },
 ];

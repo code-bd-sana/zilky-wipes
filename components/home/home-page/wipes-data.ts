@@ -11,7 +11,7 @@ export type WipesProduct = {
 export const wipesData: WipesProduct[] = [
   {
     id: "roll",
-    image: "/home/wipe.png",
+    image: "/ZilkyWipes/p.png",
     imageAlt: "Zilky Wipes roll",
     name: "ZilkyWipes™ Roll",
     price: 12,
@@ -25,7 +25,7 @@ export const wipesData: WipesProduct[] = [
   },
   {
     id: "pack-standard",
-    image: "/home/wipe.png",
+    image: "/ZilkyWipes/p2.png",
     imageAlt: "Zilky Wipes pack",
     name: "EcoClean Towels™",
     price: 16,
@@ -34,7 +34,7 @@ export const wipesData: WipesProduct[] = [
   },
   {
     id: "pack-plus",
-    image: "/home/wipe.png",
+    image: "/ZilkyWipes/p3.png",
     imageAlt: "Zilky Wipes pack",
     name: "NatureSoft Wipes™",
     price: 18,
