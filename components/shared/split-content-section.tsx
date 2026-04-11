@@ -62,25 +62,25 @@ export default function SplitContentSection({
 
   return (
     <section
-      className={cn("mx-5 md:mx-10 lg:mx-20 xl:mx-40 mt-20", sectionClassName)}
-    >
+      className={cn(
+        "relative overflow-x-hidden mx-5 md:mx-10 lg:mx-20 xl:mx-40 mt-20",
+        sectionClassName,
+      )}>
       <div
         className={cn(
-          "flex justify-between items-center gap-x-10 xl:gap-x-20 gap-y-12 md:gap-y-16 lg:gap-y-20",
+          "min-w-0 flex justify-between items-center gap-x-10 xl:gap-x-20 gap-y-12 md:gap-y-16 lg:gap-y-20",
           desktopDirection === "content-media"
             ? "flex-col-reverse lg:flex-row"
             : "flex-col-reverse lg:flex-row-reverse",
-          innerClassName
-        )}
-      >
+          innerClassName,
+        )}>
         {/* Content */}
         <motion.div
           initial={shouldAnimate ? "hidden" : false}
           whileInView={shouldAnimate ? "visible" : undefined}
           viewport={shouldAnimate ? { once: true, amount: 0.3 } : undefined}
           variants={contentVariants}
-          className={cn("w-full max-w-180 lg:max-w-170", contentClassName)}
-        >
+          className={cn("min-w-0 w-full max-w-180 lg:max-w-170", contentClassName)}>
           {content}
         </motion.div>
 
@@ -90,8 +90,7 @@ export default function SplitContentSection({
           whileInView={shouldAnimate ? "visible" : undefined}
           viewport={shouldAnimate ? { once: true, amount: 0.3 } : undefined}
           variants={mediaVariants}
-          className={cn("w-full max-w-170 lg:max-w-180", mediaClassName)}
-        >
+          className={cn("min-w-0 w-full max-w-170 lg:max-w-180", mediaClassName)}>
           {media}
         </motion.div>
       </div>
