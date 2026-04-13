@@ -2,16 +2,17 @@
 
 import DashboardSidebar from "@/components/dashboard/dashboard-sidebar";
 import DashboardTopHeader from "@/components/dashboard/dashboard-top-header";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type DashboardLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 
 function DashboardLayoutContent({ children }: DashboardLayoutProps) {
-  const searchParams = useSearchParams();
-  const activeView = searchParams.get("view") ?? "home";
+  const pathname = usePathname();
+  const activeView =
+    pathname === "/dashboard" ? "home" : pathname.split("/")[2] ?? "home";
 
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] =
     useState(false);
@@ -64,19 +65,6 @@ function DashboardLayoutContent({ children }: DashboardLayoutProps) {
   );
 }
 
-function DashboardLayoutFallback({ children }: DashboardLayoutProps) {
-  return (
-    <div className='min-h-screen bg-[#f5f5f5] xl:flex'>
-      <main className='min-w-0 flex-1 bg-white'>{children}</main>
-    </div>
-  );
-}
-
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  return (
-    <Suspense
-      fallback={<DashboardLayoutFallback>{children}</DashboardLayoutFallback>}>
-      <DashboardLayoutContent>{children}</DashboardLayoutContent>
-    </Suspense>
-  );
+  return <DashboardLayoutContent>{children}</DashboardLayoutContent>;
 }

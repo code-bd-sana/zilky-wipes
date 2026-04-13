@@ -18,28 +18,34 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import type { ComponentType } from "react";
 
 type SidebarItem = {
   label: string;
-  value: string;
+  href: string;
+  key: string;
   icon: ComponentType<{ className?: string }>;
 };
 
 const operationItems: SidebarItem[] = [
-  { label: "Home", value: "home", icon: GalleryVerticalEnd },
-  { label: "Products", value: "products", icon: ListTree },
-  { label: "Add Product", value: "add-product", icon: FileText },
-  { label: "Orders", value: "orders", icon: Package },
-  { label: "Subscription", value: "subscription", icon: CircleDollarSign },
-  { label: "Customers", value: "customers", icon: Users },
-  { label: "Feedback", value: "feedback", icon: Star },
+  { label: "Home", key: "home", href: "/dashboard", icon: GalleryVerticalEnd },
+  { label: "Products", key: "products", href: "/dashboard/products", icon: ListTree },
+  { label: "Add Product", key: "add-product", href: "/dashboard/add-product", icon: FileText },
+  { label: "Orders", key: "orders", href: "/dashboard/orders", icon: Package },
+  {
+    label: "Subscription",
+    key: "subscription",
+    href: "/dashboard/subscription",
+    icon: CircleDollarSign,
+  },
+  { label: "Customers", key: "customers", href: "/dashboard/customers", icon: Users },
+  { label: "Feedback", key: "feedback", href: "/dashboard/feedback", icon: Star },
 ];
 
 const otherItems: SidebarItem[] = [
-  { label: "Integration", value: "integration", icon: Network },
-  { label: "Settings", value: "settings", icon: Settings },
+  { label: "Integration", key: "integration", href: "/dashboard/integration", icon: Network },
+  { label: "Settings", key: "settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 function SidebarNavItem({
@@ -57,7 +63,7 @@ function SidebarNavItem({
 
   return (
     <Link
-      href={`/dashboard?view=${item.value}`}
+      href={item.href}
       title={item.label}
       onClick={onNavigate}
       className={cn(
@@ -89,8 +95,8 @@ export default function DashboardSidebar({
   onToggleCollapse,
   onCloseMobile,
 }: DashboardSidebarProps) {
-  const searchParams = useSearchParams();
-  const activeView = searchParams.get("view") ?? "home";
+  const pathname = usePathname();
+  const activeView = pathname === "/dashboard" ? "home" : pathname.split("/")[2] ?? "home";
 
   return (
     <aside
@@ -198,9 +204,9 @@ export default function DashboardSidebar({
         <div className='mt-2 flex flex-col gap-0.5'>
           {operationItems.map((item) => (
             <SidebarNavItem
-              key={item.value}
+              key={item.key}
               item={item}
-              isActive={activeView === item.value}
+              isActive={activeView === item.key}
               isCollapsed={isCollapsed}
               onNavigate={onCloseMobile}
             />
@@ -219,9 +225,9 @@ export default function DashboardSidebar({
         <div className='mt-2 flex flex-col gap-0.5'>
           {otherItems.map((item) => (
             <SidebarNavItem
-              key={item.value}
+              key={item.key}
               item={item}
-              isActive={activeView === item.value}
+              isActive={activeView === item.key}
               isCollapsed={isCollapsed}
               onNavigate={onCloseMobile}
             />
