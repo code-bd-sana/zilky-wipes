@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { addMonths, format } from "date-fns";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useState } from "react";
 import { DayPicker, type DateRange } from "react-day-picker";
@@ -31,6 +31,13 @@ export default function DateRangePicker({
   // Internal draft state – only committed when "Apply" is clicked.
   const [draft, setDraft] = useState<DateRange | undefined>(value);
 
+  // The left-hand month displayed in the calendar.
+  const [month, setMonth] = useState<Date>(
+    () => new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+  );
+
+  const nextMonth = addMonths(month, 1);
+
   const handleSelect = (range: DateRange | undefined) => {
     setDraft(range);
     onChange?.(range);
@@ -50,14 +57,18 @@ export default function DateRangePicker({
 
   return (
     <div className={cn("select-none", className)}>
-      {/* Selected-range summary bar */}
+      {/* ── Selected-range summary bar ─────────────────────────────── */}
       <div className="mb-2 flex items-center gap-1.5 rounded-md border border-[#e6e6e6] bg-[#f5f5f5] px-2.5 py-1.5 text-xs text-[#5a5a5a]">
         {fromLabel ? (
           <>
             <span className="font-medium text-[#3a3a3a]">{fromLabel}</span>
             <span className="text-[#bdbdbd]">→</span>
             <span className="font-medium text-[#3a3a3a]">
-              {toLabel ?? <span className="font-normal text-[#adadad]">Pick end date</span>}
+              {toLabel ?? (
+                <span className="font-normal text-[#adadad]">
+                  Pick end date
+                </span>
+              )}
             </span>
             <button
               type="button"
@@ -73,29 +84,64 @@ export default function DateRangePicker({
         )}
       </div>
 
-      {/* Calendar */}
+      {/* ── Custom navigation header ────────────────────────────────── */}
+      {/*
+       *  react-day-picker v9 renders a single <nav> element (containing both
+       *  ◄ and ►) before the months container, causing both buttons to stack
+       *  on the left. We suppress the built-in nav entirely (components.Nav →
+       *  null) and build our own header so ← sits on the far left and → sits
+       *  on the far right, with the two month labels centred between them.
+       */}
+      <div className="mb-1 flex items-center gap-1 px-1">
+        {/* Previous month */}
+        <button
+          type="button"
+          onClick={() => setMonth((m) => addMonths(m, -1))}
+          className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#e4e4e4] bg-[#f7f7f7] text-[#7a7a7a] transition-colors hover:bg-[#ececec] hover:text-[#3a3a3a]"
+          aria-label="Previous month"
+        >
+          <ChevronLeft className="h-3.5 w-3.5" />
+        </button>
+
+        {/* Month labels — each takes equal share of the remaining space */}
+        <div className="flex flex-1 items-center">
+          <span className="flex-1 text-center text-xs font-semibold tracking-wide text-[#3a3a3a]">
+            {format(month, "MMMM yyyy")}
+          </span>
+          <span className="flex-1 text-center text-xs font-semibold tracking-wide text-[#3a3a3a]">
+            {format(nextMonth, "MMMM yyyy")}
+          </span>
+        </div>
+
+        {/* Next month */}
+        <button
+          type="button"
+          onClick={() => setMonth((m) => addMonths(m, 1))}
+          className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#e4e4e4] bg-[#f7f7f7] text-[#7a7a7a] transition-colors hover:bg-[#ececec] hover:text-[#3a3a3a]"
+          aria-label="Next month"
+        >
+          <ChevronRight className="h-3.5 w-3.5" />
+        </button>
+      </div>
+ 
+      {/* ── Calendar ───────────────────────────────────────────────── */}
       <DayPicker
         mode="range"
         selected={draft}
         onSelect={handleSelect}
         numberOfMonths={2}
+        month={month}
+        onMonthChange={setMonth}
         showOutsideDays
+        /* Suppress the built-in Nav entirely — we own navigation above. */
+        components={{ Nav: () => <></> }}
         classNames={{
           months: "flex gap-4",
           month: "flex flex-col gap-1",
-          month_caption:
-            "flex items-center justify-between px-1 py-1",
-          caption_label:
-            "text-xs font-semibold text-[#3a3a3a] tracking-wide",
-          nav: "flex items-center gap-1",
-          button_previous: cn(
-            "inline-flex h-6 w-6 items-center justify-center rounded border border-[#e4e4e4]",
-            "bg-[#f7f7f7] text-[#7a7a7a] transition-colors hover:bg-[#ececec] hover:text-[#3a3a3a]",
-          ),
-          button_next: cn(
-            "inline-flex h-6 w-6 items-center justify-center rounded border border-[#e4e4e4]",
-            "bg-[#f7f7f7] text-[#7a7a7a] transition-colors hover:bg-[#ececec] hover:text-[#3a3a3a]",
-          ),
+          /* Hide the redundant caption rendered by DayPicker — we drew our
+             own month labels in the custom header above. */
+          month_caption: "hidden",
+          caption_label: "hidden",
           month_grid: "w-full border-collapse",
           weekdays: "flex",
           weekday:
@@ -109,8 +155,10 @@ export default function DateRangePicker({
           ),
           selected:
             "[&>button]:bg-[#3a3a3a] [&>button]:text-white [&>button]:hover:bg-[#2a2a2a]",
-          today: "[&>button]:font-semibold [&>button]:text-[#1a1a1a]",
-          outside: "[&>button]:text-[#d0d0d0] [&>button]:hover:text-[#b0b0b0]",
+          today:
+            "[&>button]:font-semibold [&>button]:text-[#1a1a1a]",
+          outside:
+            "[&>button]:text-[#d0d0d0] [&>button]:hover:text-[#b0b0b0]",
           range_start:
             "[&>button]:rounded-r-none [&>button]:bg-[#3a3a3a] [&>button]:text-white after:absolute after:inset-y-0 after:right-0 after:w-1/2 after:bg-[#efefef] after:-z-10",
           range_end:
@@ -118,19 +166,12 @@ export default function DateRangePicker({
           range_middle:
             "bg-[#efefef] [&>button]:rounded-none [&>button]:hover:bg-[#e3e3e3]",
           hidden: "invisible",
-          disabled: "[&>button]:opacity-30 [&>button]:cursor-not-allowed",
-        }}
-        components={{
-          Chevron: ({ orientation }) =>
-            orientation === "left" ? (
-              <ChevronLeft className="h-3.5 w-3.5" />
-            ) : (
-              <ChevronRight className="h-3.5 w-3.5" />
-            ),
+          disabled:
+            "[&>button]:opacity-30 [&>button]:cursor-not-allowed",
         }}
       />
 
-      {/* Footer actions */}
+      {/* ── Footer actions ─────────────────────────────────────────── */}
       <div className="mt-2 flex items-center justify-end gap-2 border-t border-[#ebebeb] pt-2">
         <button
           type="button"

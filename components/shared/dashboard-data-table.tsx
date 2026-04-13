@@ -396,7 +396,7 @@ export default function DashboardDataTable<T>({
                     className={cn(
                       "absolute left-[calc(100%+4px)] rounded-md border border-[#dcdcdc] bg-[#fbfbfb] p-0.5 shadow-sm",
                       hasExpandedCustomContent
-                        ? "w-136 max-w-[calc(100vw-2rem)]"
+                        ? "w-max max-w-[calc(100vw-2rem)]"
                         : "w-36",
                     )}
                     style={{ top: subMenuTop }}>
