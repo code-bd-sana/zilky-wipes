@@ -141,7 +141,7 @@ export default function DashboardDataTable<T>({
   return (
     <section
       className={cn(
-        "overflow-hidden rounded-lg border border-[#dfdfdf] bg-[#f7f7f7]",
+        "overflow-hidden rounded-lg border border-[#dfdfdf] ",
         className,
       )}>
       <div className='flex items-center justify-between gap-3 border-b border-[#e1e1e1] px-4 py-2'>
