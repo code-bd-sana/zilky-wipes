@@ -4,6 +4,9 @@ import DashboardDataTable, {
   type DashboardFilterMenuConfig,
   type DashboardTableColumn,
 } from "@/components/shared/dashboard-data-table";
+import DateRangePicker, {
+  type DateRange,
+} from "@/components/shared/date-range-picker";
 import {
   CalendarDays,
   DollarSign,
@@ -16,6 +19,7 @@ import {
   Trash2,
   Settings2,
 } from "lucide-react";
+import { useState } from "react";
 
 type ProductRow = {
   id: string;
@@ -105,51 +109,66 @@ const columns: DashboardTableColumn<ProductRow>[] = [
   },
 ];
 
-const productFilterMenu: DashboardFilterMenuConfig = {
-  searchPlaceholder: "Search...",
-  groups: [
-    {
-      id: "date-range",
-      label: "Date range",
-      icon: CalendarDays,
-      options: [
-        { id: "last-30-days", label: "Last 30 Days" },
-        { id: "last-10-days", label: "Last 10 Days" },
-        { id: "today", label: "Today" },
-        {
-          id: "custom",
-          label: "Custom",
-          icon: Settings2,
-          keepMenuOpen: true,
-        },
-      ],
-    },
-    {
-      id: "stock-status",
-      label: "Stock Status",
-      icon: IndentIncrease,
-      options: [
-        { id: "all", label: "All" },
-        { id: "in-stock", label: "In Stock" },
-        { id: "low-stock", label: "Low Stock" },
-        { id: "out-of-stock", label: "Out of Stock" },
-      ],
-    },
-    {
-      id: "product-type",
-      label: "Product Type",
-      icon: PackageCheck,
-      options: [
-        { id: "all-types", label: "All Types" },
-        { id: "wipes", label: "Wipes" },
-        { id: "towels", label: "Towels" },
-        { id: "cloths", label: "Cloths" },
-      ],
-    },
-  ],
-};
-
 export default function DashboardProductsPage() {
+  const [customDateRange, setCustomDateRange] = useState<
+    DateRange | undefined
+  >();
+
+  const productFilterMenu: DashboardFilterMenuConfig = {
+    searchPlaceholder: "Search...",
+    groups: [
+      {
+        id: "date-range",
+        label: "Date range",
+        icon: CalendarDays,
+        options: [
+          { id: "last-30-days", label: "Last 30 Days" },
+          { id: "last-10-days", label: "Last 10 Days" },
+          { id: "today", label: "Today" },
+          {
+            id: "custom",
+            label: "Custom",
+            icon: Settings2,
+            keepMenuOpen: true,
+            customContent: (
+              <DateRangePicker
+                value={customDateRange}
+                onChange={setCustomDateRange}
+                onApply={(range) => {
+                  setCustomDateRange(range);
+                  // TODO: filter data by range
+                  console.log("Applied date range:", range);
+                }}
+              />
+            ),
+          },
+        ],
+      },
+      {
+        id: "stock-status",
+        label: "Stock Status",
+        icon: IndentIncrease,
+        options: [
+          { id: "all", label: "All" },
+          { id: "in-stock", label: "In Stock" },
+          { id: "low-stock", label: "Low Stock" },
+          { id: "out-of-stock", label: "Out of Stock" },
+        ],
+      },
+      {
+        id: "product-type",
+        label: "Product Type",
+        icon: PackageCheck,
+        options: [
+          { id: "all-types", label: "All Types" },
+          { id: "wipes", label: "Wipes" },
+          { id: "towels", label: "Towels" },
+          { id: "cloths", label: "Cloths" },
+        ],
+      },
+    ],
+  };
+
   return (
     <div className='p-3 md:p-4'>
       <DashboardDataTable
