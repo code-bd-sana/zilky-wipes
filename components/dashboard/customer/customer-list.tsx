@@ -42,8 +42,9 @@ const STATUS_STYLES: Record<DashboardCustomerStatus, string> = {
 const products: ProductRow[] = dashboardCustomers;
 
 export default function CustomerListPage() {
-  const [selectedCustomer, setSelectedCustomer] =
-    useState<ProductRow | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<ProductRow | null>(
+    null,
+  );
   const [customDateRange, setCustomDateRange] = useState<
     DateRange | undefined
   >();
@@ -85,9 +86,9 @@ export default function CustomerListPage() {
         options: [
           { id: "all", label: "All" },
           { id: "active", label: "Active" },
-          { id: "canceled", label: "Canceled subscription" },
-          { id: "paused", label: "Paused indefinitely" },
-          { id: "skipped", label: "Skipped next Delivery" },
+          { id: "canceled", label: "Canceled subs." },
+          { id: "paused", label: "Paused inf." },
+          { id: "skipped", label: "Skipped next" },
         ],
       },
       {
