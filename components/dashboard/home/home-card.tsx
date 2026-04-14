@@ -38,7 +38,7 @@ const cardData: CardData[] = [
   {
     title: "Orders & Fulfillment",
     actionLabel: "View All",
-    actionHref: "/dashboard?view=orders",
+    actionHref: "/dashboard/orders",
     accent: "#14b8a6",
     topStat: "24 Orders Today",
     topDescription:
@@ -56,7 +56,7 @@ const cardData: CardData[] = [
   {
     title: "Subscriptions",
     actionLabel: "View All",
-    actionHref: "/dashboard?view=subscriptions",
+    actionHref: "/dashboard/subscriptions",
     accent: "#22c55e",
     topStat: "342 Active Subscriptions",
     topDescription: "+12% this month",
@@ -75,7 +75,7 @@ const cardData: CardData[] = [
   {
     title: "Customer Feedback",
     actionLabel: "View All",
-    actionHref: "/dashboard?view=feedback",
+    actionHref: "/dashboard/feedback",
     accent: "#2563eb",
     topStat: "4.8 Average Rating",
     topDescription: "Based on 127 reviews",
