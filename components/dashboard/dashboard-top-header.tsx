@@ -10,6 +10,7 @@ import {
   Package,
   Layers,
   ListTodo,
+  Star,
   Menu,
   Plus,
   X,
@@ -80,8 +81,8 @@ const headerByView: Record<string, HeaderConfig> = {
   },
   feedback: {
     label: "Feedback",
-    icon: Package,
-    badge: "Feedback",
+    icon: Star,
+    badge: "Feedback List",
     badgeIcon: ListOrdered,
   },
   settings: {
