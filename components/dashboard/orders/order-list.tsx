@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import DashboardDataTable, {
   type DashboardFilterMenuConfig,
   type DashboardTableColumn,
@@ -22,36 +23,150 @@ import {
   Settings2,
   Users,
 } from "lucide-react";
-import { useState } from "react";
+import OrderDetail, {
+  type OrderDetailData,
+  type OrderStatus,
+  type OrderTimelineEntry,
+} from "./order-details";
 
-type OrderStatus =
-  | "Processing"
-  | "Paid"
-  | "Shipped"
-  | "Delivered"
-  | "Canceled"
-  | "Previous client";
+type ProductRow = OrderDetailData;
 
-type ProductRow = {
-  id: string;
-  orderId: string;
-  date: string;
-  customer: string;
-  items: number;
-  amount: number;
-  orderStatus: OrderStatus;
-};
+type BaseOrderRow = Pick<
+  OrderDetailData,
+  "id" | "orderId" | "date" | "customer" | "items" | "amount" | "orderStatus"
+>;
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
   Processing: "bg-[#FDF2F8] text-[#BE185D]",
-  Paid: "bg-[#ECFDF5] text-[#047857]",
-  Shipped: "bg-[#F0F9FF] text-[#0369A1]",
+  Paid: "bg-[#E7F7ED] text-[#166534]",
+  Shipped: "bg-[#EFF6FF] text-[#1D4ED8]",
   Delivered: "bg-[#F5F3FF] text-[#6D28D9]",
   Canceled: "bg-[#FFF1F2] text-[#BE123C]",
   "Previous client": "bg-[#E6F7F7] text-[#064B46]",
 };
 
-const products: ProductRow[] = [
+const TRACKING_LABEL_BY_STATUS: Record<OrderStatus, string> = {
+  Processing: "Order placed",
+  Paid: "Picked and packed",
+  Shipped: "In transit",
+  Delivered: "Delivered",
+  Canceled: "Canceled",
+  "Previous client": "Out for delivery",
+};
+
+const COMPLETED_STEP_COUNT_BY_STATUS: Record<OrderStatus, number> = {
+  Processing: 1,
+  Paid: 2,
+  Shipped: 3,
+  Delivered: 5,
+  Canceled: 3,
+  "Previous client": 4,
+};
+
+const SUBSCRIPTION_TYPES = [
+  "Starter Kit",
+  "Family Kit",
+  "Refill Kit",
+  "Sensitive Kit",
+];
+
+const ADDRESS_BOOK = [
+  "123 Oak Street, Brooklyn",
+  "45 Maple Avenue, Queens",
+  "880 Harbor Drive, Jersey City",
+  "14 Pine Street, Manhattan",
+  "52 Cedar Lane, Bronx",
+  "107 Willow Road, Staten Island",
+];
+
+const createDateLabel = (dateValue: string, dayOffset: number): string => {
+  const [day, month, year] = dateValue.split("/").map(Number);
+
+  if (!day || !month || !year) {
+    return dateValue;
+  }
+
+  const parsedDate = new Date(year, month - 1, day + dayOffset);
+  return parsedDate.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+};
+
+const buildTimeline = (
+  orderStatus: OrderStatus,
+  date: string,
+  address: string,
+): OrderTimelineEntry[] => {
+  if (orderStatus === "Canceled") {
+    return [
+      {
+        dateLabel: createDateLabel(date, 0),
+        timeLabel: "08:14 AM",
+        title: "Order placed",
+        location: "ZilkyWipes fulfillment center",
+      },
+      {
+        dateLabel: createDateLabel(date, 0),
+        timeLabel: "02:37 PM",
+        title: "Picked and packed",
+        location: "Brooklyn, NY facility",
+      },
+      {
+        dateLabel: createDateLabel(date, 1),
+        timeLabel: "11:10 AM",
+        title: "Order canceled",
+        location: "Canceled by customer request",
+      },
+    ];
+  }
+
+  const timeline: OrderTimelineEntry[] = [
+    {
+      dateLabel: createDateLabel(date, 0),
+      timeLabel: "08:14 AM",
+      title: "Order placed",
+      location: "ZilkyWipes fulfillment center",
+    },
+    {
+      dateLabel: createDateLabel(date, 0),
+      timeLabel: "02:37 PM",
+      title: "Picked and packed",
+      location: "Brooklyn, NY facility",
+    },
+    {
+      dateLabel: createDateLabel(date, 1),
+      timeLabel: "06:22 AM",
+      title: "In transit",
+      location: "USPS regional facility",
+    },
+    {
+      dateLabel: createDateLabel(date, 2),
+      timeLabel: "07:45 AM",
+      title: "Out for delivery",
+      location: "Local post office",
+    },
+    {
+      dateLabel:
+        orderStatus === "Delivered"
+          ? createDateLabel(date, 2)
+          : "Expected today by 8:00 PM",
+      timeLabel: orderStatus === "Delivered" ? "08:00 PM" : undefined,
+      title: "Delivery",
+      location: address,
+    },
+  ];
+
+  const completedStepCount = COMPLETED_STEP_COUNT_BY_STATUS[orderStatus];
+
+  return timeline.map((step, index) => ({
+    ...step,
+    isPending: index >= completedStepCount,
+  }));
+};
+
+const baseOrders: BaseOrderRow[] = [
   {
     id: "1",
     orderId: "#1245321",
@@ -171,84 +286,113 @@ const products: ProductRow[] = [
   },
 ];
 
-const columns: DashboardTableColumn<ProductRow>[] = [
-  {
-    id: "order-name",
-    header: "Order",
-    icon: Package,
-    widthClassName: "w-[15%]",
-    cell: (row) => <span>{row.orderId}</span>,
-  },
-  {
-    id: "date",
-    header: "Date",
-    icon: Calendar,
-    widthClassName: "w-[15%]",
-    cell: (row) => <span>{row.date}</span>,
-  },
-  {
-    id: "customer",
-    header: "Customer",
-    icon: Users,
-    widthClassName: "w-[13%]",
-    cell: (row) => <span>{row.customer}</span>,
-  },
-  {
-    id: "item",
-    header: "Items",
-    icon: ListIndentIncrease,
-    widthClassName: "w-[13%]",
-    cell: (row) => <span>{row.items}</span>,
-  },
-  {
-    id: "amount",
-    header: "Amount",
-    icon: DollarSign,
-    widthClassName: "w-[13%]",
-    cell: (row) => <span>${row.amount.toFixed(2)}</span>,
-  },
-  {
-    id: "order-status",
-    header: "Order Status",
-    icon: Loader,
-    widthClassName: "w-[13%]",
-    cell: (row) => (
-      <span
-        className={`inline-flex items-center rounded-[6px] px-2.5 py-0.5 text-xs font-base ${STATUS_STYLES[row.orderStatus]}`}>
-        {row.orderStatus}
-      </span>
-    ),
-  },
-  {
-    id: "action",
-    header: "Action",
-    icon: Forward,
-    widthClassName: "w-[24%]",
-    cell: () => (
-      <div className='flex items-center gap-2'>
-        <button
-          type='button'
-          className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
-          <Plus className='h-3.5 w-3.5' color='#262626' />
-          <span>Add internal note</span>
-          <span className='bg-white p-1 rounded-lg text-[#262626] text-[8px]'>
-            01
-          </span>
-        </button>
-        <button
-          type='button'
-          className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
-          <span>View More</span>
-        </button>
-      </div>
-    ),
-  },
-];
+const products: ProductRow[] = baseOrders.map((order, index) => {
+  const subscriptionType =
+    SUBSCRIPTION_TYPES[index % SUBSCRIPTION_TYPES.length];
+  const address = ADDRESS_BOOK[index % ADDRESS_BOOK.length];
+
+  return {
+    ...order,
+    trackingLabel: TRACKING_LABEL_BY_STATUS[order.orderStatus],
+    timeline: buildTimeline(order.orderStatus, order.date, address),
+    subscriptionType,
+    address,
+    itemLabel:
+      index % 2 === 0
+        ? `One Time ${subscriptionType}`
+        : `${subscriptionType} Bundle`,
+    trackOrderLabel:
+      order.orderStatus === "Canceled" ? "Reorder" : "Track Order",
+    trackSubscriptionLabel: "Track Subscription",
+    canTrackSubscription: order.orderStatus !== "Canceled",
+    internalNotes: (index % 3) + 1,
+  };
+});
 
 export default function OrderListPage() {
+  const [selectedOrder, setSelectedOrder] = useState<ProductRow | null>(null);
   const [customDateRange, setCustomDateRange] = useState<
     DateRange | undefined
   >();
+
+  const handleSeeDetails = (row: ProductRow) => {
+    setSelectedOrder(row);
+  };
+
+  const columns: DashboardTableColumn<ProductRow>[] = [
+    {
+      id: "order-name",
+      header: "Order",
+      icon: Package,
+      widthClassName: "w-[15%]",
+      cell: (row) => <span>{row.orderId}</span>,
+    },
+    {
+      id: "date",
+      header: "Date",
+      icon: Calendar,
+      widthClassName: "w-[15%]",
+      cell: (row) => <span>{row.date}</span>,
+    },
+    {
+      id: "customer",
+      header: "Customer",
+      icon: Users,
+      widthClassName: "w-[13%]",
+      cell: (row) => <span>{row.customer}</span>,
+    },
+    {
+      id: "item",
+      header: "Items",
+      icon: ListIndentIncrease,
+      widthClassName: "w-[13%]",
+      cell: (row) => <span>{row.items}</span>,
+    },
+    {
+      id: "amount",
+      header: "Amount",
+      icon: DollarSign,
+      widthClassName: "w-[13%]",
+      cell: (row) => <span>${row.amount.toFixed(2)}</span>,
+    },
+    {
+      id: "order-status",
+      header: "Order Status",
+      icon: Loader,
+      widthClassName: "w-[13%]",
+      cell: (row) => (
+        <span
+          className={`inline-flex items-center rounded-[6px] px-2.5 py-0.5 text-xs font-base ${STATUS_STYLES[row.orderStatus]}`}>
+          {row.orderStatus}
+        </span>
+      ),
+    },
+    {
+      id: "action",
+      header: "Action",
+      icon: Forward,
+      widthClassName: "w-[24%]",
+      cell: (row) => (
+        <div className='flex items-center gap-2'>
+          <button
+            type='button'
+            className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
+            <Plus className='h-3.5 w-3.5' color='#262626' />
+            <span>Add internal note</span>
+            <span className='bg-white p-1 rounded-lg text-[#262626] text-[8px]'>
+              {String(row.internalNotes).padStart(2, "0")}
+            </span>
+          </button>
+          <button
+            type='button'
+            onClick={() => handleSeeDetails(row)}
+            className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
+            <span>View More</span>
+          </button>
+        </div>
+      ),
+    },
+  ];
 
   const productFilterMenu: DashboardFilterMenuConfig = {
     searchPlaceholder: "Search...",
@@ -310,7 +454,7 @@ export default function OrderListPage() {
       <DashboardDataTable
         filterAction={{ label: "Filter", icon: ListFilter }}
         filterMenu={productFilterMenu}
-        searchPlaceholder='Search Products, Status'
+        searchPlaceholder='Search Orders, Status'
         data={products}
         columns={columns}
         getRowId={(row) => row.id}
@@ -320,6 +464,11 @@ export default function OrderListPage() {
         }}
         pageSizeOptions={[5, 10, 20, 50]}
         defaultPageSize={10}
+      />
+      <OrderDetail
+        key={selectedOrder?.id ?? "order-detail-empty"}
+        order={selectedOrder}
+        onClose={() => setSelectedOrder(null)}
       />
     </section>
   );
