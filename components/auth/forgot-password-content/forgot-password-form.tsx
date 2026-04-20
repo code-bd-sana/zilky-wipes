@@ -34,7 +34,7 @@ export default function ForgotPasswordForm() {
 
       <div className='flex-1 flex items-center justify-center'>
         <div className='w-full mx-auto'>
-          <div className='pb-6 text-center'>
+          <div className='pb-6 text-start'>
             <h1 className='text-2xl sm:text-3xl font-semibold text-(--text-primary) mb-1'>
               Forgot password
             </h1>
