@@ -40,11 +40,10 @@ export default function LoginForm() {
           {/* Header */}
           <div className='pb-6 text-start'>
             <h1 className='text-2xl sm:text-3xl font-semibold text-(--text-primary) mb-1'>
-              Sign up
+              Sign In
             </h1>
             <p className='text-sm text-(--shop-pagination-text)'>
-              Make changes to your account here. Click save when you&apos;re
-              done.
+              Enter your email and password to access your account.
             </p>
           </div>
 
