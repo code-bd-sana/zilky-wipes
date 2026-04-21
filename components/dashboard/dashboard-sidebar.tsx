@@ -30,8 +30,18 @@ type SidebarItem = {
 
 const operationItems: SidebarItem[] = [
   { label: "Home", key: "home", href: "/dashboard", icon: GalleryVerticalEnd },
-  { label: "Products", key: "products", href: "/dashboard/products", icon: ListTree },
-  { label: "Add Product", key: "add-product", href: "/dashboard/add-product", icon: FileText },
+  {
+    label: "Products",
+    key: "products",
+    href: "/dashboard/products",
+    icon: ListTree,
+  },
+  {
+    label: "Add Product",
+    key: "add-product",
+    href: "/dashboard/add-product",
+    icon: FileText,
+  },
   { label: "Orders", key: "orders", href: "/dashboard/orders", icon: Package },
   {
     label: "Subscription",
@@ -39,13 +49,33 @@ const operationItems: SidebarItem[] = [
     href: "/dashboard/subscription",
     icon: CircleDollarSign,
   },
-  { label: "Customers", key: "customers", href: "/dashboard/customers", icon: Users },
-  { label: "Feedback", key: "feedback", href: "/dashboard/feedback", icon: Star },
+  {
+    label: "Customers",
+    key: "customers",
+    href: "/dashboard/customers",
+    icon: Users,
+  },
+  {
+    label: "Feedback",
+    key: "feedback",
+    href: "/dashboard/feedback",
+    icon: Star,
+  },
 ];
 
 const otherItems: SidebarItem[] = [
-  { label: "Integration", key: "integration", href: "/dashboard/integration", icon: Network },
-  { label: "Settings", key: "settings", href: "/dashboard/settings", icon: Settings },
+  {
+    label: "Integration",
+    key: "integration",
+    href: "/dashboard/integration",
+    icon: Network,
+  },
+  {
+    label: "Settings",
+    key: "settings",
+    href: "/dashboard/settings",
+    icon: Settings,
+  },
 ];
 
 function SidebarNavItem({
@@ -96,14 +126,15 @@ export default function DashboardSidebar({
   onCloseMobile,
 }: DashboardSidebarProps) {
   const pathname = usePathname();
-  const activeView = pathname === "/dashboard" ? "home" : pathname.split("/")[2] ?? "home";
+  const activeView =
+    pathname === "/dashboard" ? "home" : (pathname.split("/")[2] ?? "home");
 
   return (
     <aside
       className={cn(
         "fixed inset-y-0 left-0 z-50 flex h-screen shrink-0 flex-col border-r border-black/10 bg-[#FAFAF9] p-3 transition-all duration-300 ease-out",
         isMobileOpen ? "translate-x-0" : "-translate-x-full",
-        "w-72 xl:static xl:translate-x-0",
+        "w-72 xl:sticky xl:top-0 xl:h-screen xl:translate-x-0",
         isCollapsed ? "xl:w-20" : "xl:w-80",
       )}>
       <div

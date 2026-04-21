@@ -4,7 +4,8 @@
 
 @font-face {
   font-family: "Malibu Sunday";
-  src: url("/font/Malibu/Malibu Sunday Serif.otf") format("opentype"),
+  src:
+    url("/font/Malibu/Malibu Sunday Serif.otf") format("opentype"),
     url("/font/Malibu/Malibu Sunday Serif.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
@@ -13,7 +14,8 @@
 
 @font-face {
   font-family: "Malibu Sunday";
-  src: url("/font/Malibu/Malibu Sunday Serif.otf") format("opentype"),
+  src:
+    url("/font/Malibu/Malibu Sunday Serif.otf") format("opentype"),
     url("/font/Malibu/Malibu Sunday Serif.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
@@ -115,15 +117,15 @@
   --checkout-divider: #e2e2e2;
   --checkout-muted-text: #474747;
   --checkbox-muted-subtext: #979191;
-  --checkbox-muted-foreground: #64748B;
+  --checkbox-muted-foreground: #64748b;
   --navbar-height: 4.25rem;
 }
 
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
   :root {
     --navbar-height: 6.25rem;
   }
-}
+} */
 
 @layer base {
   * {

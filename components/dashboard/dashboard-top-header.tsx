@@ -92,7 +92,7 @@ const headerByView: Record<string, HeaderConfig> = {
   "add-product": {
     label: "Add Product",
     icon: ListTodo,
-    badge: "Create Product",
+    // badge: "Create Product",
     badgeIcon: ClipboardList,
   },
   integration: {
