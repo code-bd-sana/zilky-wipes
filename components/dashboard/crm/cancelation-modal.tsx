@@ -26,32 +26,56 @@ type CrmProductRow = {
 const crmProductRows: CrmProductRow[] = [
   {
     id: "1",
-    section: "Prompt",
-    title: "How does it feel so far?",
-    subtitle: "Your experience matters to us. Good or bad - we're  listening. It helps us do better.",
+    section: "Modal Heading",
+    title: "We’d hate to see you go",
+    subtitle: "Before you cancel, would any of these options help?",
     imagePaths: [],
   },
   {
     id: "2",
-    section: "Input",
-    title: "Write your experience", 
+    section: "Option 1",
+    title: "Deliver less often", 
     subtitle: "-",
     imagePaths: [],
+    hasMoveRightIcon: true, 
   },
   {
     id: "3",
-    section: "Upload",
-    title: "Upload file,doc,image,gif",
+    section: "Option 2",
+    title: "Skip just one delivery",
+    subtitle: "-",
+    imagePaths: [],
+    hasMoveRightIcon: true, 
+  },
+  {
+    id: "4",
+    section: "Option 3",
+    title: "Pause for a while",
+    subtitle: "Refer a Friend",
+    imagePaths: [],
+    hasMoveRightIcon: true,
+  },
+  {
+    id: "5",
+    section: "Note",
+    title: "",
+    subtitle: "If none of these work for you right now, we understand.",
+    imagePaths: [],
+  },
+  {
+    id: "6",
+    section: "CTA 1",
+    title: "Continue with cancellation",
     subtitle: "-",
     imagePaths: [],
   },
   {
-    id: "4",
-    section: "CTA",
-    title: "Submit Feedback",
-    subtitle: "Refer a Friend",
+    id: "7",
+    section: "CTA 2",
+    title: "Keep my subscription",
+    subtitle: "-",
     imagePaths: [],
-  },
+  }
 ];
 
 const columns: DashboardTableColumn<CrmProductRow>[] = [
@@ -125,7 +149,7 @@ const columns: DashboardTableColumn<CrmProductRow>[] = [
   },
 ];
 
-export default function CrmPushFeedbackPage() {
+export default function CrmCancelationPage() {
   return (
     <section>
       <DashboardDataTable

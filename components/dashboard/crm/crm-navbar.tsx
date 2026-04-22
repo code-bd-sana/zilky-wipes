@@ -44,11 +44,17 @@ const crmNavItems: CrmNavItem[] = [
     icon: Bell,
     href: "/dashboard/crm/pushSubscription",
   },
-  { id: "feedback",
+  { 
+    id: "feedback",
     label: "Feedback modal", icon: MessageSquareText,
     href: "/dashboard/crm/feedback"
   },
-  { id: "cancelation", label: "Cancelation modal", icon: X, href: "/dashboard/crm/cancelation" },
+  { 
+    id: "cancelation",
+    label: "Cancelation modal",
+    icon: X, 
+    href: "/dashboard/crm/cancelation" 
+  },
   { id: "faq", label: "FAQ", icon: CircleHelp, href: "/dashboard/crm/faq" },
   { id: "subscription", label: "Subscription", icon: Users, href: "/dashboard/crm/subscription" },
   { id: "benefits", label: "Benifits", icon: Sparkles, href: "/dashboard/crm/benefits" },
