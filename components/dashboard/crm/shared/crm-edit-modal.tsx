@@ -1,7 +1,7 @@
-import { ChevronsLeft, Group, Maximize2 } from "lucide-react";
+import { ChevronsLeft, Group, Maximize2, Save } from "lucide-react";
 import Image from "next/image";
 
-export default function EditModal({
+export default function CRMEditModal({
   isOpen,
   onClose,
   section,
@@ -84,6 +84,12 @@ export default function EditModal({
                   </div>
                 </div>
               ))}
+            </div>
+            <div className='flex justify-end items-center mt-10'>
+              <button className='bg-[#FAFAF9] text-[#262626] py-2 px-4 rounded-md hover:bg-[#f1f1eb] border border-[#E5E7EB]'>
+                <Save className='w-4 h-4 inline-flex items-center justify-center mr-2' />
+                Save Changes
+              </button>
             </div>
           </div>
         </div>
