@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import EditModal from "./shared/edit-modal";
+import CRMEditModal from "./shared/crm-edit-modal";
 
 const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
 
@@ -162,6 +162,7 @@ export default function CrmHomePage() {
       ),
     },
   ];
+
   return (
     <section>
       <DashboardDataTable
@@ -178,7 +179,7 @@ export default function CrmHomePage() {
         footerMode='count-only'
         countOnlyLabel='Sections'
       />
-      <EditModal
+      <CRMEditModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         section={selectedRow?.section || ""}
