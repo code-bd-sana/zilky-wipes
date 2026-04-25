@@ -109,7 +109,7 @@ export default function SettingsPage() {
         <button
           onClick={handleSubmit}
           className='mt-7 sm:mt-8 px-6 py-3.5 sm:py-4 text-[#262626] font-medium bg-[#FAFAF9] border border-[#E5E7EB] rounded-[10px] hover:bg-gray-200 active:scale-[0.98] transition-all duration-150 cursor-pointer'>
-          Update Password
+          Update Password & Settings
         </button>
       </div>
     </section>
