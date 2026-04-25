@@ -119,16 +119,13 @@ export default function AddProductPage() {
                 onDragOver={handleDrag}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`w-full border-2 border-dashed rounded-md p-8 text-center cursor-pointer transition-colors ${
+                className={`w-full border-2 border-dashed rounded-md p-12 text-center cursor-pointer transition-colors ${
                   dragActive
                     ? "border-[#1e2d4a] bg-blue-50"
                     : "border-[#E7E5E4] hover:border-[#1e2d4a]"
                 }`}>
                 <div className='flex flex-col items-center justify-center'>
                   <div className='text-4xl mb-3 text-gray-400'>+</div>
-                  <p className='text-sm text-gray-500'>
-                    Drag and drop images here or click to select
-                  </p>
                 </div>
                 <input
                   ref={fileInputRef}
@@ -139,12 +136,13 @@ export default function AddProductPage() {
                   className='hidden'
                 />
               </div>
-              <p className='text-xs text-gray-500 mt-2'>
+              <p className='text-sm text-[#979191] mt-2'>
                 Add up to 5 images. First image will be the main photo.
               </p>
             </div>
           </div>
 
+          {/* Product Details */}
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
             {/* Price */}
             <div>
@@ -208,15 +206,16 @@ export default function AddProductPage() {
           </div>
         </div>
 
+        {/* Action Buttons */}
         <div className='flex flex-col md:flex-row gap-x-4'>
           <button
             onClick={handleSubmit}
-            className='mt-7 sm:mt-8 px-10 py-3.5 sm:py-4 bg-white text-(--cart-panel-bg) font-semibold border border-[#E5E5E5] rounded-full hover:bg-blue-200  active:scale-[0.98] transition-all duration-150 text-base cursor-pointer'>
+            className='mt-7 sm:mt-8 px-6 py-3.5 sm:py-4 bg-[#FAFAF9] text-(--cart-panel-bg) font-semibold border border-[#E5E7EB] rounded-[10px] hover:bg-blue-50  active:scale-[0.98] transition-all duration-150 cursor-pointer text-base'>
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className='mt-7 sm:mt-8 px-10 py-3.5 sm:py-4 bg-(--cart-panel-bg) text-white font-semibold rounded-full hover:bg-[#16253d] active:scale-[0.98] transition-all duration-150 text-base cursor-pointer'>
+            className='mt-7 sm:mt-8 px-6 py-3.5 sm:py-4 bg-[#FAFAF9] text-(--cart-panel-bg) font-semibold border border-[#E5E7EB] rounded-[10px] hover:bg-blue-50  active:scale-[0.98] transition-all duration-150 cursor-pointer text-base '>
             Save Product
           </button>
         </div>
