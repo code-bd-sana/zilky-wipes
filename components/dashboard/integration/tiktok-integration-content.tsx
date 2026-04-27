@@ -1,10 +1,27 @@
-import { BadgeInfo, BarChart3, ChevronLeft, Lock, SquarePlus, Users } from "lucide-react";
+import {
+  BadgeInfo,
+  BarChart3,
+  ChevronLeft,
+  Lock,
+  SquarePlus,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 
 function TiktokBrandIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" className="h-9 w-9 sm:h-10 sm:w-10">
-      <path d="M448 209.91a210.06 210.06 0 0 1-122.77-39.25V349.38A162.55 162.55 0 1 1 185 188.31V278.2a74.62 74.62 0 1 0 52.23 71.18V0l88 0a121.18 121.18 0 0 0 1.86 22.17A122.18 122.18 0 0 0 381 102.39a121.43 121.43 0 0 0 67 20.14Z" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="40"
+      height="40"
+      viewBox="0 0 40 40"
+      fill="none"
+    >
+      <rect width="40" height="40" rx="8" fill="black" />
+      <path
+        d="M28.0899 14.69C27.0931 14.4708 26.1913 13.9414 25.514 13.1779C24.8367 12.4143 24.4186 11.4559 24.3199 10.44V10H20.8699V23.67C20.8706 24.2766 20.6804 24.868 20.3263 25.3604C19.9722 25.8529 19.4722 26.2215 18.897 26.414C18.3218 26.6065 17.7006 26.6131 17.1214 26.4329C16.5422 26.2527 16.0344 25.8948 15.6699 25.41C15.3433 24.9808 15.1434 24.4689 15.0926 23.932C15.0419 23.3951 15.1423 22.8548 15.3827 22.372C15.623 21.8892 15.9936 21.4834 16.4526 21.2003C16.9116 20.9172 17.4406 20.7681 17.9799 20.77C18.2781 20.7683 18.5749 20.8121 18.8599 20.9V17.4C18.5282 17.3589 18.194 17.3422 17.8599 17.35C16.6292 17.3829 15.4348 17.7739 14.423 18.4753C13.4112 19.1766 12.6258 20.1578 12.1631 21.2986C11.7004 22.4395 11.5804 23.6905 11.8178 24.8986C12.0553 26.1066 12.6398 27.2191 13.4999 28.1C14.3814 28.9962 15.5094 29.6101 16.7406 29.8638C17.9718 30.1175 19.2506 29.9994 20.4146 29.5246C21.5785 29.0498 22.575 28.2397 23.2775 27.1973C23.98 26.1548 24.3568 24.9271 24.3599 23.67V16.67C25.7514 17.6639 27.4199 18.1956 29.1299 18.19V14.79C28.794 14.7914 28.4589 14.7579 28.1299 14.69H28.0899Z"
+        fill="white"
+      />
     </svg>
   );
 }
@@ -32,7 +49,8 @@ export default function TiktokIntegrationContent() {
               Connect with TikTok
             </h1>
             <p className="mx-auto mt-2 max-w-70 text-sm text-[#9A9AA0] sm:max-w-md sm:text-base">
-              Connect your TikTok account to sync profile, manage content, and track performance.
+              Connect your TikTok account to sync profile, manage content, and
+              track performance.
             </p>
           </div>
 
@@ -53,7 +71,8 @@ export default function TiktokIntegrationContent() {
                       Sync Your Content
                     </p>
                     <p className="text-xs text-[#9a9a9a] sm:text-sm">
-                      Automatically sync your TikTok videos and profile information.
+                      Automatically sync your TikTok videos and profile
+                      information.
                     </p>
                   </div>
                 </div>
@@ -121,9 +140,12 @@ export default function TiktokIntegrationContent() {
           <div className="mt-6 flex flex-col items-center gap-3 rounded-2xl border border-[#AFC3DA] bg-[#EEF4FB] p-5 text-center sm:flex-row sm:items-start sm:text-left">
             <BadgeInfo className="h-6 w-6 shrink-0 text-[#1F3A5F]" />
             <div>
-              <p className="text-sm font-bold text-[#1F3A5F]">We respect your privacy</p>
+              <p className="text-sm font-bold text-[#1F3A5F]">
+                We respect your privacy
+              </p>
               <p className="mt-1 text-xs leading-relaxed text-[#1F3A5F]/80 sm:text-sm">
-                You can disconnect your account at any time from the integration settings.
+                You can disconnect your account at any time from the integration
+                settings.
               </p>
             </div>
           </div>
