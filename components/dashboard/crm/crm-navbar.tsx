@@ -55,11 +55,27 @@ const crmNavItems: CrmNavItem[] = [
     icon: X, 
     href: "/dashboard/crm/cancelation" 
   },
-  { id: "faq", label: "FAQ", icon: CircleHelp, href: "/dashboard/crm/faq" },
+  {
+    id: "faq",
+    label: "FAQ",
+    icon: CircleHelp,
+    href: "/dashboard/crm/faq"
+  },
   { id: "subscription", label: "Subscription", icon: Users, href: "/dashboard/crm/subscription" },
   { id: "benefits", label: "Benifits", icon: Sparkles, href: "/dashboard/crm/benefits" },
   { id: "about", label: "About", icon: Info, href: "/dashboard/crm/about" },
-  { id: "help", label: "Help", icon: CircleHelp, href: "/dashboard/crm/help" },
+  {
+    id: "help",
+    label: "Help",
+    icon: CircleHelp,
+    href: "/dashboard/crm/help"
+  },
+  {
+    id: "footer",
+    label: "Footer",
+    icon: Info,
+    href: "/dashboard/crm/footer"
+  }
 ];
 
 type CrmNavbarProps = {
