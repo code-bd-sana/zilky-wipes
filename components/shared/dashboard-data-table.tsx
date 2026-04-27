@@ -67,6 +67,8 @@ export type DashboardDataTableProps<T> = {
   footerMode?: "default" | "count-only";
   countOnlyLabel?: string;
   className?: string;
+  addButton?: string;
+  onAddClick?: () => void;
 };
 
 function alignClass(align: ColumnAlign = "left") {
@@ -94,6 +96,8 @@ export default function DashboardDataTable<T>({
   footerMode = "default",
   countOnlyLabel = "Items",
   className,
+  addButton,
+  onAddClick,
 }: DashboardDataTableProps<T>) {
   const [query, setQuery] = useState("");
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
@@ -223,7 +227,8 @@ export default function DashboardDataTable<T>({
 
   const activeCustomOption =
     activeFilterGroup?.options?.find(
-      (option) => `${activeFilterGroup.id}:${option.id}` === activeFilterOptionKey,
+      (option) =>
+        `${activeFilterGroup.id}:${option.id}` === activeFilterOptionKey,
     ) ?? null;
 
   const hasExpandedCustomContent = Boolean(activeCustomOption?.customContent);
@@ -346,7 +351,9 @@ export default function DashboardDataTable<T>({
                     <Search className='pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#9e9e9e]' />
                     <input
                       value={filterMenuQuery}
-                      onChange={(event) => setFilterMenuQuery(event.target.value)}
+                      onChange={(event) =>
+                        setFilterMenuQuery(event.target.value)
+                      }
                       placeholder={filterMenu.searchPlaceholder ?? "Search..."}
                       className='h-8 w-full rounded-md border border-[#e3e3e3] bg-[#f8f8f8] pl-7 pr-2 text-xs text-[#4d4d4d] outline-none placeholder:text-[#afafaf]'
                     />
@@ -373,7 +380,9 @@ export default function DashboardDataTable<T>({
                               : "hover:bg-[#f1f1f1]",
                           )}>
                           <span className='inline-flex items-center gap-1.5'>
-                            {GroupIcon ? <GroupIcon className='h-3.5 w-3.5 text-[#757575]' /> : null}
+                            {GroupIcon ? (
+                              <GroupIcon className='h-3.5 w-3.5 text-[#757575]' />
+                            ) : null}
                             <span>{group.label}</span>
                           </span>
                           {hasOptions ? (
@@ -404,14 +413,18 @@ export default function DashboardDataTable<T>({
                       {activeFilterGroup.options.map((option) => {
                         const OptionIcon = option.icon;
                         const optionKey = `${activeFilterGroup.id}:${option.id}`;
-                        const isOptionActive = activeFilterOptionKey === optionKey;
+                        const isOptionActive =
+                          activeFilterOptionKey === optionKey;
 
                         return (
                           <button
                             key={option.id}
                             type='button'
                             onClick={() =>
-                              handleFilterOptionSelect(activeFilterGroup, option)
+                              handleFilterOptionSelect(
+                                activeFilterGroup,
+                                option,
+                              )
                             }
                             className={cn(
                               "flex w-full items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-[#3f3f3f] transition-colors hover:bg-[#f1f1f1]",
@@ -439,19 +452,28 @@ export default function DashboardDataTable<T>({
         ) : (
           <span />
         )}
-
-        <label className='relative w-full max-w-75'>
-          <Search className='pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#9b9b9b]' />
-          <input
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setCurrentPage(1);
-            }}
-            placeholder={searchPlaceholder}
-            className='h-8 w-full rounded-md border border-[#e2e2e2] bg-[#f8f8f8] px-2.5 pr-8 text-sm text-[#505050] outline-none placeholder:text-[#b1b1b1] focus:border-[#d4d4d4]'
-          />
-        </label>
+        <div className='flex-1 flex justify-end gap-2 min-w-0'>
+          {addButton ? (
+            <button
+              type='button'
+              onClick={onAddClick}
+              className='inline-flex items-center gap-1.5 rounded-md border border-[#e4e4e4] bg-[#f7f7f7] px-2.5 py-1 text-sm text-[#5b5b5b] transition-colors hover:bg-[#efefef]'>
+              {addButton}
+            </button>
+          ) : null}
+          <label className='relative w-full max-w-75 flex items-center '>
+            <Search className='pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#9b9b9b]' />
+            <input
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder={searchPlaceholder}
+              className='h-8 w-full rounded-md border border-[#e2e2e2] bg-[#f8f8f8] px-2.5 pr-8 text-sm text-[#505050] outline-none placeholder:text-[#b1b1b1] focus:border-[#d4d4d4]'
+            />
+          </label>
+        </div>
       </div>
 
       <div className='overflow-x-auto'>

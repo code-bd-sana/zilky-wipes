@@ -11,7 +11,7 @@ const jost = Jost({
 
 export const metadata: Metadata = {
   title: "Zilky Wipes",
-  description: "A better way to feel clean.",
+  description: "Because your bottom deserves better.",
 };
 
 export default function RootLayout({
@@ -20,9 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang='en'
-      className={`${jost.variable} h-full antialiased`}>
+    <html lang='en' className={`${jost.variable} h-full antialiased`}>
       <body className='min-h-full flex flex-col font-sans'>
         {children}
         <Toaster richColors position='bottom-left' />
