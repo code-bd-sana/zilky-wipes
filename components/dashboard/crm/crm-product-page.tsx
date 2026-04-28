@@ -42,10 +42,10 @@ const crmProductRows: CrmProductRow[] = [
   },
   {
     id: "3",
-    section: "Footer",
+    section: "Before Footer",
     title: "-",
     subtitle: "-",
-    imagePaths: [],
+    imagePaths: [CRM_PRODUCT_IMAGE],
   },
   {
     id: "4",

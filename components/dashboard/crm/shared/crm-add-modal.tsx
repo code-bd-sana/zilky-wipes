@@ -1,4 +1,4 @@
-import { ChevronsRight, Group, Maximize2, Save, X } from "lucide-react";
+import { ChevronsRight, Group, Save } from "lucide-react";
 import { useState } from "react";
 
 type FormField = {
@@ -80,19 +80,7 @@ export default function CRMAddModal({
               className='p-1.5 rounded-md hover:bg-gray-100 transition-colors'>
               <ChevronsRight className='w-5 h-5 text-gray-600' />
             </button>
-            <button
-              type='button'
-              onClick={onClose}
-              className='p-1.5 rounded-md hover:bg-gray-100 transition-colors'>
-              <Maximize2 className='w-4 h-4 text-gray-600' />
-            </button>
           </div>
-          <button
-            type='button'
-            onClick={onClose}
-            className='p-1.5 rounded-md hover:bg-gray-100 transition-colors'>
-            <X className='w-4 h-4 text-gray-600' />
-          </button>
         </div>
 
         <h2 className='text-2xl mb-2 text-[#2B2D2E]'>{title}</h2>

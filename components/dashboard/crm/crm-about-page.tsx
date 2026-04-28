@@ -1,14 +1,13 @@
 "use client";
 
 import DashboardDataTable, {
-  type DashboardTableColumn,
+  DashboardTableColumn,
 } from "@/components/shared/dashboard-data-table";
 import {
   ArrowRight,
   Calendar,
   Forward,
-  Image as ImageIcon,
-  MoveRight,
+  ImageIcon,
   Star,
   UserRound,
 } from "lucide-react";
@@ -16,59 +15,60 @@ import Image from "next/image";
 import { useState } from "react";
 import CRMEditModal from "./shared/crm-edit-modal";
 
-type CrmProductRow = {
+type CrmAboutRow = {
   id: string;
   section: string;
   title: string;
   subtitle: string;
   imagePaths: string[];
-  hasMoveRightIcon?: boolean;
 };
 
-const crmProductRows: CrmProductRow[] = [
+const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
+
+const crmAboutRows: CrmAboutRow[] = [
   {
     id: "1",
-    section: "Modal Heading",
-    title: "You're all set.",
-    subtitle:
-      "Would you consider subscribing to our products? Subscription reduce costs 15% from one time buying.",
+    section: "Hero Main Heading",
+    title: "Made for real bathrooms. And real bodies.",
+    subtitle: "-",
     imagePaths: [],
   },
   {
     id: "2",
-    section: "Link 1",
-    title: "See subscription benefits",
-    subtitle: "-",
-    imagePaths: [],
-    hasMoveRightIcon: true,
+    section: "Section 1",
+    title: "BRAND STORY",
+    subtitle:
+      "ZilkyWipes exists because hygiene deserves better. Not louder. Not more complicated. Just cleaner, calmer, and more considered. We didn't reinvent care. We simply made it make sense.",
+    imagePaths: [CRM_PREVIEW_IMAGE],
   },
   {
     id: "3",
-    section: "Link 2",
-    title: "Tell us about this product",
-    subtitle: "-",
-    imagePaths: [],
-    hasMoveRightIcon: true,
+    section: "Section 2",
+    title: "Questions, feedback, or just curious? we'd love to hear from you.",
+    subtitle:
+      "Your experience matters to us. Good or bad - we're listening. It helps us do better.",
+    imagePaths: [CRM_PREVIEW_IMAGE],
   },
   {
     id: "4",
-    section: "CTA",
-    title: "Track your order",
+    section: "Testimonial",
+    title:
+      "A small team. Obsessed with comfort, design, and doing things properly.",
     subtitle: "-",
-    imagePaths: [],
+    imagePaths: [CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE],
   },
 ];
 
-export default function CrmPushSubscriptionPage() {
+export default function CrmAboutPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<CrmProductRow | null>(null);
+  const [selectedRow, setSelectedRow] = useState<CrmAboutRow | null>(null);
 
-  const handleEdit = (row: CrmProductRow) => {
+  const handleEdit = (row: CrmAboutRow) => {
     setSelectedRow(row);
     setIsModalOpen(true);
   };
 
-  const columns: DashboardTableColumn<CrmProductRow>[] = [
+  const columns: DashboardTableColumn<CrmAboutRow>[] = [
     {
       id: "section",
       header: "Section",
@@ -81,49 +81,34 @@ export default function CrmPushSubscriptionPage() {
       header: "Title",
       icon: Calendar,
       widthClassName: "w-[24%]",
-      cell: (row) => (
-        <span className='flex items-center gap-1 max-w-full truncate text-[#2f2f2f]'>
-          <span className='truncate'>{row.title}</span>
-          {row.hasMoveRightIcon && <MoveRight className='h-4 w-4 shrink-0' />}
-        </span>
-      ),
+      cell: (row) => <span>{row.title}</span>,
     },
     {
       id: "subtitle",
       header: "Subtitle",
       icon: Star,
       widthClassName: "w-[35%]",
-      cell: (row) => (
-        <span className='block max-w-full truncate text-[#2f2f2f]'>
-          {row.subtitle}
-        </span>
-      ),
+      cell: (row) => <span>{row.subtitle}</span>,
     },
     {
-      id: "image",
-      header: "Image",
+      id: "images",
+      header: "Images",
       icon: ImageIcon,
       widthClassName: "w-[12%]",
-      cell: (row) => {
-        if (!row.imagePaths.length) {
-          return <span>-</span>;
-        }
-
-        return (
-          <div className='flex items-center gap-1'>
-            {row.imagePaths.map((imagePath, index) => (
-              <Image
-                key={`${row.id}-image-${index}`}
-                src={imagePath}
-                alt={`${row.section} preview ${index + 1}`}
-                width={28}
-                height={20}
-                className='rounded-sm border border-[#E5E7EB] object-cover'
-              />
-            ))}
-          </div>
-        );
-      },
+      cell: (row) => (
+        <div className='flex flex-wrap gap-2'>
+          {row.imagePaths.map((imagePath, index) => (
+            <Image
+              key={`${row.id}-image-${index}`}
+              src={imagePath}
+              alt={`${row.section} preview ${index + 1}`}
+              width={28}
+              height={20}
+              className='rounded-sm border border-[#E5E7EB] object-cover'
+            />
+          ))}
+        </div>
+      ),
     },
     {
       id: "action",
@@ -145,8 +130,8 @@ export default function CrmPushSubscriptionPage() {
   return (
     <section>
       <DashboardDataTable
-        searchPlaceholder='Search order, customer name'
-        data={crmProductRows}
+        searchPlaceholder='Search'
+        data={crmAboutRows}
         columns={columns}
         getRowId={(row) => row.id}
         searchPredicate={(row, query) => {

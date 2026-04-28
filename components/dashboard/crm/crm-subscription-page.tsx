@@ -8,7 +8,6 @@ import {
   Calendar,
   Forward,
   Image as ImageIcon,
-  MoveRight,
   Star,
   UserRound,
 } from "lucide-react";
@@ -16,7 +15,7 @@ import Image from "next/image";
 import { useState } from "react";
 import CRMEditModal from "./shared/crm-edit-modal";
 
-type CrmProductRow = {
+type CrmSubscriptionRow = {
   id: string;
   section: string;
   title: string;
@@ -25,50 +24,63 @@ type CrmProductRow = {
   hasMoveRightIcon?: boolean;
 };
 
-const crmProductRows: CrmProductRow[] = [
+const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
+
+const crmSubscriptionRows: CrmSubscriptionRow[] = [
   {
     id: "1",
-    section: "Modal Heading",
-    title: "You're all set.",
-    subtitle:
-      "Would you consider subscribing to our products? Subscription reduce costs 15% from one time buying.",
-    imagePaths: [],
+    section: "Hero Main Heading",
+    title: "Never run out again.",
+    subtitle: "-",
+    imagePaths: [CRM_PREVIEW_IMAGE],
   },
   {
     id: "2",
-    section: "Link 1",
-    title: "See subscription benefits",
-    subtitle: "-",
-    imagePaths: [],
+    section: "Feature 1",
+    title: ".....Because comfort shouldn’t be a reminder!",
+    subtitle:
+      "ZilkyWipes arrives before you need it. No last-minute runs. No guessing. Just the right amount, on your schedule.",
+    imagePaths: [CRM_PREVIEW_IMAGE],
     hasMoveRightIcon: true,
   },
   {
     id: "3",
-    section: "Link 2",
-    title: "Tell us about this product",
+    section: "Feature 2",
+    title: "Choose your rhythm.",
+    subtitle:
+      "Monthly delivery / Bi-monthly delivery. You can change this anytime.",
+    imagePaths: [CRM_PREVIEW_IMAGE],
+    hasMoveRightIcon: true,
+  },
+  {
+    id: "4",
+    section: "Difference Section",
+    title: "See the difference by yourself",
     subtitle: "-",
     imagePaths: [],
     hasMoveRightIcon: true,
   },
   {
-    id: "4",
-    section: "CTA",
-    title: "Track your order",
+    id: "5",
+    section: "Before Footer",
+    title: "-",
     subtitle: "-",
-    imagePaths: [],
+    imagePaths: [CRM_PREVIEW_IMAGE],
   },
 ];
 
-export default function CrmPushSubscriptionPage() {
+export default function CrmSubscriptionPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<CrmProductRow | null>(null);
+  const [selectedRow, setSelectedRow] = useState<CrmSubscriptionRow | null>(
+    null,
+  );
 
-  const handleEdit = (row: CrmProductRow) => {
+  const handleEdit = (row: CrmSubscriptionRow) => {
     setSelectedRow(row);
     setIsModalOpen(true);
   };
 
-  const columns: DashboardTableColumn<CrmProductRow>[] = [
+  const columns: DashboardTableColumn<CrmSubscriptionRow>[] = [
     {
       id: "section",
       header: "Section",
@@ -84,7 +96,6 @@ export default function CrmPushSubscriptionPage() {
       cell: (row) => (
         <span className='flex items-center gap-1 max-w-full truncate text-[#2f2f2f]'>
           <span className='truncate'>{row.title}</span>
-          {row.hasMoveRightIcon && <MoveRight className='h-4 w-4 shrink-0' />}
         </span>
       ),
     },
@@ -141,12 +152,11 @@ export default function CrmPushSubscriptionPage() {
       ),
     },
   ];
-
   return (
     <section>
       <DashboardDataTable
-        searchPlaceholder='Search order, customer name'
-        data={crmProductRows}
+        searchPlaceholder='Search'
+        data={crmSubscriptionRows}
         columns={columns}
         getRowId={(row) => row.id}
         searchPredicate={(row, query) => {
@@ -158,6 +168,7 @@ export default function CrmPushSubscriptionPage() {
         footerMode='count-only'
         countOnlyLabel='Sections'
       />
+
       <CRMEditModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

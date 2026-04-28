@@ -71,14 +71,6 @@ const crmHomepageRows: CrmHomepageRow[] = [
     subtitle: "-",
     imagePaths: [CRM_PREVIEW_IMAGE],
   },
-  {
-    id: "7",
-    section: "Footer",
-    title: "Running out should not be part of your mental load.",
-    subtitle:
-      "With Subscribe & Save, ZilkyWipes arrives on your schedule - monthly or bi-monthly.",
-    imagePaths: [],
-  },
 ];
 
 export default function CrmHomePage() {
