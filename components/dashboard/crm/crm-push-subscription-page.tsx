@@ -29,7 +29,7 @@ const crmProductRows: CrmProductRow[] = [
   {
     id: "1",
     section: "Modal Heading",
-    title: "See subscription benefits",
+    title: "You're all set.",
     subtitle:
       "Would you consider subscribing to our products? Subscription reduce costs 15% from one time buying.",
     imagePaths: [],
