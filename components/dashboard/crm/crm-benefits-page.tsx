@@ -1,13 +1,13 @@
 "use client";
 
 import DashboardDataTable, {
-  type DashboardTableColumn,
+  DashboardTableColumn,
 } from "@/components/shared/dashboard-data-table";
 import {
   ArrowRight,
   Calendar,
   Forward,
-  Image as ImageIcon,
+  ImageIcon,
   Star,
   UserRound,
 } from "lucide-react";
@@ -15,7 +15,7 @@ import Image from "next/image";
 import { useState } from "react";
 import CRMEditModal from "./shared/crm-edit-modal";
 
-type CrmSubscriptionRow = {
+type CrmBenefitsRow = {
   id: string;
   section: string;
   title: string;
@@ -26,42 +26,31 @@ type CrmSubscriptionRow = {
 
 const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
 
-const crmSubscriptionRows: CrmSubscriptionRow[] = [
+const crmBenefitsRows: CrmBenefitsRow[] = [
   {
     id: "1",
     section: "Hero Main Heading",
-    title: "Never run out again.",
-    subtitle: "-",
+    title: "A cleaner way to care.",
+    subtitle: "",
     imagePaths: [CRM_PREVIEW_IMAGE],
   },
   {
     id: "2",
-    section: "Feature 1",
-    title: ".....Because comfort shouldn’t be a reminder!",
+    section: "Section 1",
+    title: "Dry paper was never the answer!",
     subtitle:
-      "ZilkyWipes arrives before you need it. No last-minute runs. No guessing. Just the right amount, on your schedule.",
+      "Paper spreads. Water refreshes. One is habit. The other is care.",
     imagePaths: [],
-    hasMoveRightIcon: true,
   },
   {
     id: "3",
-    section: "Feature 2",
-    title: "Choose your rhythm.",
-    subtitle:
-      "Monthly delivery / Bi-monthly delivery. You can change this anytime.",
-    imagePaths: [],
-    hasMoveRightIcon: true,
+    section: "Testimonial",
+    title: "People don’t talk about this. ....Until they try it!",
+    subtitle: "-",
+    imagePaths: [CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE],
   },
   {
     id: "4",
-    section: "Difference Section",
-    title: "See the difference by yourself",
-    subtitle: "-",
-    imagePaths: [],
-    hasMoveRightIcon: true,
-  },
-  {
-    id: "5",
     section: "Before Footer",
     title: "-",
     subtitle: "-",
@@ -69,16 +58,16 @@ const crmSubscriptionRows: CrmSubscriptionRow[] = [
   },
 ];
 
-export default function CrmSubscriptionPage() {
+export default function CrmBenefitsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<CrmSubscriptionRow | null>(null);
+  const [selectedRow, setSelectedRow] = useState<CrmBenefitsRow | null>(null);
 
-  const handleEdit = (row: CrmSubscriptionRow) => {
+  const handleEdit = (row: CrmBenefitsRow) => {
     setSelectedRow(row);
     setIsModalOpen(true);
   };
 
-  const columns: DashboardTableColumn<CrmSubscriptionRow>[] = [
+  const columns: DashboardTableColumn<CrmBenefitsRow>[] = [
     {
       id: "section",
       header: "Section",
@@ -91,22 +80,14 @@ export default function CrmSubscriptionPage() {
       header: "Title",
       icon: Calendar,
       widthClassName: "w-[24%]",
-      cell: (row) => (
-        <span className='flex items-center gap-1 max-w-full truncate text-[#2f2f2f]'>
-          <span className='truncate'>{row.title}</span>
-        </span>
-      ),
+      cell: (row) => <span>{row.title}</span>,
     },
     {
       id: "subtitle",
       header: "Subtitle",
       icon: Star,
       widthClassName: "w-[35%]",
-      cell: (row) => (
-        <span className='block max-w-full truncate text-[#2f2f2f]'>
-          {row.subtitle}
-        </span>
-      ),
+      cell: (row) => <span>{row.subtitle}</span>,
     },
     {
       id: "image",
@@ -117,12 +98,11 @@ export default function CrmSubscriptionPage() {
         if (!row.imagePaths.length) {
           return <span>-</span>;
         }
-
         return (
           <div className='flex items-center gap-1'>
             {row.imagePaths.map((imagePath, index) => (
               <Image
-                key={`${row.id}-image-${index}`}
+                key={index}
                 src={imagePath}
                 alt={`${row.section} preview ${index + 1}`}
                 width={28}
@@ -145,7 +125,7 @@ export default function CrmSubscriptionPage() {
           onClick={() => handleEdit(row)}
           className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
           <span>Edit</span>
-          <ArrowRight className='h-3.5 w-3.5' color='#262626' />
+          <ArrowRight className='w-3.5 h-3.5' color='#262626' />
         </button>
       ),
     },
@@ -154,12 +134,12 @@ export default function CrmSubscriptionPage() {
     <section>
       <DashboardDataTable
         searchPlaceholder='Search order, customer name'
-        data={crmSubscriptionRows}
+        data={crmBenefitsRows}
         columns={columns}
         getRowId={(row) => row.id}
         searchPredicate={(row, query) => {
           const text = `${row.section} ${row.title} ${row.subtitle}`;
-          return text.toLowerCase().includes(query);
+          return text.toLowerCase().includes(query.toLowerCase());
         }}
         pageSizeOptions={[50]}
         defaultPageSize={50}
