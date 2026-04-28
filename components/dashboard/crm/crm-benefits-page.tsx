@@ -40,7 +40,7 @@ const crmBenefitsRows: CrmBenefitsRow[] = [
     title: "Dry paper was never the answer!",
     subtitle:
       "Paper spreads. Water refreshes. One is habit. The other is care.",
-    imagePaths: [],
+    imagePaths: [CRM_PREVIEW_IMAGE],
   },
   {
     id: "3",
@@ -133,7 +133,7 @@ export default function CrmBenefitsPage() {
   return (
     <section>
       <DashboardDataTable
-        searchPlaceholder='Search order, customer name'
+        searchPlaceholder='Search'
         data={crmBenefitsRows}
         columns={columns}
         getRowId={(row) => row.id}

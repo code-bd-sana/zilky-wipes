@@ -1,13 +1,13 @@
 "use client";
 
 import DashboardDataTable, {
-  type DashboardTableColumn,
+  DashboardTableColumn,
 } from "@/components/shared/dashboard-data-table";
 import {
   ArrowRight,
   Calendar,
   Forward,
-  Image as ImageIcon,
+  ImageIcon,
   Star,
   UserRound,
 } from "lucide-react";
@@ -15,72 +15,60 @@ import Image from "next/image";
 import { useState } from "react";
 import CRMEditModal from "./shared/crm-edit-modal";
 
-type CrmSubscriptionRow = {
+type CrmAboutRow = {
   id: string;
   section: string;
   title: string;
   subtitle: string;
   imagePaths: string[];
-  hasMoveRightIcon?: boolean;
 };
 
 const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
 
-const crmSubscriptionRows: CrmSubscriptionRow[] = [
+const crmAboutRows: CrmAboutRow[] = [
   {
     id: "1",
     section: "Hero Main Heading",
-    title: "Never run out again.",
+    title: "Made for real bathrooms. And real bodies.",
     subtitle: "-",
-    imagePaths: [CRM_PREVIEW_IMAGE],
+    imagePaths: [],
   },
   {
     id: "2",
-    section: "Feature 1",
-    title: ".....Because comfort shouldn’t be a reminder!",
+    section: "Section 1",
+    title: "BRAND STORY",
     subtitle:
-      "ZilkyWipes arrives before you need it. No last-minute runs. No guessing. Just the right amount, on your schedule.",
+      "ZilkyWipes exists because hygiene deserves better. Not louder. Not more complicated. Just cleaner, calmer, and more considered. We didn't reinvent care. We simply made it make sense.",
     imagePaths: [CRM_PREVIEW_IMAGE],
-    hasMoveRightIcon: true,
   },
   {
     id: "3",
-    section: "Feature 2",
-    title: "Choose your rhythm.",
+    section: "Section 2",
+    title: "Questions, feedback, or just curious? we'd love to hear from you.",
     subtitle:
-      "Monthly delivery / Bi-monthly delivery. You can change this anytime.",
+      "Your experience matters to us. Good or bad - we're listening. It helps us do better.",
     imagePaths: [CRM_PREVIEW_IMAGE],
-    hasMoveRightIcon: true,
   },
   {
     id: "4",
-    section: "Difference Section",
-    title: "See the difference by yourself",
+    section: "Testimonial",
+    title:
+      "A small team. Obsessed with comfort, design, and doing things properly.",
     subtitle: "-",
-    imagePaths: [],
-    hasMoveRightIcon: true,
-  },
-  {
-    id: "5",
-    section: "Before Footer",
-    title: "-",
-    subtitle: "-",
-    imagePaths: [CRM_PREVIEW_IMAGE],
+    imagePaths: [CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE],
   },
 ];
 
-export default function CrmSubscriptionPage() {
+export default function CrmAboutPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<CrmSubscriptionRow | null>(
-    null,
-  );
+  const [selectedRow, setSelectedRow] = useState<CrmAboutRow | null>(null);
 
-  const handleEdit = (row: CrmSubscriptionRow) => {
+  const handleEdit = (row: CrmAboutRow) => {
     setSelectedRow(row);
     setIsModalOpen(true);
   };
 
-  const columns: DashboardTableColumn<CrmSubscriptionRow>[] = [
+  const columns: DashboardTableColumn<CrmAboutRow>[] = [
     {
       id: "section",
       header: "Section",
@@ -93,48 +81,34 @@ export default function CrmSubscriptionPage() {
       header: "Title",
       icon: Calendar,
       widthClassName: "w-[24%]",
-      cell: (row) => (
-        <span className='flex items-center gap-1 max-w-full truncate text-[#2f2f2f]'>
-          <span className='truncate'>{row.title}</span>
-        </span>
-      ),
+      cell: (row) => <span>{row.title}</span>,
     },
     {
       id: "subtitle",
       header: "Subtitle",
       icon: Star,
       widthClassName: "w-[35%]",
-      cell: (row) => (
-        <span className='block max-w-full truncate text-[#2f2f2f]'>
-          {row.subtitle}
-        </span>
-      ),
+      cell: (row) => <span>{row.subtitle}</span>,
     },
     {
-      id: "image",
-      header: "Image",
+      id: "images",
+      header: "Images",
       icon: ImageIcon,
       widthClassName: "w-[12%]",
-      cell: (row) => {
-        if (!row.imagePaths.length) {
-          return <span>-</span>;
-        }
-
-        return (
-          <div className='flex items-center gap-1'>
-            {row.imagePaths.map((imagePath, index) => (
-              <Image
-                key={`${row.id}-image-${index}`}
-                src={imagePath}
-                alt={`${row.section} preview ${index + 1}`}
-                width={28}
-                height={20}
-                className='rounded-sm border border-[#E5E7EB] object-cover'
-              />
-            ))}
-          </div>
-        );
-      },
+      cell: (row) => (
+        <div className='flex flex-wrap gap-2'>
+          {row.imagePaths.map((imagePath, index) => (
+            <Image
+              key={`${row.id}-image-${index}`}
+              src={imagePath}
+              alt={`${row.section} preview ${index + 1}`}
+              width={28}
+              height={20}
+              className='rounded-sm border border-[#E5E7EB] object-cover'
+            />
+          ))}
+        </div>
+      ),
     },
     {
       id: "action",
@@ -152,11 +126,12 @@ export default function CrmSubscriptionPage() {
       ),
     },
   ];
+
   return (
     <section>
       <DashboardDataTable
         searchPlaceholder='Search'
-        data={crmSubscriptionRows}
+        data={crmAboutRows}
         columns={columns}
         getRowId={(row) => row.id}
         searchPredicate={(row, query) => {
@@ -168,7 +143,6 @@ export default function CrmSubscriptionPage() {
         footerMode='count-only'
         countOnlyLabel='Sections'
       />
-
       <CRMEditModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
