@@ -1,5 +1,6 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -13,6 +14,8 @@ export default function SignupForm() {
     password: "",
     repeatPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -65,7 +68,7 @@ export default function SignupForm() {
                 value={formData.firstName}
                 onChange={handleChange}
                 placeholder='Pedro Duarte'
-                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-400 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
+                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-600 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
               />
             </div>
 
@@ -80,7 +83,7 @@ export default function SignupForm() {
                 value={formData.lastName}
                 onChange={handleChange}
                 placeholder='Pedro Duarte'
-                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-400 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
+                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-600 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
               />
             </div>
 
@@ -95,7 +98,7 @@ export default function SignupForm() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder='pedro@duarte.com'
-                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-400 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
+                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-600 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
               />
             </div>
 
@@ -110,7 +113,7 @@ export default function SignupForm() {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder='@peduarte'
-                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-400 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
+                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-600 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
               />
             </div>
 
@@ -119,14 +122,23 @@ export default function SignupForm() {
               <label className='block text-sm text-(--text-primary) mb-1.5'>
                 Password
               </label>
-              <input
-                type='password'
-                name='password'
-                value={formData.password}
-                onChange={handleChange}
-                placeholder='Enter your password'
-                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-400 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
-              />
+              <div className='relative'>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name='password'
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder='Enter your password'
+                  className='w-full px-3 pr-10 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-600 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
+                />
+                <button
+                  type='button'
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700'>
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
             </div>
 
             {/* Repeat Password */}
@@ -134,14 +146,29 @@ export default function SignupForm() {
               <label className='block text-sm text-(--text-primary) mb-1.5'>
                 Repeat password
               </label>
-              <input
-                type='password'
-                name='repeatPassword'
-                value={formData.repeatPassword}
-                onChange={handleChange}
-                placeholder='Repeat your password'
-                className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-400 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
-              />
+              <div className='relative'>
+                <input
+                  type={showRepeatPassword ? "text" : "password"}
+                  name='repeatPassword'
+                  value={formData.repeatPassword}
+                  onChange={handleChange}
+                  placeholder='Repeat your password'
+                  className='w-full px-3 pr-10 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-600 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
+                />
+                <button
+                  type='button'
+                  onClick={() => setShowRepeatPassword((s) => !s)}
+                  aria-label={
+                    showRepeatPassword ? "Hide password" : "Show password"
+                  }
+                  className='absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700'>
+                  {showRepeatPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 

@@ -65,6 +65,12 @@ const operationItems: SidebarItem[] = [
     href: "/dashboard/feedback",
     icon: Star,
   },
+  {
+    label: "Analytics",
+    key: "analytics",
+    href: "/dashboard/analytics",
+    icon: FileChartLine,
+  },
 ];
 
 const otherItems: SidebarItem[] = [
@@ -79,12 +85,6 @@ const otherItems: SidebarItem[] = [
     key: "crm",
     href: "/dashboard/crm",
     icon: LibraryBig,
-  },
-  {
-    label: "Analytics",
-    key: "analytics",
-    href: "/dashboard/analytics",
-    icon: FileChartLine,
   },
   {
     label: "Settings",
