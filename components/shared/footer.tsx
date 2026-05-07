@@ -174,7 +174,7 @@ const Footer = () => {
             md:gap-20
           '>
           {/* Branding */}
-          <div className='md:col-span-3 flex flex-col gap-y-6'>
+          <div className='lg:col-span-3 flex flex-col gap-y-6'>
             <Link href='/' className='inline-block'>
               <Image
                 src='/Logo/logo-white.png'
@@ -210,14 +210,14 @@ const Footer = () => {
           </div>
           {/* Links */}
           <div
-            className='md:col-span-6 grid
+            className='lg:col-span-6 grid
             grid-cols-2
             gap-12
             md:grid-cols-3
             md:gap-20'>
             {/* Pages */}
             <div>
-              <h4 className='text-3xl font-semibold text-white mb-10 font-heading'>
+              <h4 className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
                 Pages
               </h4>
 
@@ -226,7 +226,7 @@ const Footer = () => {
                   <li key={item.href} className='-mt-1'>
                     <Link
                       href={item.href}
-                      className='text-white hover:text-white/90 transition-colors duration-300'>
+                      className='text-white hover:text-white/90 transition-colors duration-300 text-base lg:text-xl'>
                       {item.label}
                     </Link>
                   </li>
@@ -235,7 +235,7 @@ const Footer = () => {
             </div>
             {/* Others */}
             <div>
-              <h4 className='text-3xl font-semibold text-white mb-10 font-heading'>
+              <h4 className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
                 Others
               </h4>
 
@@ -244,7 +244,7 @@ const Footer = () => {
                   <li key={item.href} className='-mt-1'>
                     <a
                       href={item.href}
-                      className='text-white hover:text-white/90 transition-colors duration-300'>
+                      className='text-white hover:text-white/90 transition-colors duration-300 text-base lg:text-xl'>
                       {item.label}
                     </a>
                   </li>
@@ -253,7 +253,7 @@ const Footer = () => {
             </div>
             {/* Contact */}
             <div>
-              <h4 className='text-3xl font-semibold text-white mb-10 font-heading'>
+              <h4 className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
                 Contact Us
               </h4>
 
@@ -264,7 +264,7 @@ const Footer = () => {
                       key={item.label}
                       className='flex items-start gap-2.5 -mt-1'>
                       <item.icon className='h-8 w-8 shrink-0 p-1' />
-                      <span className='leading-[1.6] text-white max-w-63'>
+                      <span className='leading-[1.6] text-white max-w-63 text-base lg:text-xl'>
                         {item.label}
                       </span>
                     </li>
@@ -275,8 +275,8 @@ const Footer = () => {
           </div>
 
           {/* GET NOTIFIED */}
-          <div className='md:col-span-3'>
-            <h4 className='text-3xl font-semibold text-white mb-4 font-heading'>
+          <div className='lg:col-span-3'>
+            <h4 className='text-2xl lg:text-3xl font-semibold text-white mb-4 font-heading'>
               Get Notified
             </h4>
             <div className='relative max-w-full'>
