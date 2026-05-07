@@ -136,7 +136,7 @@ function TestimonialCard({
   );
 }
 
-export default function People() {
+export default function Testimonial() {
   const [desktopSlide, setDesktopSlide] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [tabletSlide, setTabletSlide] = useState(0);
