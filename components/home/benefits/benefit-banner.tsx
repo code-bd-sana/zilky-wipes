@@ -19,7 +19,7 @@ export default function BenefitBanner() {
         <div className='absolute inset-0 ' />
       </div>
       {/* Content overlay */}
-      <div className='relative z-10 h-full flex items-end justify-start text-start mx-5 md:mx-11.5 py-15'>
+      <div className='relative z-10 h-full flex items-end justify-start text-start max-w-480 mx-auto px-5 md:px-11.5 py-15'>
         <p className='font-heading text-[40px] md:text-[70px] lg:text-[120px] font-bold w-full text-white'>
           A cleaner way to care.
         </p>
