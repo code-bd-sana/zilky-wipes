@@ -197,7 +197,7 @@ export default function Testimonial() {
 
   return (
     <section className='bg-[#FBFAF9]'>
-      <div className='max-w-480 px-5 md:px-12 lg:px-20 xl:px-35 mt-20 md:mt-50 py-25'>
+      <div className='max-w-480 mx-auto px-5 md:px-12 lg:px-20 xl:px-35 mt-20 md:mt-50 py-25'>
         <PageTitle
           title="People don't talk about this. ....Until they try it!"
           titleClassName='max-w-250!'
