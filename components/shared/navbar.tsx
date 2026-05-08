@@ -16,6 +16,7 @@ const navLinks = [
   { label: "Benefits", href: "/benefits" },
   { label: "About Us", href: "/about" },
   { label: "FAQ", href: "/faq" },
+  { label: "Feedback", href: "/feedback" },
 ] as const;
 
 export default function Navbar() {

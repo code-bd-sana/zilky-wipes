@@ -14,7 +14,7 @@ export default function BenefitSection1() {
   ];
 
   return (
-    <section>
+    <section className='max-w-480 mx-auto'>
       {" "}
       <SplitContentSection
         desktopDirection='content-media'
