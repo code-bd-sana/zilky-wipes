@@ -1,7 +1,7 @@
 import BenefitBanner from "@/components/home/benefits/benefit-banner";
 import BenefitComfort from "@/components/home/benefits/benefit-comfort";
 import BenefitsFooter from "@/components/home/benefits/benefit-footer";
-import BenefitPeople from "@/components/home/benefits/benefit-people";
+// import BenefitPeople from "@/components/home/benefits/benefit-people";
 import BenefitSection1 from "@/components/home/benefits/benefit-section-1";
 import ZilkyAdvantage from "@/components/home/benefits/zilky-advantage";
 
@@ -12,7 +12,7 @@ export default function Benefits() {
       <BenefitSection1 />
       <ZilkyAdvantage />
       <BenefitComfort />
-      <BenefitPeople />
+      {/* <BenefitPeople /> */}
       <BenefitsFooter />
     </>
   );

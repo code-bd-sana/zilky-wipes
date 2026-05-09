@@ -61,7 +61,7 @@ export default function BenefitSection1() {
         media={
           <>
             <Image
-              src='/home/benefits/benefit-section-1.jpg'
+              src='/ZilkyWipes/1000308870.png'
               alt='Benefit preview'
               fill
               priority
