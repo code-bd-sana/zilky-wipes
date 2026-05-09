@@ -3,6 +3,7 @@
 import { useState } from "react";
 import PageTitle from "@/components/shared/page-title/page-title";
 import GeneralFeedbackForm from "./general-feedback-form";
+import MarketResearchSurvey from "./market-research-survey";
 
 type TabType = "general" | "market";
 
@@ -49,9 +50,7 @@ export default function FeedbackPageContent() {
         {activeTab === "general" ? (
           <GeneralFeedbackForm />
         ) : (
-          <div className='bg-white rounded-2xl p-8 md:p-12 shadow-[0_2px_20px_rgba(0,0,0,0.04)] text-center text-(--text-primary)'>
-            <p>Market Research Survey coming soon...</p>
-          </div>
+          <MarketResearchSurvey />
         )}
       </div>
 
