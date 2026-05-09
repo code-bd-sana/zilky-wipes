@@ -274,7 +274,7 @@ export default function Navbar() {
               className='flex items-center'>
               <Link href='/' aria-label='ZilkyWipes home'>
                 <Image
-                  src='/Logo/Logo-02.svg'
+                  src='/Logo/logoFF.png'
                   alt='ZilkyWipes'
                   width={190}
                   height={52}
