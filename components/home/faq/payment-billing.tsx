@@ -1,36 +1,63 @@
+"use client";
+
+import { useState } from "react";
+import { Plus, X } from "lucide-react";
+
 export default function PaymentAndBilling() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   const paymentQuestions = [
     {
-      question: "When will I be charged?",
+      question: "Are ZilkyWipes really biodegradable and eco-friendly?",
       answer:
-        "We charge your card 2 days before each scheduled delivery. If your payment doesn't go through, we'll try again after 24 hours. If it still fails, your subscription will pause automatically.",
+        "Yes, ZilkyWipes are 100% biodegradable and made from sustainable materials. They break down completely in water within 24 hours and in soil within 28 days. Our manufacturing process uses renewable energy, and packaging is made from recycled materials. We're committed to environmental responsibility without compromising performance.",
     },
     {
-      question: "How do I update my payment method?",
+      question: "Won't flushing wipes harm the environment?",
       answer:
-        "Click 'Update via Stripe' on your dashboard or in Settings. You'll be securely redirected to Stripe to update your card. We don't store your complete payment information.",
+        "Unlike traditional wet wipes that can harm marine life and clog treatment facilities, ZilkyWipes are specifically engineered to break down completely before reaching water treatment plants. They're made from plant-based fibers that biodegrade naturally, and our formula contains only biodegradable ingredients that won't harm aquatic ecosystems.",
     },
     {
-      question: "Can I get a refund?",
+      question: "What chemicals are in ZilkyWipes?",
       answer:
-        "Unopened products can be returned within 30 days for a full refund. For hygiene reasons, we can't accept opened items. Contact support to start a return.",
+        "ZilkyWipes contain only safe, gentle ingredients: purified water, aloe vera extract, vitamin E, natural plant-based cleansing agents, and a mild preservative system to prevent bacterial growth. We use NO alcohol, parabens, sulfates, artificial fragrances, or harsh chemicals. Full ingredient list is available on our packaging and website.",
     },
     {
-      question: "Where can I find my invoices?",
+      question: "Are they tested on animals?",
       answer:
-        "We email an invoice after each charge. You can also view and download all past invoices from Settings under 'Billing history.'",
+        "No, ZilkyWipes are never tested on animals. We're committed to cruelty-free practices and use only established safe ingredients and alternative testing methods. Our products are certified cruelty-free by leading animal welfare organizations.",
     },
   ];
-  return (
-    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150  pt-20'>
+
+  const handleToggle = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+ return (
+    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 pt-20'>
       <p className='text-[#979191] border-b border-[#F2F2F2] pb-2'>
-        Payment & Billing
+        Environmental & Health Concerns
       </p>
+
       <div className='mt-6 space-y-8'>
         {paymentQuestions.map((item, index) => (
           <div key={index}>
-            <p className='text-[#474747] text-base '>{item.question}</p>
-            <p className='text-[#979191] text-sm mt-2'>{item.answer}</p>
+            <button
+              onClick={() => handleToggle(index)}
+              className='w-full flex items-center justify-between gap-4 text-left'
+            >
+              <p className='text-[#474747] text-base '>{item.question}</p>
+
+              {openIndex === index ? (
+                <X size={18} className='text-[#474747] shrink-0' />
+              ) : (
+                <Plus size={18} className='text-[#474747] shrink-0' />
+              )}
+            </button>
+
+            {openIndex === index && (
+              <p className='text-[#979191] text-sm mt-2'>{item.answer}</p>
+            )}
           </div>
         ))}
       </div>

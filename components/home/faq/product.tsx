@@ -1,36 +1,63 @@
+"use client";
+
+import { useState } from "react";
+import { Plus, X } from "lucide-react";
+
 export default function Product() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   const productQuestions = [
     {
-      question: "Are these actually flushable?",
+      question: "Aren't ZilkyWipes more expensive than toilet paper?",
       answer:
-        "Yes, ZilkyWipes are certified flushable by independent labs and break down in water faster than toilet paper. They're safe for all plumbing systems, including septic tanks.",
+        "While the upfront cost is higher, ZilkyWipes often provide better value because you use fewer wipes per use, reduce the need for additional products (like wet wipes or creams), and the health benefits can save money on medical issues. Many customers find their monthly costs are similar or even lower when factoring in the superior cleaning and reduced product usage.",
     },
     {
-      question: "How long does one roll last?",
+      question: "Why should I pay for something when toilet paper works fine?",
       answer:
-        "For one person, a roll typically lasts 3-4 weeks. It varies by household size and usage habits. You can adjust your delivery frequency anytime to match your actual needs.",
+        "Toilet paper only removes about 60% of bacteria, while ZilkyWipes remove 99.9%. This superior cleaning can prevent UTIs, reduce irritation, and improve overall hygiene and confidence. Think of it as an investment in your health and comfort - the small daily cost often pays for itself in reduced health issues and increased quality of life.",
     },
     {
-      question: "What are they made of?",
+      question: "Is the subscription worth it?",
       answer:
-        "100% biodegradable plant-based fibers. No plastic, no harsh chemicals, and free from parabens, alcohol, and synthetic fragrances.",
+        "The subscription offers significant benefits: 15% savings, free shipping, never running out, and the convenience of automatic delivery. You can adjust frequency, skip deliveries, or cancel anytime. Most customers save $50-100 annually with the subscription while ensuring they never run out of this essential product.",
     },
     {
-      question: "Are they safe for sensitive skin?",
+      question: "What if I don't like them? Can I get a refund?",
       answer:
-        "Yes. Our wipes are hypoallergenic and pH balanced. They're gentler than toilet paper and contain no irritating ingredients. If you have specific concerns, we recommend checking with your dermatologist.",
+        "We offer a 30-day money-back guarantee. If you're not completely satisfied, return the unused portion for a full refund, no questions asked. We're confident you'll love ZilkyWipes, but we want you to try them risk-free.",
     },
   ];
+
+  const handleToggle = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
-    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150  pt-20'>
+    <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 pt-20'>
       <p className='text-[#979191] border-b border-[#F2F2F2] pb-2'>
-        Product Questions
+        Cost & Value
       </p>
+
       <div className='mt-6 space-y-8'>
         {productQuestions.map((item, index) => (
           <div key={index}>
-            <p className='text-[#474747] text-base '>{item.question}</p>
-            <p className='text-[#979191] text-sm mt-2'>{item.answer}</p>
+            <button
+              onClick={() => handleToggle(index)}
+              className='w-full flex items-center justify-between gap-4 text-left'
+            >
+              <p className='text-[#474747] text-base '>{item.question}</p>
+
+              {openIndex === index ? (
+                <X size={18} className='text-[#474747] shrink-0' />
+              ) : (
+                <Plus size={18} className='text-[#474747] shrink-0' />
+              )}
+            </button>
+
+            {openIndex === index && (
+              <p className='text-[#979191] text-sm mt-2'>{item.answer}</p>
+            )}
           </div>
         ))}
       </div>
