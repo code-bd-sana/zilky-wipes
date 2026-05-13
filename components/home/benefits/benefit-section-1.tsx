@@ -23,13 +23,13 @@ export default function BenefitSection1() {
         content={
           <>
             <PageTitle
-              title='Dry paper was never the answer!'
-              titleClassName='max-w-150! mx-auto text-[40px]! leading-[1.1]! md:text-[56px]!'
+              title='Why ZilkyWipes Are Superior to Everything Else'
+              titleClassName='max-w-600! mx-auto text-[40px]! leading-[1.1]! md:text-[54px]!'
               subtitle={[
-                "Paper spreads. Water refreshes.",
-                "One is habit. The other is care.",
+                "Discover the revolutionary benefits that make ZilkyWipes the ultimate ",
+                "choice for personal hygiene. Backed by science, loved by users.",
               ]}
-              subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]!'
+              subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[22px]!'
             />
             <div className='mt-10 md:mt-14 lg:mt-16'>
               {plans.map((plan, index) => (
@@ -61,7 +61,7 @@ export default function BenefitSection1() {
         media={
           <>
             <Image
-              src='/home/benefits/benefit-section-1.jpg'
+              src='/ZilkyWipes/1000308870.png'
               alt='Benefit preview'
               fill
               priority

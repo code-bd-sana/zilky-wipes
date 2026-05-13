@@ -12,7 +12,7 @@ export default function SubscriptionBanner() {
           poster='/home/subscription/subscription-banner.png'
           className='absolute inset-0 w-full h-full object-cover'>
           <source
-            src='home/subscription/subscription-banner.mp4'
+            src='video/2.mp4'
             type='video/mp4'
           />
           Your browser does not support the video tag.

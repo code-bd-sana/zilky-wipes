@@ -10,7 +10,7 @@ export default function SubscriptionFooter() {
           poster='/home/subscription/subscription-footer.png'
           className='w-full h-auto object-cover'>
           <source
-            src='/home/subscription/subscription-footer.mp4'
+            src='/video/4.mp4'
             type='video/mp4'
           />
           Your browser does not support the video tag.

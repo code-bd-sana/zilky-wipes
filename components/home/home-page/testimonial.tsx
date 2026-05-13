@@ -120,7 +120,7 @@ function StarRating({ count }: { count: number }) {
   );
 }
 
-function TestimonialCard({
+function BenefitPeopleCard({
   person,
 }: {
   person: { name: string; feedback: string; stars: number };
@@ -136,7 +136,7 @@ function TestimonialCard({
   );
 }
 
-export default function Testimonial() {
+export default function BenefitPeople() {
   const [desktopSlide, setDesktopSlide] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [tabletSlide, setTabletSlide] = useState(0);
@@ -197,7 +197,7 @@ export default function Testimonial() {
 
   return (
     <section className='bg-[#FBFAF9]'>
-      <div className='max-w-480 mx-auto px-5 md:px-12 lg:px-20 xl:px-35 mt-20 md:mt-50 py-25'>
+      <div className='max-w-480 mx-auto px-5 md:px-12 lg:px-20 xl:px-40 mt-20 py-25'>
         <PageTitle
           title="People don't talk about this. ....Until they try it!"
           titleClassName='max-w-250!'
@@ -215,7 +215,7 @@ export default function Testimonial() {
               style={{ transform: `translateX(-${mobileIndex * 100}%)` }}>
               {allTestimonials.map((person, i) => (
                 <div key={i} className='w-full shrink-0 px-1'>
-                  <TestimonialCard person={person} />
+                  <BenefitPeopleCard person={person} />
                 </div>
               ))}
             </div>
@@ -252,7 +252,7 @@ export default function Testimonial() {
                 <div key={slideIdx} className='w-full shrink-0 flex gap-6 px-1'>
                   {slide.map((person, personIdx) => (
                     <div key={personIdx} className='flex-1'>
-                      <TestimonialCard person={person} />
+                      <BenefitPeopleCard person={person} />
                     </div>
                   ))}
                 </div>
@@ -293,7 +293,7 @@ export default function Testimonial() {
                   className='w-full shrink-0 flex gap-x-6 justify-center'>
                   {slide.map((person, personIdx) => (
                     <div key={personIdx} className='flex-1'>
-                      <TestimonialCard person={person} />
+                      <BenefitPeopleCard person={person} />
                     </div>
                   ))}
                 </div>

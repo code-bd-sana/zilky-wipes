@@ -50,7 +50,7 @@ export default function SubsSection1() {
         media={
           <>
             <Image
-              src='/home/subscription/subscription-1.jpg'
+              src='/ZilkyWipes/1000308869.png'
               alt='Subscription preview'
               fill
               priority

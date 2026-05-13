@@ -40,7 +40,7 @@ export default function AboutSection1() {
             playsInline
             poster='/home/banner.png'
             className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
-            <source src='/home/section1.mp4' type='video/mp4' />
+            <source src='/video/3.mp4' type='video/mp4' />
             Your browser does not support the video tag.
           </video>
         }
