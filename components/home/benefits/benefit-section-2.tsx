@@ -1,0 +1,88 @@
+import PageTitle from "@/components/shared/page-title/page-title";
+import SplitContentSection from "@/components/shared/split-content-section";
+import { Droplet, Package, Recycle } from "lucide-react";
+
+export default function BenefitSection2() {
+  const environmentalBenefits = [
+    {
+      icon: Recycle,
+      iconColor: "#4CAF7A",
+      iconBg: "#4CAF7A1A",
+      title: "100% Biodegradable",
+      subTitle:
+        "Breaks down completely in water within 24 hours, leaving no harmful residue.",
+    },
+    {
+      icon: Droplet,
+      iconColor: "#2C8E87",
+      iconBg: "#2C8E871A",
+      title: "Water-Based Formula",
+      subTitle:
+        "Made with purified water and natural ingredients, free from harsh chemicals.",
+    },
+    {
+      icon: Package,
+      iconColor: "#D4A843",
+      iconBg: "#D4A8431A",
+      title: "Sustainable Packaging",
+      subTitle:
+        "Recyclable packaging made from post-consumer materials, minimizing environmental footprint.",
+    },
+  ];
+  return (
+    <section className='mb-10 lg:mb-30'>
+      <SplitContentSection
+        desktopDirection='media-content'
+        sectionClassName='md:mt-50'
+        content={
+          <>
+            <PageTitle
+              title='Environmental Responsibility'
+              titleClassName='max-w-250! text-[40px]! leading-[1.1]! md:text-[56px]!'
+              subtitle={[
+                "We're committed to making clean choices that are also green choices. Every ZilkyWipe is designed with the planet in mind.",
+              ]}
+              subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]! max-w-130! mx-auto text-center'
+            />
+            <div className='mt-6'>
+              {environmentalBenefits.map((benefit) => (
+                <div
+                  key={benefit.title}
+                  className='flex flex-row items-center gap-4 mt-5 px-4 border border-gray-200 rounded-xl py-5 md:py-6 hover:shadow-lg transition-shadow duration-300'>
+                  <div
+                    style={{ backgroundColor: benefit.iconBg }}
+                    className='p-3 rounded-[14px]'>
+                    <benefit.icon
+                      className='w-7 h-7'
+                      style={{ color: benefit.iconColor }}
+                    />
+                  </div>
+                  <div>
+                    <h3 className='text-lg md:text-xl font-semibold text-(--text-primary)'>
+                      {benefit.title}
+                    </h3>
+                    <p className='text-gray-600 max-w-200'>
+                      {benefit.subTitle}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        }
+        media={
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster='/home/banner.png'
+            className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
+            <source src='/video/1.mp4' type='video/mp4' />
+            Your browser does not support the video tag.
+          </video>
+        }
+      />
+    </section>
+  );
+}
