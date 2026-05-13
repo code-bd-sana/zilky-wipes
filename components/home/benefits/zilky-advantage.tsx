@@ -180,19 +180,10 @@ export default function ZilkyAdvantage() {
     <section className='max-w-480 mx-auto px-4 md:px-14 lg:px-45 py-10 md:py-16 font-serif'>
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div className='my-10 md:mb-25 text-center'>
-        <p
-          className='font-sans text-xs tracking-widest uppercase mb-2 opacity-60'
-          style={{ color: BRAND }}>
-          Why choose ZilkyWipes
-        </p>
         <PageTitle
           title='The ZilkyWipes Advantage'
           titleClassName='max-w-200! mx-auto text-[40px]! leading-[1.1]! md:text-[56px]!'
         />
-        <p className='font-sans text-sm md:text-base text-gray-500 max-w-md mx-auto mt-3 leading-relaxed'>
-          See how ZilkyWipes stacks up against ordinary alternatives — across
-          cleanliness, comfort, and care.
-        </p>
       </div>
 
       {/* ── Desktop / Tablet ─────────────────────────────────────────────── */}
@@ -252,7 +243,11 @@ export default function ZilkyAdvantage() {
                   <span
                     className='text-xl leading-tight font-semibold'
                     style={{
-                      color: isZilky ? BRAND : isHovered ? "#262626" : "#888",
+                      color: isZilky
+                        ? BRAND
+                        : isHovered
+                          ? "#242424"
+                          : "#262626",
                     }}>
                     {label}
                   </span>
