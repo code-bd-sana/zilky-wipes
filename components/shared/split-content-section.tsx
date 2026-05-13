@@ -63,7 +63,7 @@ export default function SplitContentSection({
   return (
     <section
       className={cn(
-        "relative overflow-x-hidden mx-5 md:mx-10 lg:mx-20 xl:mx-40 mt-20",
+        "max-w-480 mx-auto relative overflow-x-hidden px-5 md:px-10 lg:px-20 xl:px-40 mt-20",
         sectionClassName,
       )}>
       <div
@@ -80,7 +80,10 @@ export default function SplitContentSection({
           whileInView={shouldAnimate ? "visible" : undefined}
           viewport={shouldAnimate ? { once: true, amount: 0.3 } : undefined}
           variants={contentVariants}
-          className={cn("min-w-0 w-full max-w-180 lg:max-w-170", contentClassName)}>
+          className={cn(
+            "min-w-0 w-full max-w-180 lg:max-w-170",
+            contentClassName,
+          )}>
           {content}
         </motion.div>
 
@@ -90,7 +93,10 @@ export default function SplitContentSection({
           whileInView={shouldAnimate ? "visible" : undefined}
           viewport={shouldAnimate ? { once: true, amount: 0.3 } : undefined}
           variants={mediaVariants}
-          className={cn("min-w-0 w-full max-w-170 lg:max-w-180", mediaClassName)}>
+          className={cn(
+            "min-w-0 w-full max-w-170 lg:max-w-180",
+            mediaClassName,
+          )}>
           {media}
         </motion.div>
       </div>
