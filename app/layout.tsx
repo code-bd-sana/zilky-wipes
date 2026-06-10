@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-
 import { Toaster } from "@/components/ui/sonner";
 import { Jost } from "next/font/google";
 import "./globals.css";
+import Providers from "./providers";
 
 const jost = Jost({
   variable: "--font-jost",
@@ -22,8 +22,10 @@ export default function RootLayout({
   return (
     <html lang='en' className={`${jost.variable} h-full antialiased`}>
       <body className='min-h-full flex flex-col font-sans'>
-        {children}
-        <Toaster richColors position='bottom-left' />
+        <Providers>
+          {children}
+          <Toaster richColors position='bottom-left' />
+        </Providers>
       </body>
     </html>
   );
