@@ -3,32 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
-
-const DEMO_USERS = [
-  {
-    email: "user@gmail.com",
-    password: "admin@123",
-    name: "John Doe",
-    role: "user",
-  },
-  {
-    email: "admin@gmail.com",
-    password: "admin@123",
-    name: "Admin User",
-    role: "admin",
-  },
-];
+import { useLogin } from "@/hooks/useAuth";
 
 export default function LoginForm() {
-  const router = useRouter();
+  const { mutate: login, isPending } = useLogin();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,33 +20,7 @@ export default function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-
-    // Simulate API delay
-    setTimeout(() => {
-      const user = DEMO_USERS.find(
-        (u) => u.email === formData.email && u.password === formData.password,
-      );
-
-      if (user) {
-        const userData = {
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
-        localStorage.setItem("zilky_user", JSON.stringify(userData));
-        toast.success(`Welcome back, ${user.name}!`);
-
-        if (user.role === "admin") {
-          router.push("/dashboard");
-        } else {
-          router.push("/");
-        }
-      } else {
-        toast.error("Invalid email or password");
-      }
-      setIsLoading(false);
-    }, 1000);
+    login(formData);
   };
 
   return (
@@ -92,10 +49,6 @@ export default function LoginForm() {
             </h1>
             <p className='text-sm text-(--shop-pagination-text)'>
               Enter your email and password to access your account.
-              <br />
-              <span className='text-xs opacity-70'>
-                Demo: user@gmail.com / admin@123 | admin@gmail.com / admin@123
-              </span>
             </p>
           </div>
 
@@ -152,9 +105,9 @@ export default function LoginForm() {
             {/* Login Button */}
             <button
               type='submit'
-              disabled={isLoading}
+              disabled={isPending}
               className='w-full mt-7 sm:mt-8 py-3.5 sm:py-4 bg-(--cart-panel-bg) text-white font-semibold rounded-full hover:bg-[#16253d] active:scale-[0.98] transition-all duration-150 text-base disabled:opacity-50 disabled:cursor-not-allowed'>
-              {isLoading ? "Logging in..." : "Login"}
+              {isPending ? "Logging in..." : "Login"}
             </button>
           </form>
 
