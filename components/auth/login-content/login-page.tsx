@@ -8,14 +8,12 @@ export default function LoginPageContent() {
       <div className='absolute inset-0 w-full h-full overflow-hidden'>
         {/* Image Background */}
         <Image
-          src='/auth/auth.png'
+          src='/ZilkyWipes/1000308870.png'
           alt='Login'
           fill
-          className='absolute inset-0 w-full h-full object-cover'
+          className='absolute inset-0 w-full h-full object-cover '
         />
-
-        {/* Dark overlay for text contrast */}
-        <div className='absolute inset-0 ' />
+        <div className='absolute inset-0 bg-black/50' />
       </div>
       {/* Content overlay */}
       <div className='relative z-10 mx-4 md:mx-11.5 h-svh overflow-y-auto py-6 md:py-10'>
