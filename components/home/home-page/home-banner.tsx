@@ -1,6 +1,9 @@
 import PageTitle from "@/components/shared/page-title/page-title";
 
-export default function HomeBanner() {
+export default function HomeBanner({ data }: { data?: any }) {
+  const title = data?.title || 'A better way to feel clean.';
+  const videoSrc = data?.imagePaths?.[0] || '/ZilkyWipes/hero.mp4';
+
   return (
     <section className='w-full h-screen relative overflow-hidden'>
       {/* Hero container */}
@@ -12,7 +15,7 @@ export default function HomeBanner() {
           muted
           playsInline
           className='absolute inset-0 w-full h-full object-cover'>
-          <source src='/ZilkyWipes/hero.mp4' type='video/mp4' />
+          <source src={videoSrc} type='video/mp4' />
           Your browser does not support the video tag.
         </video>
 
@@ -23,7 +26,7 @@ export default function HomeBanner() {
       <div className='relative z-10 h-full flex items-end justify-start text-start mx-5 md:mx-11.5 py-15'>
         <PageTitle
           align='start'
-          title='A better way to feel clean.'
+          title={title}
           className='w-full'
           titleClassName='text-white! text-[40px]! md:text-[70px]! lg:text-[120px]! font-bold! leading-[0.95]!'
         />

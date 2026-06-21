@@ -1,4 +1,6 @@
-export default function FooterVideo() {
+export default function FooterVideo({ data }: { data?: any }) {
+  const videoSrc = data?.imagePaths?.[0] || '/video/2.mp4';
+
   return (
     <section className='bg-(--text-primary)'>
       <div className='w-full '>
@@ -8,7 +10,7 @@ export default function FooterVideo() {
           muted
           playsInline
           className='w-full h-auto object-cover'>
-          <source src='/video/2.mp4' type='video/mp4' />
+          <source src={videoSrc} type='video/mp4' />
           Your browser does not support the video tag.
         </video>
       </div>

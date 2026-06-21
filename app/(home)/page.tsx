@@ -5,15 +5,36 @@ import Section1 from "@/components/home/home-page/section-1";
 import Section2 from "@/components/home/home-page/section-2";
 import ShopeWipes from "@/components/home/home-page/shop-wipes";
 
-export default function Home() {
+async function getPageData() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages/home`, {
+      next: { revalidate: 60, tags: ['page-home'] }
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data;
+  } catch (e) {
+    console.error("Failed to fetch page data", e);
+    return null;
+  }
+}
+
+export default async function Home() {
+  const pageData = await getPageData();
+  
+  const sections = (pageData?.sections || []).reduce((acc: any, sec: any) => {
+    acc[sec.sectionKey] = sec.content;
+    return acc;
+  }, {});
+
   return (
     <>
-      <HomeBanner />
-      <ShopeWipes />
-      <Section1 />
-      <Section2 />
-      <Testimonial />
-      <FooterVideo />
+      <HomeBanner data={sections['hero']} />
+      <ShopeWipes data={sections['shop']} />
+      <Section1 data={sections['feature-1']} />
+      <Section2 data={sections['feature-2']} />
+      <Testimonial data={sections['testimonial']} />
+      <FooterVideo data={sections['footer-video']} />
     </>
   );
 }
