@@ -12,74 +12,80 @@ import {
   UserRound,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
-import CRMEditModal from "./shared/crm-edit-modal";
+import { useState, useEffect } from "react";
+import CRMHomeEditModal from "./shared/crm-home-edit-modal";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getPage, upsertSection, createPage } from "@/lib/api/pages";
 
 const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
 
 type CrmHomepageRow = {
   id: string;
+  sectionKey: string;
   section: string;
   title: string;
   subtitle: string;
   imagePaths: string[];
 };
 
-const crmHomepageRows: CrmHomepageRow[] = [
-  {
-    id: "1",
-    section: "Homepage",
-    title: "A better way to feel clean.",
-    subtitle: "-",
-    imagePaths: [CRM_PREVIEW_IMAGE],
-  },
-  {
-    id: "2",
-    section: "Shop",
-    title: "Shop ZilkyWipes",
-    subtitle:
-      "Water cleans. Dry paper spreads. ZilkyWipes leaves you genuinely clean - safely, every day.",
-    imagePaths: [CRM_PREVIEW_IMAGE],
-  },
-  {
-    id: "3",
-    section: "Feature 1",
-    title: "....Because dry paper was never the full answer.",
-    subtitle:
-      "Water cleans. Dry paper spreads. ZilkyWipes leaves you genuinely clean - safely, every day.",
-    imagePaths: [CRM_PREVIEW_IMAGE],
-  },
-  {
-    id: "4",
-    section: "Feature 2",
-    title: "Made for real bathrooms. And real bodies.",
-    subtitle:
-      "Everyday moments. Private spaces. ZilkyWipes, exactly where it belongs.",
-    imagePaths: [CRM_PREVIEW_IMAGE],
-  },
-  {
-    id: "5",
-    section: "Testimonial",
-    title: "People do not talk about this ...Until they try it!",
-    subtitle: "-",
-    imagePaths: [CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE],
-  },
-  {
-    id: "6",
-    section: "Before footer",
-    title: "-",
-    subtitle: "-",
-    imagePaths: [CRM_PREVIEW_IMAGE],
-  },
+const defaultSections = [
+  { sectionKey: "hero", section: "Homepage (Hero)", title: "A better way to feel clean.", subtitle: "-", imagePaths: [CRM_PREVIEW_IMAGE] },
+  { sectionKey: "shop", section: "Shop", title: "Shop ZilkyWipes", subtitle: "Water cleans. Dry paper spreads. ZilkyWipes leaves you genuinely clean - safely, every day.", imagePaths: [CRM_PREVIEW_IMAGE] },
+  { sectionKey: "feature-1", section: "Feature 1", title: "....Because dry paper was never the full answer.", subtitle: "Water cleans. Dry paper spreads. ZilkyWipes leaves you genuinely clean - safely, every day.", imagePaths: [CRM_PREVIEW_IMAGE] },
+  { sectionKey: "feature-2", section: "Feature 2", title: "Made for real bathrooms. And real bodies.", subtitle: "Everyday moments. Private spaces. ZilkyWipes, exactly where it belongs.", imagePaths: [CRM_PREVIEW_IMAGE] },
+  { sectionKey: "testimonial", section: "Testimonial", title: "People do not talk about this ...Until they try it!", subtitle: "-", imagePaths: [CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE] },
+  { sectionKey: "footer-video", section: "Footer Video", title: "-", subtitle: "-", imagePaths: [CRM_PREVIEW_IMAGE] },
 ];
 
 export default function CrmHomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<CrmHomepageRow | null>(null);
+  
+  const queryClient = useQueryClient();
+  
+  const { data: pageData, isLoading } = useQuery({
+    queryKey: ["page", "home"],
+    queryFn: () => getPage("home"),
+  });
+
+  // Auto-create the page if it doesn't exist yet
+  useEffect(() => {
+    if (!isLoading && pageData === null) {
+      createPage("home", "Homepage").then(() => {
+        queryClient.invalidateQueries({ queryKey: ["page", "home"] });
+      });
+    }
+  }, [isLoading, pageData, queryClient]);
+
+  const upsertMutation = useMutation({
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) => 
+      upsertSection("home", sectionKey, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["page", "home"] });
+    }
+  });
+
+  const crmHomepageRows: CrmHomepageRow[] = defaultSections.map((def, index) => {
+    const sectionData = pageData?.sections?.find((s: any) => s.sectionKey === def.sectionKey);
+    const content = sectionData?.content || {};
+    
+    return {
+      id: sectionData?.id || String(index + 1),
+      sectionKey: def.sectionKey,
+      section: def.section,
+      title: content.title || def.title,
+      subtitle: content.subtitle || def.subtitle,
+      imagePaths: content.imagePaths?.length ? content.imagePaths : def.imagePaths,
+    };
+  });
 
   const handleEdit = (row: CrmHomepageRow) => {
     setSelectedRow(row);
     setIsModalOpen(true);
+  };
+
+  const handleSave = async (sectionKey: string, content: any) => {
+    await upsertMutation.mutateAsync({ sectionKey, content });
   };
 
   const columns: DashboardTableColumn<CrmHomepageRow>[] = [
@@ -124,16 +130,19 @@ export default function CrmHomePage() {
 
         return (
           <div className='flex items-center gap-1'>
-            {row.imagePaths.map((imagePath, index) => (
+            {row.imagePaths.slice(0, 3).map((imagePath, index) => (
               <Image
                 key={`${row.id}-image-${index}`}
-                src={imagePath}
+                src={imagePath.startsWith('/') || imagePath.startsWith('http') ? imagePath : CRM_PREVIEW_IMAGE}
                 alt={`${row.section} preview ${index + 1}`}
                 width={28}
                 height={20}
-                className='rounded-sm border border-[#E5E7EB] object-cover'
+                className='rounded-sm border border-[#E5E7EB] object-cover min-h-[20px] min-w-[28px]'
               />
             ))}
+            {row.imagePaths.length > 3 && (
+              <span className="text-xs text-gray-500 ml-1">+{row.imagePaths.length - 3}</span>
+            )}
           </div>
         );
       },
@@ -157,8 +166,9 @@ export default function CrmHomePage() {
 
   return (
     <section>
+      {isLoading && <div className="mb-4 text-sm text-gray-500">Loading data...</div>}
       <DashboardDataTable
-        searchPlaceholder='Search order, customer name'
+        searchPlaceholder='Search section'
         data={crmHomepageRows}
         columns={columns}
         getRowId={(row) => row.id}
@@ -171,13 +181,15 @@ export default function CrmHomePage() {
         footerMode='count-only'
         countOnlyLabel='Sections'
       />
-      <CRMEditModal
+      <CRMHomeEditModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        section={selectedRow?.section || ""}
-        title={selectedRow?.title || ""}
-        subtitle={selectedRow?.subtitle || ""}
-        imagePaths={selectedRow?.imagePaths || []}
+        sectionKey={selectedRow?.sectionKey || null}
+        sectionName={selectedRow?.section || null}
+        initialContent={
+          selectedRow ? { title: selectedRow.title, subtitle: selectedRow.subtitle, imagePaths: selectedRow.imagePaths } : null
+        }
+        onSave={handleSave}
       />
     </section>
   );
