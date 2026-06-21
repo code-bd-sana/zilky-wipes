@@ -1,12 +1,13 @@
-import { ChevronsRight, Save, Plus, Trash2 } from "lucide-react";
-import { useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { ChevronsRight, Save, Trash2, UploadCloud } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState, useRef } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { uploadMedia } from "@/lib/api/pages";
 
 type FormValues = {
   title: string;
   subtitle: string;
-  imagePaths: { url: string }[];
 };
 
 export default function CRMHomeEditModal({
@@ -26,7 +27,6 @@ export default function CRMHomeEditModal({
 }) {
   const {
     register,
-    control,
     handleSubmit,
     reset,
     formState: { isSubmitting },
@@ -34,45 +34,78 @@ export default function CRMHomeEditModal({
     defaultValues: {
       title: "",
       subtitle: "",
-      imagePaths: [],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "imagePaths",
-  });
+  const [existingPaths, setExistingPaths] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       reset({
         title: initialContent?.title || "",
         subtitle: initialContent?.subtitle || "",
-        imagePaths: (initialContent?.imagePaths || []).map((url: string) => ({
-          url,
-        })),
       });
+      setExistingPaths(initialContent?.imagePaths || []);
+      setSelectedFiles([]);
     }
   }, [isOpen, initialContent, reset]);
 
   if (!isOpen) return null;
 
+  const removeExistingPath = (index: number) => {
+    const updated = [...existingPaths];
+    updated.splice(index, 1);
+    setExistingPaths(updated);
+  };
+
+  const removeSelectedFile = (index: number) => {
+    const updated = [...selectedFiles];
+    updated.splice(index, 1);
+    setSelectedFiles(updated);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)]);
+    }
+    // reset input so the same files can be selected again if removed
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const onSubmit = async (data: FormValues) => {
     if (!sectionKey) return;
+    setIsUploading(true);
     try {
+      let newlyUploadedUrls: string[] = [];
+      if (selectedFiles.length > 0) {
+        newlyUploadedUrls = await uploadMedia("homepage", selectedFiles);
+      }
+
+      const finalPaths = [...existingPaths, ...newlyUploadedUrls].filter(Boolean);
+
       const formattedContent = {
         title: data.title,
         subtitle: data.subtitle,
-        imagePaths: data.imagePaths.map((img) => img.url).filter(Boolean),
+        imagePaths: finalPaths,
       };
+
       await onSave(sectionKey, formattedContent);
       toast.success("Section updated successfully");
       onClose();
     } catch (error) {
       console.error(error);
       toast.error("Failed to update section");
+    } finally {
+      setIsUploading(false);
     }
   };
+
+  const isFormLoading = isSubmitting || isUploading;
 
   return (
     <section
@@ -120,54 +153,82 @@ export default function CRMHomeEditModal({
               </label>
               <textarea
                 {...register("subtitle")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black min-h-25"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black min-h-[100px]"
                 placeholder="Section subtitle or main text"
               />
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Media URLs (Images/Videos)
-                </label>
-                <button
-                  type="button"
-                  onClick={() => append({ url: "" })}
-                  className="text-sm flex items-center text-blue-600 hover:text-blue-800"
-                >
-                  <Plus className="w-4 h-4 mr-1" /> Add Media
-                </button>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Media (Images/Videos)
+              </label>
+              
+              {/* File Upload Zone */}
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full cursor-pointer border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors"
+              >
+                <UploadCloud className="w-8 h-8 text-gray-400 mb-2" />
+                <p className="text-sm text-gray-600 font-medium">Click to upload media</p>
+                <p className="text-xs text-gray-500 mt-1">Supports PNG, JPG, MP4</p>
+                <input
+                  type="file"
+                  multiple
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                  accept="image/*,video/*"
+                />
               </div>
 
-              {fields.map((field, index) => (
-                <div key={field.id} className="flex items-center gap-2 mb-2">
-                  <input
-                    type="text"
-                    {...register(`imagePaths.${index}.url` as const)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-                    placeholder="https://..."
-                  />
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-md"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-              
-              {fields.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {fields.map((field, index) => {
-                    return (
-                      <div key={`preview-${index}`} className="w-16 h-16 bg-gray-100 border rounded flex items-center justify-center overflow-hidden">
-                         <ImageIconPreview />
+              {/* Preview Area */}
+              <div className="mt-4 space-y-3">
+                {/* Existing media */}
+                {existingPaths.map((path, idx) => (
+                  <div key={`existing-${idx}`} className="flex items-center justify-between p-2 border rounded-md bg-white">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      <div className="w-10 h-10 bg-gray-100 shrink-0 border rounded flex items-center justify-center overflow-hidden">
+                         {path.endsWith('.mp4') || path.endsWith('.webm') ? (
+                           <span className="text-xs font-bold text-gray-400">VID</span>
+                         ) : (
+                           <Image src={path.startsWith('/') || path.startsWith('http') ? path : '/ZilkyWipes/1000308870.png'} alt="preview" width={40} height={40} className="object-cover w-full h-full" />
+                         )}
                       </div>
-                    )
-                  })}
-                </div>
-              )}
+                      <p className="text-sm text-gray-600 truncate max-w-[200px]" title={path}>
+                        {path.split('/').pop()}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeExistingPath(idx)}
+                      className="p-1.5 text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+
+                {/* New selected files */}
+                {selectedFiles.map((file, idx) => (
+                  <div key={`new-${idx}`} className="flex items-center justify-between p-2 border border-blue-100 rounded-md bg-blue-50/50">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      <div className="w-10 h-10 bg-white shrink-0 border border-blue-100 rounded flex items-center justify-center overflow-hidden">
+                        <span className="text-xs font-bold text-blue-400">NEW</span>
+                      </div>
+                      <p className="text-sm text-gray-600 truncate max-w-[200px]" title={file.name}>
+                        {file.name}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeSelectedFile(idx)}
+                      className="p-1.5 text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -175,22 +236,14 @@ export default function CRMHomeEditModal({
         <div className="flex justify-end items-center mt-10 border-t pt-4">
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="bg-[#FAFAF9] text-[#262626] py-2 px-4 rounded-md hover:bg-[#f1f1eb] border border-[#E5E7EB] disabled:opacity-50"
+            disabled={isFormLoading}
+            className="bg-[#FAFAF9] text-[#262626] py-2 px-4 rounded-md hover:bg-[#f1f1eb] border border-[#E5E7EB] disabled:opacity-50 flex items-center"
           >
-            <Save className="w-4 h-4 inline-flex items-center justify-center mr-2" />
-            {isSubmitting ? "Saving..." : "Save Changes"}
+            <Save className="w-4 h-4 mr-2" />
+            {isUploading ? "Uploading..." : isSubmitting ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </form>
     </section>
-  );
-}
-
-function ImageIconPreview() {
-  return (
-    <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-    </svg>
   );
 }

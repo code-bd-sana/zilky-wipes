@@ -21,3 +21,18 @@ export const createPage = async (slug: string, title: string, description?: stri
   const { data } = await api.post(`/pages`, { slug, title, description });
   return data.data;
 };
+
+export const uploadMedia = async (pageName: string, files: File[]) => {
+  const formData = new FormData();
+  files.forEach(file => {
+    formData.append("files", file);
+  });
+
+  const { data } = await api.post(`/upload/${pageName}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  });
+  
+  return data.data; // returns an array of URLs
+};
