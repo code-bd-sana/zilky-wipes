@@ -1,6 +1,8 @@
 import PageTitle from "@/components/shared/page-title/page-title";
 import SplitContentSection from "@/components/shared/split-content-section";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { isVideo } from "@/lib/utils";
 
 export default function Section1({ data }: { data?: any }) {
   const title = data?.title || '.....Because dry paper was never the answer!';
@@ -9,7 +11,8 @@ export default function Section1({ data }: { data?: any }) {
     "ZilkyWipes leaves you genuinely clean — safely,",
     "gently, responsibly.",
   ];
-  const videoSrc = data?.imagePaths?.[0] || '/video/1.mp4';
+  const mediaSrc = data?.imagePaths?.[0] || '/video/1.mp4';
+  const renderVideo = isVideo(mediaSrc);
 
   return (
     <section>
@@ -35,15 +38,26 @@ export default function Section1({ data }: { data?: any }) {
           </>
         }
         media={
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
-            <source src={videoSrc} type='video/mp4' />
-            Your browser does not support the video tag.
-          </video>
+          renderVideo ? (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
+              <source src={mediaSrc} type='video/mp4' />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <div className='relative w-full aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] overflow-hidden'>
+              <Image 
+                src={mediaSrc} 
+                alt="Section Image" 
+                fill 
+                className="object-cover"
+              />
+            </div>
+          )
         }
       />
     </section>

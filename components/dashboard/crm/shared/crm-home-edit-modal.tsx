@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { uploadMedia } from "@/lib/api/pages";
+import { isVideo } from "@/lib/utils";
 
 type FormValues = {
   title: string;
@@ -153,7 +154,7 @@ export default function CRMHomeEditModal({
               </label>
               <textarea
                 {...register("subtitle")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black min-h-[100px]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black min-h-25"
                 placeholder="Section subtitle or main text"
               />
             </div>
@@ -184,17 +185,19 @@ export default function CRMHomeEditModal({
               {/* Preview Area */}
               <div className="mt-4 space-y-3">
                 {/* Existing media */}
-                {existingPaths.map((path, idx) => (
+                {existingPaths.map((path, idx) => {
+                  const renderVideo = isVideo(path);
+                  return (
                   <div key={`existing-${idx}`} className="flex items-center justify-between p-2 border rounded-md bg-white">
                     <div className="flex items-center gap-3 overflow-hidden">
-                      <div className="w-10 h-10 bg-gray-100 shrink-0 border rounded flex items-center justify-center overflow-hidden">
-                         {path.endsWith('.mp4') || path.endsWith('.webm') ? (
-                           <span className="text-xs font-bold text-gray-400">VID</span>
+                      <div className="w-10 h-10 bg-gray-100 shrink-0 border rounded flex items-center justify-center overflow-hidden relative">
+                         {renderVideo ? (
+                           <video src={path} className="object-cover w-full h-full" muted playsInline />
                          ) : (
-                           <Image src={path.startsWith('/') || path.startsWith('http') ? path : '/ZilkyWipes/1000308870.png'} alt="preview" width={40} height={40} className="object-cover w-full h-full" />
+                           <Image src={path.startsWith('/') || path.startsWith('http') ? path : '/ZilkyWipes/1000308870.png'} alt="preview" fill className="object-cover w-full h-full" />
                          )}
                       </div>
-                      <p className="text-sm text-gray-600 truncate max-w-[200px]" title={path}>
+                      <p className="text-sm text-gray-600 truncate max-w-50" title={path}>
                         {path.split('/').pop()}
                       </p>
                     </div>
@@ -206,16 +209,24 @@ export default function CRMHomeEditModal({
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
-                ))}
+                )})}
 
                 {/* New selected files */}
-                {selectedFiles.map((file, idx) => (
+                {selectedFiles.map((file, idx) => {
+                  const objectUrl = URL.createObjectURL(file);
+                  const renderVideo = file.type.startsWith('video/');
+                  
+                  return (
                   <div key={`new-${idx}`} className="flex items-center justify-between p-2 border border-blue-100 rounded-md bg-blue-50/50">
                     <div className="flex items-center gap-3 overflow-hidden">
-                      <div className="w-10 h-10 bg-white shrink-0 border border-blue-100 rounded flex items-center justify-center overflow-hidden">
-                        <span className="text-xs font-bold text-blue-400">NEW</span>
+                      <div className="w-10 h-10 bg-white shrink-0 border border-blue-100 rounded flex items-center justify-center overflow-hidden relative">
+                        {renderVideo ? (
+                          <video src={objectUrl} className="object-cover w-full h-full" muted playsInline />
+                        ) : (
+                          <Image src={objectUrl} alt="preview" fill className="object-cover w-full h-full" />
+                        )}
                       </div>
-                      <p className="text-sm text-gray-600 truncate max-w-[200px]" title={file.name}>
+                      <p className="text-sm text-gray-600 truncate max-w-50" title={file.name}>
                         {file.name}
                       </p>
                     </div>
@@ -227,7 +238,7 @@ export default function CRMHomeEditModal({
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
-                ))}
+                )})}
               </div>
             </div>
           </div>
