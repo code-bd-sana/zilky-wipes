@@ -75,7 +75,7 @@ export default function CrmHomePage() {
       section: def.section,
       title: content.title || def.title,
       subtitle: content.subtitle || def.subtitle,
-      imagePaths: content.imagePaths?.length ? content.imagePaths : def.imagePaths,
+      imagePaths: content.imagePaths !== undefined ? content.imagePaths : def.imagePaths,
     };
   });
 
