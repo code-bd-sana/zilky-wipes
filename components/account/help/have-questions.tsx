@@ -18,10 +18,10 @@ export default function HaveQuestions() {
         </div>
         <div className='flex items-center justify-center mt-3'>
           <div className='flex space-x-4 pt-2'>
-            <Button className='bg-[#FFFFFF] text-[#474747] hover:bg-[#f3e9e9] border border-[#E5E5E5] px-6 py-1.5 rounded-[4px] text-sm'>
+            <Button className='bg-[#FFFFFF] text-[#474747] hover:bg-[#f3e9e9] border border-[#E5E5E5] px-6 py-1.5 rounded-lg text-sm'>
               Email Us
             </Button>
-            <Button className='bg-[#FFFFFF] text-[#474747] hover:bg-[#f3e9e9] border border-[#E5E5E5] px-6 py-1.5 rounded-[4px] text-sm'>
+            <Button className='bg-[#FFFFFF] text-[#474747] hover:bg-[#f3e9e9] border border-[#E5E5E5] px-6 py-1.5 rounded-lg text-sm'>
               Contact Us
             </Button>
           </div>

@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 import CRMHomeEditModal from "./shared/crm-home-edit-modal";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getPage, upsertSection, createPage } from "@/lib/api/pages";
+import { isVideo } from "@/lib/utils";
 
 const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
 
@@ -130,16 +131,27 @@ export default function CrmHomePage() {
 
         return (
           <div className='flex items-center gap-1'>
-            {row.imagePaths.slice(0, 3).map((imagePath, index) => (
-              <Image
-                key={`${row.id}-image-${index}`}
-                src={imagePath.startsWith('/') || imagePath.startsWith('http') ? imagePath : CRM_PREVIEW_IMAGE}
-                alt={`${row.section} preview ${index + 1}`}
-                width={28}
-                height={20}
-                className='rounded-sm border border-[#E5E7EB] object-cover min-h-[20px] min-w-[28px]'
-              />
-            ))}
+            {row.imagePaths.slice(0, 3).map((imagePath, index) => {
+              const renderVideo = isVideo(imagePath);
+              return renderVideo ? (
+                <video
+                  key={`${row.id}-image-${index}`}
+                  src={imagePath}
+                  className='rounded-sm border border-[#E5E7EB] object-cover min-h-5 max-h-5 min-w-7 max-w-7'
+                  muted
+                  playsInline
+                />
+              ) : (
+                <Image
+                  key={`${row.id}-image-${index}`}
+                  src={imagePath.startsWith('/') || imagePath.startsWith('http') ? imagePath : CRM_PREVIEW_IMAGE}
+                  alt={`${row.section} preview ${index + 1}`}
+                  width={28}
+                  height={20}
+                  className='rounded-sm border border-[#E5E7EB] object-cover min-h-5 max-h-5 min-w-7 max-w-7'
+                />
+              );
+            })}
             {row.imagePaths.length > 3 && (
               <span className="text-xs text-gray-500 ml-1">+{row.imagePaths.length - 3}</span>
             )}
