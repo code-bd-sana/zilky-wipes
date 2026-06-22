@@ -4,14 +4,34 @@ import SubscriptionBanner from "@/components/home/subscription/subscription-bann
 import SubscriptionDifference from "@/components/home/subscription/subscription-difference";
 import SubscriptionFooter from "@/components/home/subscription/subscription-footer";
 
-export default function Subscription() {
+async function getSubscriptionPageData() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages/subscription`, {
+      next: { revalidate: 60, tags: ['page-subscription'] }
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data;
+  } catch (e) {
+    console.error("Failed to fetch subscription page data", e);
+    return null;
+  }
+}
+
+export default async function Subscription() {
+  const pageData = await getSubscriptionPageData();
+  const sections = (pageData?.sections || []).reduce((acc: any, sec: any) => {
+    acc[sec.sectionKey] = sec.content;
+    return acc;
+  }, {});
+
   return (
     <>
-      <SubscriptionBanner />
-      <SubsSection1 />
-      <SubsSection2 />
-      <SubscriptionDifference />
-      <SubscriptionFooter />
+      <SubscriptionBanner data={sections['hero']} />
+      <SubsSection1 data={sections['section-1']} />
+      <SubsSection2 data={sections['section-2']} />
+      <SubscriptionDifference data={sections['difference']} />
+      <SubscriptionFooter data={sections['footer-video']} />
     </>
   );
 }

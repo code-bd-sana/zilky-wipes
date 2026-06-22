@@ -10,23 +10,29 @@ type BenefitColumn = {
   items: BenefitItem[];
 };
 
-export default function SubscriptionDifference() {
+export default function SubscriptionDifference({ data }: { data?: any }) {
+  const title = data?.title || "See the difference by yourself";
+  
+  const col1Points = data?.col1Points?.length ? data.col1Points : [
+    "Buy when you remember.",
+    "Full price.",
+    "Manual reordering.",
+  ];
+  
+  const col2Points = data?.col2Points?.length ? data.col2Points : [
+    "Always stocked.",
+    "Preferred pricing.",
+    "Total control.",
+  ];
+
   const benefitColumns: BenefitColumn[] = [
     {
       heading: "One-Time Purchase",
-      items: [
-        { no: "01", title: "Buy when you remember." },
-        { no: "02", title: "Full price." },
-        { no: "03", title: "Manual reordering." },
-      ],
+      items: col1Points.map((p: string, idx: number) => ({ no: String(idx + 1).padStart(2, '0'), title: p })),
     },
     {
       heading: "Subscription",
-      items: [
-        { no: "01", title: "Always stocked." },
-        { no: "02", title: "Preferred pricing." },
-        { no: "03", title: "Total control." },
-      ],
+      items: col2Points.map((p: string, idx: number) => ({ no: String(idx + 1).padStart(2, '0'), title: p })),
     },
   ];
 
@@ -34,7 +40,7 @@ export default function SubscriptionDifference() {
     <section className='bg-[#FBFAF9]'>
       <div className='mx-5 md:mx-12 mt-20 md:mt-50 py-25'>
         <PageTitle
-          title='See the difference by yourself'
+          title={title}
           align='start'
           titleClassName='w-full! text-center!'
         />

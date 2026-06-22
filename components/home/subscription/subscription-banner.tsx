@@ -1,22 +1,35 @@
-export default function SubscriptionBanner() {
+import Image from "next/image";
+import { isVideo } from "@/lib/utils";
+
+export default function SubscriptionBanner({ data }: { data?: any }) {
+  const title = data?.title || 'Never run out again.';
+  const mediaSrc = data?.imagePaths?.[0] || '/video/2.mp4';
+  const renderVideo = isVideo(mediaSrc);
+
   return (
     <section className='w-full h-screen relative overflow-hidden'>
       {/* Hero container */}
-      <div className='absolute inset-0 w-full h-full overflow-hidden'>
-        {/* Video Background */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster='/home/subscription/subscription-banner.png'
-          className='absolute inset-0 w-full h-full object-cover'>
-          <source
-            src='video/2.mp4'
-            type='video/mp4'
+      <div className='absolute inset-0 w-full h-full overflow-hidden bg-black/10'>
+        {/* Background Media */}
+        {renderVideo ? (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className='absolute inset-0 w-full h-full object-cover'>
+            <source src={mediaSrc} type='video/mp4' />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <Image 
+            src={mediaSrc} 
+            alt="Hero Background" 
+            fill 
+            className="object-cover"
+            priority
           />
-          Your browser does not support the video tag.
-        </video>
+        )}
 
         {/* Dark overlay for text contrast */}
         <div className='absolute inset-0 ' />
@@ -24,7 +37,7 @@ export default function SubscriptionBanner() {
       {/* Content overlay */}
       <div className='relative z-10 h-full flex items-end justify-start text-start mx-5 md:mx-11.5 py-15'>
         <p className='font-heading text-[40px] md:text-[70px] lg:text-[120px] font-bold w-full text-white'>
-          Never run out again.
+          {title}
         </p>
       </div>
     </section>
