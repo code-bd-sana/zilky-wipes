@@ -12,58 +12,78 @@ import {
   UserRound,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
-import CRMEditModal from "./shared/crm-edit-modal";
+import { useState, useEffect } from "react";
+import CRMHomeEditModal from "./shared/crm-home-edit-modal";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getPage, upsertSection, createPage } from "@/lib/api/pages";
+import { isVideo } from "@/lib/utils";
 
-const CRM_PRODUCT_IMAGE = "/ZilkyWipes/1000308870.png";
+const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
 
 type CrmProductRow = {
   id: string;
+  sectionKey: string;
   section: string;
   title: string;
   subtitle: string;
   imagePaths: string[];
 };
 
-const crmProductRows: CrmProductRow[] = [
-  {
-    id: "1",
-    section: "Title 1",
-    title: "One Time",
-    subtitle: "-",
-    imagePaths: [CRM_PRODUCT_IMAGE],
-  },
-  {
-    id: "2",
-    section: "Title 2",
-    title: "Subscription",
-    subtitle: "-",
-    imagePaths: [],
-  },
-  {
-    id: "3",
-    section: "Before Footer",
-    title: "-",
-    subtitle: "-",
-    imagePaths: [CRM_PRODUCT_IMAGE],
-  },
-  {
-    id: "4",
-    section: "Types",
-    title: "Starter Kit, Refill, Bundles",
-    subtitle: "-",
-    imagePaths: [],
-  },
+const defaultSections = [
+  { sectionKey: "footer-video", section: "Footer Video", title: "-", subtitle: "-", imagePaths: [CRM_PREVIEW_IMAGE] },
 ];
 
 export default function CrmProductPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<CrmProductRow | null>(null);
+  
+  const queryClient = useQueryClient();
+  
+  const { data: pageData, isLoading } = useQuery({
+    queryKey: ["page", "shop"],
+    queryFn: () => getPage("shop"),
+  });
+
+  // Auto-create the page if it doesn't exist yet
+  useEffect(() => {
+    if (!isLoading && pageData === null) {
+      createPage("shop", "Shop").then(() => {
+        queryClient.invalidateQueries({ queryKey: ["page", "shop"] });
+      });
+    }
+  }, [isLoading, pageData, queryClient]);
+
+  const upsertMutation = useMutation({
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) => 
+      upsertSection("shop", sectionKey, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["page", "shop"] });
+    }
+  });
+
+  const crmProductRows: CrmProductRow[] = defaultSections.map((def, index) => {
+    const sectionData = pageData?.sections?.find((s: any) => s.sectionKey === def.sectionKey);
+    const content = sectionData?.content || {};
+    
+    return {
+      id: sectionData?.id || String(index + 1),
+      sectionKey: def.sectionKey,
+      section: def.section,
+      title: content.title || def.title,
+      subtitle: content.subtitle || def.subtitle,
+      imagePaths: content.imagePaths !== undefined ? content.imagePaths : def.imagePaths,
+    };
+  });
 
   const handleEdit = (row: CrmProductRow) => {
     setSelectedRow(row);
     setIsModalOpen(true);
   };
+
+  const handleSave = async (sectionKey: string, content: any) => {
+    await upsertMutation.mutateAsync({ sectionKey, content });
+  };
+
   const columns: DashboardTableColumn<CrmProductRow>[] = [
     {
       id: "section",
@@ -106,16 +126,30 @@ export default function CrmProductPage() {
 
         return (
           <div className='flex items-center gap-1'>
-            {row.imagePaths.map((imagePath, index) => (
-              <Image
-                key={`${row.id}-image-${index}`}
-                src={imagePath}
-                alt={`${row.section} preview ${index + 1}`}
-                width={28}
-                height={20}
-                className='rounded-sm border border-[#E5E7EB] object-cover'
-              />
-            ))}
+            {row.imagePaths.slice(0, 3).map((imagePath, index) => {
+              const renderVideo = isVideo(imagePath);
+              return renderVideo ? (
+                <video
+                  key={`${row.id}-image-${index}`}
+                  src={imagePath}
+                  className='rounded-sm border border-[#E5E7EB] object-cover min-h-5 max-h-5 min-w-7 max-w-7'
+                  muted
+                  playsInline
+                />
+              ) : (
+                <Image
+                  key={`${row.id}-image-${index}`}
+                  src={imagePath.startsWith('/') || imagePath.startsWith('http') ? imagePath : CRM_PREVIEW_IMAGE}
+                  alt={`${row.section} preview ${index + 1}`}
+                  width={28}
+                  height={20}
+                  className='rounded-sm border border-[#E5E7EB] object-cover min-h-5 max-h-5 min-w-7 max-w-7'
+                />
+              );
+            })}
+            {row.imagePaths.length > 3 && (
+              <span className="text-xs text-gray-500 ml-1">+{row.imagePaths.length - 3}</span>
+            )}
           </div>
         );
       },
@@ -136,10 +170,12 @@ export default function CrmProductPage() {
       ),
     },
   ];
+
   return (
     <section>
+      {isLoading && <div className="mb-4 text-sm text-gray-500">Loading data...</div>}
       <DashboardDataTable
-        searchPlaceholder='Search order, customer name'
+        searchPlaceholder='Search section'
         data={crmProductRows}
         columns={columns}
         getRowId={(row) => row.id}
@@ -153,13 +189,16 @@ export default function CrmProductPage() {
         countOnlyLabel='Sections'
       />
 
-      <CRMEditModal
+      <CRMHomeEditModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        section={selectedRow?.section || ""}
-        title={selectedRow?.title || ""}
-        subtitle={selectedRow?.subtitle || ""}
-        imagePaths={selectedRow?.imagePaths || []}
+        sectionKey={selectedRow?.sectionKey || null}
+        sectionName={selectedRow?.section || null}
+        initialContent={
+          selectedRow ? { title: selectedRow.title, subtitle: selectedRow.subtitle, imagePaths: selectedRow.imagePaths } : null
+        }
+        pageKey="shop"
+        onSave={handleSave}
       />
     </section>
   );

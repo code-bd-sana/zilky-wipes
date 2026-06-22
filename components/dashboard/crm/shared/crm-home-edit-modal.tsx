@@ -17,6 +17,7 @@ export default function CRMHomeEditModal({
   sectionKey,
   sectionName,
   initialContent,
+  pageKey,
   onSave,
 }: {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export default function CRMHomeEditModal({
   sectionKey: string | null;
   sectionName: string | null;
   initialContent: any;
+  pageKey?: string;
   onSave: (sectionKey: string, content: any) => Promise<void>;
 }) {
   const {
@@ -84,7 +86,7 @@ export default function CRMHomeEditModal({
     try {
       let newlyUploadedUrls: string[] = [];
       if (selectedFiles.length > 0) {
-        newlyUploadedUrls = await uploadMedia("homepage", selectedFiles);
+        newlyUploadedUrls = await uploadMedia(pageKey || "homepage", selectedFiles);
       }
 
       const finalPaths = [...existingPaths, ...newlyUploadedUrls].filter(Boolean);
