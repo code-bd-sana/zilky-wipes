@@ -167,8 +167,10 @@ function renderCell(value: CellValue) {
   }
 }
 
-export default function ZilkyAdvantage() {
+export default function ZilkyAdvantage({ data }: { data?: any }) {
   const [hoveredCol, setHoveredCol] = useState<ColKey | null>(null);
+
+  const title = data?.title || 'The ZilkyWipes Advantage';
 
   const getFlex = (key: ColKey) => {
     if (!hoveredCol) return "flex-1";
@@ -181,7 +183,7 @@ export default function ZilkyAdvantage() {
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div className='my-10 md:mb-25 text-center'>
         <PageTitle
-          title='The ZilkyWipes Advantage'
+          title={title}
           titleClassName='max-w-200! mx-auto text-[40px]! leading-[1.1]! md:text-[56px]!'
         />
       </div>
