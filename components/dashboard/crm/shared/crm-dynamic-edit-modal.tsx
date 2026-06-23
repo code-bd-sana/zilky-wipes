@@ -12,6 +12,7 @@ type FormValues = {
   points: { value: string }[];
   detailList: { title: string; description: string }[];
   statList: { value: string; title: string; description: string }[];
+  advantageList: { label: string; zilkyType: string; zilkyText: string; tpType: string; tpText: string; wwType: string; wwText: string }[];
 };
 
 export default function CRMDynamicEditModal({
@@ -44,12 +45,14 @@ export default function CRMDynamicEditModal({
       points: [],
       detailList: [],
       statList: [],
+      advantageList: [],
     },
   });
 
   const { fields: pointsFields, append: appendPoint, remove: removePoint } = useFieldArray({ control, name: "points" });
   const { fields: detailFields, append: appendDetail, remove: removeDetail } = useFieldArray({ control, name: "detailList" });
   const { fields: statFields, append: appendStat, remove: removeStat } = useFieldArray({ control, name: "statList" });
+  const { fields: advantageFields, append: appendAdvantage, remove: removeAdvantage } = useFieldArray({ control, name: "advantageList" });
 
   const [existingPaths, setExistingPaths] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -64,6 +67,7 @@ export default function CRMDynamicEditModal({
         points: (initialContent?.points || []).map((p: string) => ({ value: p })),
         detailList: initialContent?.detailList || [],
         statList: initialContent?.statList || [],
+        advantageList: initialContent?.advantageList || [],
       });
       setExistingPaths(initialContent?.imagePaths || []);
       setSelectedFiles([]);
@@ -108,6 +112,7 @@ export default function CRMDynamicEditModal({
         points: data.points.map(p => p.value),
         detailList: data.detailList,
         statList: data.statList,
+        advantageList: data.advantageList,
         imagePaths: finalPaths,
       };
 
@@ -128,6 +133,7 @@ export default function CRMDynamicEditModal({
   const showPointsList = sectionKey === "difference" || pointsFields.length > 0;
   const showDetailList = sectionKey === "section-1" || sectionKey === "comfort" || sectionKey === "section-2" || detailFields.length > 0;
   const showStatList = sectionKey === "proven-results" || statFields.length > 0;
+  const showAdvantageList = sectionKey === "advantage" || advantageFields.length > 0;
   
   // Exclude subtitle for certain sections if desired, but we can just leave it optional
   const hasSubtitle = sectionKey !== "hero" && sectionKey !== "footer-video" && sectionKey !== "advantage";
@@ -265,6 +271,65 @@ export default function CRMDynamicEditModal({
                 </div>
                 <button type="button" onClick={() => appendStat({ value: "", title: "", description: "" })} className="text-sm flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium">
                   <Plus className="w-4 h-4" /> Add Stat
+                </button>
+              </div>
+            )}
+
+            {showAdvantageList && (
+              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 overflow-x-auto">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Matrix Features</label>
+                <div className="space-y-4 mb-3">
+                  {advantageFields.map((field, index) => (
+                    <div key={field.id} className="flex flex-col gap-3 bg-white p-3 border border-gray-200 rounded-md relative">
+                      <button type="button" onClick={() => removeAdvantage(index)} className="absolute top-2 right-2 p-1.5 text-red-500 hover:bg-red-50 rounded-md">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                      <input
+                        {...register(`advantageList.${index}.label`)}
+                        className="w-full sm:w-2/3 px-3 py-2 text-sm font-medium border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
+                        placeholder="Feature Name (e.g., Flushable & Safe)"
+                      />
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {/* Zilky */}
+                        <div className="space-y-1">
+                          <label className="text-xs font-semibold text-gray-500 uppercase">ZilkyWipes</label>
+                          <select {...register(`advantageList.${index}.zilkyType`)} className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md">
+                            <option value="check">Check (✓)</option>
+                            <option value="cross">Cross (X)</option>
+                            <option value="warn">Warning (!)</option>
+                            <option value="stars">Stars</option>
+                          </select>
+                          <input {...register(`advantageList.${index}.zilkyText`)} className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md" placeholder="Text or Star count (e.g., 5)" />
+                        </div>
+                        {/* Toilet Paper */}
+                        <div className="space-y-1">
+                          <label className="text-xs font-semibold text-gray-500 uppercase">Toilet Paper</label>
+                          <select {...register(`advantageList.${index}.tpType`)} className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md">
+                            <option value="check">Check (✓)</option>
+                            <option value="cross">Cross (X)</option>
+                            <option value="warn">Warning (!)</option>
+                            <option value="stars">Stars</option>
+                          </select>
+                          <input {...register(`advantageList.${index}.tpText`)} className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md" placeholder="Text or Star count" />
+                        </div>
+                        {/* Wet Wipes */}
+                        <div className="space-y-1">
+                          <label className="text-xs font-semibold text-gray-500 uppercase">Wet Wipes</label>
+                          <select {...register(`advantageList.${index}.wwType`)} className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md">
+                            <option value="check">Check (✓)</option>
+                            <option value="cross">Cross (X)</option>
+                            <option value="warn">Warning (!)</option>
+                            <option value="stars">Stars</option>
+                          </select>
+                          <input {...register(`advantageList.${index}.wwText`)} className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md" placeholder="Text or Star count" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button type="button" onClick={() => appendAdvantage({ label: "", zilkyType: "check", zilkyText: "", tpType: "check", tpText: "", wwType: "cross", wwText: "Most aren't" })} className="text-sm flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium">
+                  <Plus className="w-4 h-4" /> Add Matrix Feature
                 </button>
               </div>
             )}

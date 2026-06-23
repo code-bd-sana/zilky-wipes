@@ -39,7 +39,13 @@ const defaultSections = [
     { title: "Hygienic", description: "Water does what paper can’t.Every time!" },
     { title: "Luxury", description: "Soft. Calm. Considered.Every day!" }
   ], imagePaths: [CRM_PREVIEW_IMAGE] },
-  { sectionKey: "advantage", section: "Zilky Advantage", title: "The ZilkyWipes Advantage", subtitle: "-", imagePaths: [] },
+  { sectionKey: "advantage", section: "Zilky Advantage", title: "The ZilkyWipes Advantage", subtitle: "-", advantageList: [
+    { label: "Cleanliness Level", zilkyType: "stars", zilkyText: "5", tpType: "stars", tpText: "2", wwType: "stars", wwText: "4" },
+    { label: "Flushable & Safe", zilkyType: "check", zilkyText: "", tpType: "check", tpText: "", wwType: "cross", wwText: "Most aren't" },
+    { label: "Convenience", zilkyType: "check", zilkyText: "", tpType: "check", tpText: "", wwType: "cross", wwText: "Separate dispenser" },
+    { label: "Skin-Friendly", zilkyType: "check", zilkyText: "", tpType: "warn", tpText: "Can irritate", wwType: "warn", wwText: "Often harsh" },
+    { label: "Environmental Impact", zilkyType: "check", zilkyText: "", tpType: "warn", tpText: "Deforestation", wwType: "cross", wwText: "Often harmful" }
+  ], imagePaths: [] },
   { sectionKey: "comfort", section: "Engineered for Comfort", title: "Engineered for Comfort", subtitle: "-", detailList: [{title: "Superior Cleanliness", description: "Clinically effective formula that leaves you feeling remarkably fresh and clean."}], imagePaths: [] },
   { sectionKey: "section-2", section: "Environmental Responsibility", title: "Environmental Responsibility", subtitle: "We're committed to making clean choices that are also green choices. Every ZilkyWipe is designed with the planet in mind.", detailList: [{title: "100% Biodegradable", description: "Breaks down completely in water within 24 hours, leaving no harmful residue."}], imagePaths: ['/video/1.mp4'] },
   { sectionKey: "proven-results", section: "Proven Results", title: "Scientifically Proven Results", subtitle: "-", statList: [{value: "99.9%", title: "Bacteria Removal Rate", description: "Breaks down 4x faster than leading competitor wet wipes."}], imagePaths: [] },
@@ -84,9 +90,10 @@ export default function CrmBenefitsPage() {
       section: def.section,
       title: content.title || def.title,
       subtitle: content.subtitle || def.subtitle,
-      points: content.points || def.points,
-      detailList: content.detailList || def.detailList,
-      statList: content.statList || def.statList,
+      points: content.points || (def as any).points,
+      detailList: content.detailList || (def as any).detailList,
+      statList: content.statList || (def as any).statList,
+      advantageList: content.advantageList || (def as any).advantageList,
       imagePaths: content.imagePaths !== undefined ? content.imagePaths : def.imagePaths,
     };
   });
