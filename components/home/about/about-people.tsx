@@ -136,10 +136,12 @@ function BenefitPeopleCard({
   );
 }
 
-export default function BenefitPeople() {
+export default function AboutPeople({ data }: { data?: any }) {
   const [desktopSlide, setDesktopSlide] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [tabletSlide, setTabletSlide] = useState(0);
+
+  const title = data?.title || "People don't talk about this. ....Until they try it!";
 
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
@@ -199,7 +201,7 @@ export default function BenefitPeople() {
     <section className='bg-[#FBFAF9]'>
       <div className='max-w-480 mx-auto px-5 md:px-12 lg:px-20 xl:px-40 mt-20 py-25'>
         <PageTitle
-          title="People don't talk about this. ....Until they try it!"
+          title={title}
           titleClassName='max-w-250!'
         />
 

@@ -7,50 +7,54 @@ import {
   ArrowRight,
   Calendar,
   Forward,
-  ImageIcon,
+  Image as ImageIcon,
   Star,
   UserRound,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
-import CRMEditModal from "./shared/crm-edit-modal";
+import { useState, useEffect } from "react";
+import CRMHomeEditModal from "./shared/crm-home-edit-modal";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getPage, upsertSection, createPage } from "@/lib/api/pages";
+import { isVideo } from "@/lib/utils";
+
+const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
 
 type CrmAboutRow = {
   id: string;
+  sectionKey: string;
   section: string;
   title: string;
   subtitle: string;
   imagePaths: string[];
 };
 
-const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
-
-const crmAboutRows: CrmAboutRow[] = [
+const defaultSections = [
   {
-    id: "1",
+    sectionKey: "hero",
     section: "Hero Main Heading",
     title: "Made for real bathrooms. And real bodies.",
     subtitle: "-",
-    imagePaths: [],
+    imagePaths: ["/video/4.mp4"],
   },
   {
-    id: "2",
+    sectionKey: "section-1",
     section: "Section 1",
     title: "BRAND STORY",
     subtitle:
-      "ZilkyWipes exists because hygiene deserves better. Not louder. Not more complicated. Just cleaner, calmer, and more considered. We didn't reinvent care. We simply made it make sense.",
-    imagePaths: [CRM_PREVIEW_IMAGE],
+      "ZilkyWipes exists because hygiene deserves better.\nNot louder. Not more complicated.\nJust cleaner, calmer, and more considered.\nWe didn't reinvent care.\nWe simply made it make sense.",
+    imagePaths: ["/video/3.mp4"],
   },
   {
-    id: "3",
+    sectionKey: "section-2",
     section: "Section 2",
     title: "Questions, feedback, or just curious? we'd love to hear from you.",
     subtitle:
-      "Your experience matters to us. Good or bad - we're listening. It helps us do better.",
-    imagePaths: [CRM_PREVIEW_IMAGE],
+      "Your experience matters to us.\nGood or bad - we're listening.\nIt helps us do better.",
+    imagePaths: ["/video/1.mp4"],
   },
   {
-    id: "4",
+    sectionKey: "testimonial",
     section: "Testimonial",
     title:
       "A small team. Obsessed with comfort, design, and doing things properly.",
@@ -63,9 +67,54 @@ export default function CrmAboutPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<CrmAboutRow | null>(null);
 
+  const queryClient = useQueryClient();
+
+  const { data: pageData, isLoading } = useQuery({
+    queryKey: ["page", "about"],
+    queryFn: () => getPage("about"),
+  });
+
+  // Auto-create the page if it doesn't exist yet
+  useEffect(() => {
+    if (!isLoading && pageData === null) {
+      createPage("about", "About Us").then(() => {
+        queryClient.invalidateQueries({ queryKey: ["page", "about"] });
+      });
+    }
+  }, [isLoading, pageData, queryClient]);
+
+  const upsertMutation = useMutation({
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) =>
+      upsertSection("about", sectionKey, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["page", "about"] });
+    },
+  });
+
+  const crmAboutRows: CrmAboutRow[] = defaultSections.map((def, index) => {
+    const sectionData = pageData?.sections?.find(
+      (s: any) => s.sectionKey === def.sectionKey
+    );
+    const content = sectionData?.content || {};
+
+    return {
+      id: sectionData?.id || String(index + 1),
+      sectionKey: def.sectionKey,
+      section: def.section,
+      title: content.title || def.title,
+      subtitle: content.subtitle || def.subtitle,
+      imagePaths:
+        content.imagePaths !== undefined ? content.imagePaths : def.imagePaths,
+    };
+  });
+
   const handleEdit = (row: CrmAboutRow) => {
     setSelectedRow(row);
     setIsModalOpen(true);
+  };
+
+  const handleSave = async (sectionKey: string, content: any) => {
+    await upsertMutation.mutateAsync({ sectionKey, content });
   };
 
   const columns: DashboardTableColumn<CrmAboutRow>[] = [
@@ -81,34 +130,68 @@ export default function CrmAboutPage() {
       header: "Title",
       icon: Calendar,
       widthClassName: "w-[24%]",
-      cell: (row) => <span>{row.title}</span>,
+      cell: (row) => (
+        <span className='block max-w-full truncate text-[#2f2f2f]'>
+          {row.title}
+        </span>
+      ),
     },
     {
       id: "subtitle",
       header: "Subtitle",
       icon: Star,
       widthClassName: "w-[35%]",
-      cell: (row) => <span>{row.subtitle}</span>,
+      cell: (row) => (
+        <span className='block max-w-full truncate text-[#2f2f2f]'>
+          {row.subtitle}
+        </span>
+      ),
     },
     {
-      id: "images",
-      header: "Images",
+      id: "image",
+      header: "Image",
       icon: ImageIcon,
       widthClassName: "w-[12%]",
-      cell: (row) => (
-        <div className='flex flex-wrap gap-2'>
-          {row.imagePaths.map((imagePath, index) => (
-            <Image
-              key={`${row.id}-image-${index}`}
-              src={imagePath}
-              alt={`${row.section} preview ${index + 1}`}
-              width={28}
-              height={20}
-              className='rounded-sm border border-[#E5E7EB] object-cover'
-            />
-          ))}
-        </div>
-      ),
+      cell: (row) => {
+        if (!row.imagePaths.length) {
+          return <span>-</span>;
+        }
+
+        return (
+          <div className='flex items-center gap-1'>
+            {row.imagePaths.slice(0, 3).map((imagePath, index) => {
+              const renderVideo = isVideo(imagePath);
+              return renderVideo ? (
+                <video
+                  key={`${row.id}-image-${index}`}
+                  src={imagePath}
+                  className='rounded-sm border border-[#E5E7EB] object-cover min-h-5 max-h-5 min-w-7 max-w-7'
+                  muted
+                  playsInline
+                />
+              ) : (
+                <Image
+                  key={`${row.id}-image-${index}`}
+                  src={
+                    imagePath.startsWith("/") || imagePath.startsWith("http")
+                      ? imagePath
+                      : CRM_PREVIEW_IMAGE
+                  }
+                  alt={`${row.section} preview ${index + 1}`}
+                  width={28}
+                  height={20}
+                  className='rounded-sm border border-[#E5E7EB] object-cover min-h-5 max-h-5 min-w-7 max-w-7'
+                />
+              );
+            })}
+            {row.imagePaths.length > 3 && (
+              <span className='text-xs text-gray-500 ml-1'>
+                +{row.imagePaths.length - 3}
+              </span>
+            )}
+          </div>
+        );
+      },
     },
     {
       id: "action",
@@ -129,8 +212,9 @@ export default function CrmAboutPage() {
 
   return (
     <section>
+      {isLoading && <div className="mb-4 text-sm text-gray-500">Loading data...</div>}
       <DashboardDataTable
-        searchPlaceholder='Search'
+        searchPlaceholder='Search section'
         data={crmAboutRows}
         columns={columns}
         getRowId={(row) => row.id}
@@ -143,13 +227,22 @@ export default function CrmAboutPage() {
         footerMode='count-only'
         countOnlyLabel='Sections'
       />
-      <CRMEditModal
+      <CRMHomeEditModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        section={selectedRow?.section || ""}
-        title={selectedRow?.title || ""}
-        subtitle={selectedRow?.subtitle || ""}
-        imagePaths={selectedRow?.imagePaths || []}
+        sectionKey={selectedRow?.sectionKey || null}
+        sectionName={selectedRow?.section || null}
+        initialContent={
+          selectedRow
+            ? {
+                title: selectedRow.title,
+                subtitle: selectedRow.subtitle,
+                imagePaths: selectedRow.imagePaths,
+              }
+            : null
+        }
+        pageKey="about"
+        onSave={handleSave}
       />
     </section>
   );
