@@ -71,6 +71,12 @@ const crmNavItems: CrmNavItem[] = [
     href: "/dashboard/crm/help"
   },
   {
+    id: "feedback-page",
+    label: "Feedback Page",
+    icon: MessageSquareText,
+    href: "/dashboard/crm/feedback-page"
+  },
+  {
     id: "footer",
     label: "Footer",
     icon: Info,

@@ -7,19 +7,22 @@ import MarketResearchSurvey from "./market-research-survey";
 
 type TabType = "general" | "market";
 
-export default function FeedbackPageContent() {
+export default function FeedbackPageContent({ data }: { data?: any }) {
   const [activeTab, setActiveTab] = useState<TabType>("general");
+
+  const title = data?.hero?.title || "We'd Love Your Feedback";
+  const subtitle = data?.hero?.subtitle || "Your thoughts help us improve every part of the ZilkyWipes experience — from browsing the website to discovering the products you love.";
+  const generalText = data?.buttons?.generalText || "General Feedback";
+  const marketText = data?.buttons?.marketText || "Market Research Survey";
+  const footerText = data?.footer?.text || "We read every message carefully and use your feedback to improve the ZilkyWipes experience.";
 
   return (
     <section className='pt-30 md:pt-40 mx-5 md:mx-12.5'>
       <PageTitle
         align='center'
-        title="We'd Love Your Feedback"
+        title={title}
         titleClassName='text-[#1D3A5F]! max-w-200! mx-auto!'
-        subtitle={[
-          "Your thoughts help us improve every part of the ZilkyWipes experience — from browsing the",
-          "website to discovering the products you love.",
-        ]}
+        subtitle={[subtitle]}
         subtitleClassName='text-[#979191]! text-base! md:text-xl! mt-5 max-w-220 mx-auto'
       />
 
@@ -32,7 +35,7 @@ export default function FeedbackPageContent() {
               ? "bg-(--text-primary) text-white"
               : "border border-(--text-primary)/30 text-(--text-primary) hover:bg-white/80"
           }`}>
-          General Feedback
+          {generalText}
         </button>
         <button
           type='button'
@@ -42,7 +45,7 @@ export default function FeedbackPageContent() {
               ? "bg-(--text-primary) text-white"
               : "border border-(--text-primary)/30 text-(--text-primary) hover:bg-white/80"
           }`}>
-          Market Research Survey
+          {marketText}
         </button>
       </div>
 
@@ -55,7 +58,7 @@ export default function FeedbackPageContent() {
       </div>
 
       <p className='text-center text-xs md:text-sm text-[#979191] mt-10 max-w-md mx-auto'>
-        &quot;We read every message carefully and use your feedback to improve the ZilkyWipes experience.&quot;
+        &quot;{footerText}&quot;
       </p>
     </section>
   );
