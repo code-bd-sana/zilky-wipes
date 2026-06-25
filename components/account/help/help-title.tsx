@@ -2,17 +2,18 @@ import PageTitle from "@/components/shared/page-title/page-title";
 import { Input } from "@base-ui/react";
 import { Search } from "lucide-react";
 
-export default function HelpTitle() {
+export default function HelpTitle({ data }: { data?: any }) {
+  const title = data?.title || 'How can we help?';
+  const subtitle = data?.subtitle || 'Find answers to common questions about your subscription';
+
   return (
     <section className='mt-30 mx-6'>
       <div className='my-8 pt-8'>
         <PageTitle
           align='center'
-          title='How can we help?'
+          title={title}
           titleClassName='text-[#474747]!'
-          subtitle={[
-            "Find answers to common questions about your subscription",
-          ]}
+          subtitle={[subtitle]}
           subtitleClassName='text-[#979191]! text-base! mt-6'
         />
       </div>
