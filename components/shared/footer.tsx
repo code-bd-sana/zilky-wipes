@@ -127,10 +127,15 @@ const Footer = () => {
             <div className='mt-4 flex flex-wrap gap-4'>
               {affiliateItems.map((item: any) => {
                 const Icon = getSocialIcon(item.platform);
+                const ensureAbsoluteUrl = (url: string) => {
+                  if (!url) return "#";
+                  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+                  return `https://${url}`;
+                };
                 return (
                   <a
                     key={item.href}
-                    href={item.href}
+                    href={ensureAbsoluteUrl(item.href)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className='inline-flex items-center gap-2 text-white hover:text-white/90 transition-colors duration-300'>

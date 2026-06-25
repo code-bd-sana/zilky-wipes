@@ -372,14 +372,12 @@ function LinksEditModal({
                     )}
                   </div>
                   <div>
-                    <label className='block text-xs font-medium text-gray-500 mb-1'>
-                      URL / Href
-                    </label>
-                    <input
-                      {...register(`links.${index}.href` as const)}
-                      required
-                      placeholder='e.g. /home or https://...'
-                      className='w-full px-3 py-2 text-sm border rounded-md'
+                    <label className="block text-xs font-medium text-gray-500 mb-1">URL / Href</label>
+                    <input 
+                      {...register(`links.${index}.href` as const)} 
+                      required 
+                      placeholder={isSocial ? "e.g. https://facebook.com/..." : "e.g. /home or https://..."}
+                      className="w-full px-3 py-2 text-sm border rounded-md" 
                     />
                   </div>
                 </div>
