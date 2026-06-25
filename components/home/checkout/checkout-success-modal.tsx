@@ -2,6 +2,9 @@
 
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { getPage } from "@/lib/api/pages";
 
 type CheckoutSuccessModalProps = {
   open: boolean;
@@ -14,6 +17,25 @@ export default function CheckoutSuccessModal({
   onClose,
   onOpenReview,
 }: CheckoutSuccessModalProps) {
+  const { data: pageData } = useQuery({
+    queryKey: ["page", "push-subscription"],
+    queryFn: () => getPage("push-subscription"),
+    enabled: open, // Only fetch when modal opens
+  });
+
+  const getContent = (key: string) => pageData?.sections?.find((s: any) => s.sectionKey === key)?.content || {};
+
+  const hero = getContent("hero");
+  const link1 = getContent("link1");
+  const link2 = getContent("link2");
+  const cta = getContent("cta");
+
+  const title = hero.title || "You're all set.";
+  const subtitle = hero.subtitle || "Would you consider subscribing to our products? Subscription reduce costs 15% from one time buying.";
+  const link1Text = link1.text || "See subscription benefits here ->";
+  const link2Text = link2.text || "Tell us about this product here ->";
+  const ctaText = cta.text || "Track your order";
+
   useEffect(() => {
     if (!open || typeof document === "undefined") {
       return;
@@ -63,28 +85,26 @@ export default function CheckoutSuccessModal({
           <h2
             className='font-heading leading-none text-white'
             style={{ fontSize: "clamp(2.25rem, 7.5vw, 60px)" }}>
-            You&apos;re all set.
+            {title}
           </h2>
 
           <p className='text-white' style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-            Would you consider subscribing to our products? Subscription reduce
-            costs 15% from one time buying.
+            {subtitle}
           </p>
 
-          <a
-            href='#'
+          <Link
+            href='/subscription'
             className='underline underline-offset-4 text-white'
-            onClick={(event) => event.preventDefault()}
             style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-            See subscription benifits here {"->"}
-          </a>
+            {link1Text}
+          </Link>
 
           <button
             type='button'
             onClick={onOpenReview}
             className='underline underline-offset-4 text-left text-white'
             style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-            Tell us about this product here {"->"}
+            {link2Text}
           </button>
         </div>
 
@@ -93,7 +113,7 @@ export default function CheckoutSuccessModal({
           onClick={onClose}
           className='mt-auto rounded-full bg-white px-6 py-4 text-(--text-primary)'
           style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}>
-          Track your order
+          {ctaText}
         </button>
       </div>
     </div>,
