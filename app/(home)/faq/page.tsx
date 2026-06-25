@@ -1,25 +1,39 @@
+import FaqCategory from "@/components/home/faq/faq-category";
 import HaveQuestions from "@/components/home/faq/have-questions";
 import HelpTitle from "@/components/home/faq/help-title";
-import ManagingSubscription from "@/components/home/faq/managing-subscription";
-import OrderingAndDelivery from "@/components/home/faq/ordering-and-delivary";
-import PaymentAndBilling from "@/components/home/faq/payment-billing";
-import Product from "@/components/home/faq/product";
-import ReturnPolicy from "@/components/home/faq/return-policy";
-import ShippingAndDelivery from "@/components/home/faq/shipping-delivery";
-import TechnicalAndPractical from "@/components/home/faq/technical-and-practical";
 
-export default function FaqPage() {
+async function getFaqPageData() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages/faq`, {
+      next: { revalidate: 60, tags: ['page-faq'] }
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data;
+  } catch (e) {
+    console.error("Failed to fetch faq page data", e);
+    return null;
+  }
+}
+
+export default async function FaqPage() {
+  const pageData = await getFaqPageData();
+  const sections = (pageData?.sections || []).reduce((acc: any, sec: any) => {
+    acc[sec.sectionKey] = sec.content;
+    return acc;
+  }, {});
+
+  const faqs = sections['faqs']?.topics || [];
+
   return (
     <>
-      <HelpTitle />
-      <ManagingSubscription />
-      <ShippingAndDelivery />
-      <PaymentAndBilling />
-      <Product />
-      <OrderingAndDelivery />
-      <TechnicalAndPractical />
-      <ReturnPolicy />
-      <HaveQuestions />
+      <HelpTitle data={sections['hero']} />
+      
+      {faqs.map((topic: any, index: number) => (
+        <FaqCategory key={topic.name || index} data={topic} />
+      ))}
+
+      <HaveQuestions data={sections['cta']} />
     </>
   );
 }
