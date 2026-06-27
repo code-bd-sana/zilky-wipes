@@ -32,6 +32,28 @@ type CrmSubscriptionRow = {
   imagePaths: string[];
 };
 
+type PageSectionContent = {
+  title?: string;
+  subtitle?: string;
+  points?: string[];
+  col1Points?: string[];
+  col2Points?: string[];
+  imagePaths?: string[];
+};
+
+type PageSection = {
+  id?: string;
+  sectionKey: string;
+  content: PageSectionContent;
+};
+
+type PageData = {
+  id: string;
+  pageKey: string;
+  title: string;
+  sections: PageSection[];
+};
+
 const defaultSections = [
   { sectionKey: "hero", section: "Hero Main Heading", title: "Never run out again.", subtitle: "-", imagePaths: [CRM_PREVIEW_IMAGE] },
   { sectionKey: "section-1", section: "Feature 1", title: ".....Because comfort shouldn’t be a reminder!", subtitle: "ZilkyWipes arrives before you need it. No last-minute runs. No guessing. Just the right amount, on your schedule.", points: ["Better value than one-time purchases", "Flexible delivery, monthly or bi-monthly", "Pause, skip, or cancel anytime", "Change plans in seconds"], imagePaths: [CRM_PREVIEW_IMAGE] },
@@ -60,7 +82,7 @@ export default function CrmSubscriptionPage() {
   }, [isLoading, pageData, queryClient]);
 
   const upsertMutation = useMutation({
-    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) => 
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: Record<string, unknown> }) => 
       upsertSection("subscription", sectionKey, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["page", "subscription"] });
@@ -68,7 +90,7 @@ export default function CrmSubscriptionPage() {
   });
 
   const crmSubscriptionRows: CrmSubscriptionRow[] = defaultSections.map((def, index) => {
-    const sectionData = pageData?.sections?.find((s: any) => s.sectionKey === def.sectionKey);
+    const sectionData = (pageData as PageData)?.sections?.find((s: PageSection) => s.sectionKey === def.sectionKey);
     const content = sectionData?.content || {};
     
     return {
@@ -89,7 +111,7 @@ export default function CrmSubscriptionPage() {
     setIsModalOpen(true);
   };
 
-  const handleSave = async (sectionKey: string, content: any) => {
+  const handleSave = async (sectionKey: string, content: Record<string, unknown>) => {
     await upsertMutation.mutateAsync({ sectionKey, content });
   };
 
