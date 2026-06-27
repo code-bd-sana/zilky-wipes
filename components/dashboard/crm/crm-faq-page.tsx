@@ -1,24 +1,54 @@
 'use client';
 
 import DashboardDataTable from '@/components/shared/dashboard-data-table';
+import { createPage, getPage, upsertSection } from '@/lib/api/pages';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowRight,
+  ChevronsRight,
   Forward,
   ListFilter,
-  Star,
-  UserRound,
-  ChevronsRight,
-  Save,
-  Trash2,
   Plus,
+  Save,
+  Star,
+  Trash2,
+  UserRound,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getPage, upsertSection, createPage } from '@/lib/api/pages';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 // --- Types ---
+type TopicQuestion = {
+  id?: string;
+  question: string;
+  answer: string;
+};
+
+type Topic = {
+  name: string;
+  questions: TopicQuestion[];
+};
+
+type PageSectionContent = {
+  title?: string;
+  subtitle?: string;
+  topics?: Topic[];
+};
+
+type PageSection = {
+  id?: string;
+  sectionKey: string;
+  content: PageSectionContent;
+};
+
+type PageData = {
+  id: string;
+  pageKey: string;
+  title: string;
+  sections: PageSection[];
+};
+
 type CrmTopicRow = {
   id: string;
   section: string;
@@ -41,7 +71,7 @@ function SectionEditModal({
   isOpen: boolean;
   onClose: () => void;
   rowData: CrmTopicRow | null;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const {
     register,
@@ -61,12 +91,12 @@ function SectionEditModal({
 
   if (!isOpen || !rowData || rowData.type === 'topic') return null;
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     try {
       await onSave(rowData.type, { title: data.title, subtitle: data.subtitle });
       toast.success('Saved successfully');
       onClose();
-    } catch (e) {
+    } catch {
       toast.error('Failed to save');
     }
   };
@@ -133,8 +163,8 @@ function TopicEditModal({
   isOpen: boolean;
   onClose: () => void;
   rowData: CrmTopicRow | null;
-  pageData: any;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  pageData: PageData | null;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const {
     register,
@@ -156,9 +186,9 @@ function TopicEditModal({
 
   useEffect(() => {
     if (isOpen && rowData && rowData.type === 'topic') {
-      const faqsContent = pageData?.sections?.find((s: any) => s.sectionKey === 'faqs')
+      const faqsContent = pageData?.sections?.find((s: PageSection) => s.sectionKey === 'faqs')
         ?.content || { topics: [] };
-      const topic = faqsContent.topics[rowData.topicIndex!];
+      const topic = faqsContent.topics?.[rowData.topicIndex!];
       if (topic) {
         reset({
           topicName: topic.name,
@@ -170,9 +200,9 @@ function TopicEditModal({
 
   if (!isOpen || !rowData || rowData.type !== 'topic') return null;
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: { topicName: string; questions: TopicQuestion[] }) => {
     try {
-      const faqsContent = pageData?.sections?.find((s: any) => s.sectionKey === 'faqs')
+      const faqsContent = pageData?.sections?.find((s: PageSection) => s.sectionKey === 'faqs')
         ?.content || { topics: [] };
       const topics = JSON.parse(JSON.stringify(faqsContent.topics));
 
@@ -180,7 +210,7 @@ function TopicEditModal({
       targetTopic.name = data.topicName;
 
       // Assign unique ids to new questions if missing
-      targetTopic.questions = data.questions.map((q: any) => ({
+      targetTopic.questions = data.questions.map((q: TopicQuestion) => ({
         id: q.id || Math.random().toString(36).substr(2, 9),
         question: q.question,
         answer: q.answer,
@@ -189,7 +219,7 @@ function TopicEditModal({
       await onSave('faqs', { topics });
       toast.success('Topic updated successfully');
       onClose();
-    } catch (e) {
+    } catch {
       toast.error('Failed to update topic');
     }
   };
@@ -276,7 +306,7 @@ function TopicEditModal({
               ))}
               {fields.length === 0 && (
                 <p className='text-sm text-gray-500 text-center py-6 bg-gray-50 rounded-lg border border-dashed'>
-                  No questions added yet. Click "Add Question" to start.
+                  No questions added yet. Click &quot;Add Question&quot; to start.
                 </p>
               )}
             </div>
@@ -306,8 +336,8 @@ function TopicAddModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  pageData: any;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  pageData: PageData | null;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const {
     register,
@@ -322,25 +352,26 @@ function TopicAddModal({
 
   if (!isOpen) return null;
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     try {
-      const faqsContent = pageData?.sections?.find((s: any) => s.sectionKey === 'faqs')
+      const faqsContent = pageData?.sections?.find((s: PageSection) => s.sectionKey === 'faqs')
         ?.content || { topics: [] };
       const topics = JSON.parse(JSON.stringify(faqsContent.topics));
 
-      const topicName = data.topicName.trim();
+      const { topicName } = data as { topicName: string };
+      const trimmedName = topicName.trim();
 
-      if (topics.some((t: any) => t.name.toLowerCase() === topicName.toLowerCase())) {
+      if (topics.some((t: Topic) => t.name.toLowerCase() === trimmedName.toLowerCase())) {
         toast.error('A topic with this name already exists');
         return;
       }
 
-      topics.push({ name: topicName, questions: [] });
+      topics.push({ name: trimmedName, questions: [] });
 
       await onSave('faqs', { topics });
       toast.success('Topic created successfully');
       onClose();
-    } catch (e) {
+    } catch {
       toast.error('Failed to create topic');
     }
   };
@@ -419,7 +450,7 @@ export default function CrmFAQPage() {
   }, [isLoading, pageData, queryClient]);
 
   const upsertMutation = useMutation({
-    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) =>
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: Record<string, unknown> }) =>
       upsertSection('faq', sectionKey, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['page', 'faq'] });
@@ -435,7 +466,7 @@ export default function CrmFAQPage() {
     )
       return;
 
-    const faqsContent = pageData?.sections?.find((s: any) => s.sectionKey === 'faqs')?.content || {
+    const faqsContent = pageData?.sections?.find((s: PageSection) => s.sectionKey === 'faqs')?.content || {
       topics: [],
     };
     const topics = [...faqsContent.topics];
@@ -445,7 +476,7 @@ export default function CrmFAQPage() {
     try {
       await upsertMutation.mutateAsync({ sectionKey: 'faqs', content: { topics } });
       toast.success('Topic deleted successfully');
-    } catch (e) {
+    } catch {
       toast.error('Failed to delete topic');
     }
   };
@@ -462,7 +493,7 @@ export default function CrmFAQPage() {
   // Build rows grouped by topic
   const rows: CrmTopicRow[] = [];
   if (pageData) {
-    const heroContent = pageData.sections?.find((s: any) => s.sectionKey === 'hero')?.content || {
+    const heroContent = (pageData as PageData).sections?.find((s: PageSection) => s.sectionKey === 'hero')?.content || {
       title: 'Everything you need to know.',
       subtitle: 'Find answers to common questions about your subscription',
     };
@@ -470,12 +501,12 @@ export default function CrmFAQPage() {
       id: 'hero',
       section: 'Page Header',
       topic: '-',
-      title: heroContent.title,
-      subtitle: heroContent.subtitle,
+      title: heroContent.title || '',
+      subtitle: heroContent.subtitle || '',
       type: 'hero',
     });
 
-    const ctaContent = pageData.sections?.find((s: any) => s.sectionKey === 'cta')?.content || {
+    const ctaContent = (pageData as PageData).sections?.find((s: PageSection) => s.sectionKey === 'cta')?.content || {
       title: 'Still have questions?',
       subtitle: 'Our support team is here to help Monday–Friday, 9am–5pm EST',
     };
@@ -483,15 +514,15 @@ export default function CrmFAQPage() {
       id: 'cta',
       section: 'CTA Section',
       topic: '-',
-      title: ctaContent.title,
-      subtitle: ctaContent.subtitle,
+      title: ctaContent.title || '',
+      subtitle: ctaContent.subtitle || '',
       type: 'cta',
     });
 
-    const faqsContent = pageData.sections?.find((s: any) => s.sectionKey === 'faqs')?.content || {
+    const faqsContent = (pageData as PageData).sections?.find((s: PageSection) => s.sectionKey === 'faqs')?.content || {
       topics: [],
     };
-    faqsContent.topics.forEach((topic: any, tIndex: number) => {
+    faqsContent.topics?.forEach((topic: Topic, tIndex: number) => {
       rows.push({
         id: `topic-${tIndex}`,
         section: 'FAQ Topic',
