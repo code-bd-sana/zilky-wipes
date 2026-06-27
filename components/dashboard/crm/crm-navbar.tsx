@@ -95,31 +95,48 @@ export default function CrmNavbar({ onToggleMobileSidebar, isMobileSidebarOpen }
   const [activeItemId, setActiveItemId] = useState('homepage');
 
   const scrollRef = useRef<HTMLElement>(null);
+  const [isDown, setIsDown] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
-    setIsDragging(true);
+    setIsDown(true);
+    setIsDragging(false); // Reset dragging state on click down
     setStartX(e.pageX - scrollRef.current.offsetLeft);
     setScrollLeft(scrollRef.current.scrollLeft);
   };
 
   const handleMouseLeave = () => {
-    setIsDragging(false);
+    setIsDown(false);
   };
 
   const handleMouseUp = () => {
-    setIsDragging(false);
+    setIsDown(false);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollRef.current) return;
+    if (!isDown || !scrollRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX) * 2; // Scroll-fast multiplier
+    
+    // If the mouse has moved more than 5px, we consider it a deliberate drag
+    if (Math.abs(walk) > 5) {
+      setIsDragging(true);
+    }
+    
     scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (isDragging) {
+      // Prevent the click from registering as a link navigation if we just finished a drag
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
+    }
   };
 
   const routedActiveId = crmNavItems.find((item) => item.href === pathname)?.id;
@@ -144,7 +161,8 @@ export default function CrmNavbar({ onToggleMobileSidebar, isMobileSidebarOpen }
             onMouseLeave={handleMouseLeave}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
-            className={`min-w-0 flex-1 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+            onClickCapture={handleClickCapture}
+            className={`min-w-0 flex-1 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isDown ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
           >
             <ul className='flex min-w-max items-center gap-1 pr-2 pointer-events-auto'>
               {crmNavItems.map((item) => {
@@ -158,7 +176,7 @@ export default function CrmNavbar({ onToggleMobileSidebar, isMobileSidebarOpen }
                 );
 
                 return (
-                  <li key={item.id} className={isDragging ? 'pointer-events-none' : ''}>
+                  <li key={item.id}>
                     {item.href ? (
                       <Link href={item.href} className={itemClassName} draggable={false}>
                         <Icon className='h-4 w-4' />
