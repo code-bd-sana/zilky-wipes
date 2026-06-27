@@ -24,6 +24,7 @@ type CrmFooterRow = {
   id: string;
   section: string;
   sectionKey: string;
+  topic: string;
   title: string;
   subtitle: string;
   type: 'text' | 'links' | 'social' | 'contact' | 'subscription';
