@@ -3,6 +3,8 @@
 import { Paperclip } from "lucide-react";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getPage } from "@/lib/api/pages";
 
 type CheckoutReviewModalProps = {
   open: boolean;
@@ -15,6 +17,26 @@ export default function CheckoutReviewModal({
   onClose,
   onOpenReferFriend,
 }: CheckoutReviewModalProps) {
+  const { data: pageData } = useQuery({
+    queryKey: ["page", "push-feedback"],
+    queryFn: () => getPage("push-feedback"),
+    enabled: open, // Only fetch when modal opens
+  });
+
+  const getContent = (key: string) => pageData?.sections?.find((s: any) => s.sectionKey === key)?.content || {};
+
+  const promptData = getContent("prompt");
+  const inputData = getContent("input");
+  const uploadData = getContent("upload");
+  const ctaData = getContent("cta");
+
+  const title = promptData.title || "How does it feel so far?";
+  const subtitle = promptData.subtitle || "Your experience matters to us. Good or bad - we're listening. It helps us do better.";
+  const inputText = inputData.text || "Write your experience";
+  const uploadText = uploadData.text || "Upload File, Doc, Image";
+  const submitBtnText = ctaData.submitText || "Submit Feedback";
+  const referBtnText = ctaData.referText || "Refer a Friend";
+
   useEffect(() => {
     if (!open || typeof document === "undefined") {
       return;
@@ -64,30 +86,29 @@ export default function CheckoutReviewModal({
       >
         <div className="flex flex-col gap-4">
           <h2 className="text-2xl md:text-6xl font-heading leading-none text-white">
-            How does it feel so far?
+            {title}
           </h2>
 
           <p className="text-white text-sm md:text-2xl">
-            Your experience matters to us. Good or bad - we&apos;re listening.
-            It helps us do better.
+            {subtitle}
           </p>
         </div>
 
         <div className="my-auto flex flex-1 items-center py-4">
           <div className="w-full">
             <label htmlFor="checkout-review" className="sr-only">
-              Write your experience
+              {inputText}
             </label>
             <textarea
               id="checkout-review"
-              placeholder="Write your experience"
+              placeholder={inputText}
               className="min-h-30 w-full rounded-[6px] border border-white bg-transparent p-3 text-white placeholder:text-white/70 focus:outline-none focus:ring-1 focus:ring-white/70"
             />
             <button
               type="button"
               className="mt-2 inline-flex w-fit items-center gap-2 text-white"
             >
-              Upload File, Doc, Image
+              {uploadText}
               <Paperclip className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -100,7 +121,7 @@ export default function CheckoutReviewModal({
             className="w-full rounded-full bg-white px-6 py-4 text-(--text-primary)"
             style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}
           >
-            Submit Feedback
+            {submitBtnText}
           </button>
 
           <button
@@ -109,7 +130,7 @@ export default function CheckoutReviewModal({
             className="mt-3 w-full text-center text-white underline underline-offset-4"
             style={{ fontSize: "clamp(1rem, 3.5vw, 24px)" }}
           >
-            Refer a Friend
+            {referBtnText}
           </button>
         </div>
       </div>
