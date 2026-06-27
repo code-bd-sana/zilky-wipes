@@ -1,24 +1,15 @@
-"use client";
+'use client';
 
-import DashboardDataTable, {
-  DashboardTableColumn,
-} from "@/components/shared/dashboard-data-table";
-import {
-  ArrowRight,
-  Calendar,
-  Forward,
-  Image as ImageIcon,
-  Star,
-  UserRound,
-} from "lucide-react";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import CRMHomeEditModal from "./shared/crm-home-edit-modal";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getPage, upsertSection, createPage } from "@/lib/api/pages";
-import { isVideo } from "@/lib/utils";
+import DashboardDataTable, { DashboardTableColumn } from '@/components/shared/dashboard-data-table';
+import { createPage, getPage, upsertSection } from '@/lib/api/pages';
+import { isVideo } from '@/lib/utils';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ArrowRight, Calendar, Forward, Image as ImageIcon, Star, UserRound } from 'lucide-react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import CRMHomeEditModal from './shared/crm-home-edit-modal';
 
-const CRM_PREVIEW_IMAGE = "/ZilkyWipes/1000308870.png";
+const CRM_PREVIEW_IMAGE = '/ZilkyWipes/1000308870.png';
 
 type CrmAboutRow = {
   id: string;
@@ -31,34 +22,33 @@ type CrmAboutRow = {
 
 const defaultSections = [
   {
-    sectionKey: "hero",
-    section: "Hero Main Heading",
-    title: "Made for real bathrooms. And real bodies.",
-    subtitle: "-",
-    imagePaths: ["/video/4.mp4"],
+    sectionKey: 'hero',
+    section: 'Hero Main Heading',
+    title: 'Made for real bathrooms. And real bodies.',
+    subtitle: '-',
+    imagePaths: ['/video/4.mp4'],
   },
   {
-    sectionKey: "section-1",
-    section: "Section 1",
-    title: "BRAND STORY",
+    sectionKey: 'section-1',
+    section: 'Section 1',
+    title: 'BRAND STORY',
     subtitle:
       "ZilkyWipes exists because hygiene deserves better.\nNot louder. Not more complicated.\nJust cleaner, calmer, and more considered.\nWe didn't reinvent care.\nWe simply made it make sense.",
-    imagePaths: ["/video/3.mp4"],
+    imagePaths: ['/video/3.mp4'],
   },
   {
-    sectionKey: "section-2",
-    section: "Section 2",
+    sectionKey: 'section-2',
+    section: 'Section 2',
     title: "Questions, feedback, or just curious? we'd love to hear from you.",
     subtitle:
       "Your experience matters to us.\nGood or bad - we're listening.\nIt helps us do better.",
-    imagePaths: ["/video/1.mp4"],
+    imagePaths: ['/video/1.mp4'],
   },
   {
-    sectionKey: "testimonial",
-    section: "Testimonial",
-    title:
-      "A small team. Obsessed with comfort, design, and doing things properly.",
-    subtitle: "-",
+    sectionKey: 'testimonial',
+    section: 'Testimonial',
+    title: 'A small team. Obsessed with comfort, design, and doing things properly.',
+    subtitle: '-',
     imagePaths: [CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE, CRM_PREVIEW_IMAGE],
   },
 ];
@@ -70,30 +60,41 @@ export default function CrmAboutPage() {
   const queryClient = useQueryClient();
 
   const { data: pageData, isLoading } = useQuery({
-    queryKey: ["page", "about"],
-    queryFn: () => getPage("about"),
+    queryKey: ['page', 'about'],
+    queryFn: () => getPage('about'),
   });
 
   // Auto-create the page if it doesn't exist yet
   useEffect(() => {
     if (!isLoading && pageData === null) {
-      createPage("about", "About Us").then(() => {
-        queryClient.invalidateQueries({ queryKey: ["page", "about"] });
+      createPage('about', 'About Us').then(() => {
+        queryClient.invalidateQueries({ queryKey: ['page', 'about'] });
       });
     }
   }, [isLoading, pageData, queryClient]);
 
   const upsertMutation = useMutation({
-    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) =>
-      upsertSection("about", sectionKey, content),
+    mutationFn: ({
+      sectionKey,
+      content,
+    }: {
+      sectionKey: string;
+      content: Record<string, unknown>;
+    }) => upsertSection('about', sectionKey, content),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["page", "about"] });
+      queryClient.invalidateQueries({ queryKey: ['page', 'about'] });
     },
   });
 
+  type PageSection = {
+    id?: string;
+    sectionKey: string;
+    content: Record<string, unknown>;
+  };
+
   const crmAboutRows: CrmAboutRow[] = defaultSections.map((def, index) => {
     const sectionData = pageData?.sections?.find(
-      (s: any) => s.sectionKey === def.sectionKey
+      (s: PageSection) => s.sectionKey === def.sectionKey,
     );
     const content = sectionData?.content || {};
 
@@ -103,8 +104,7 @@ export default function CrmAboutPage() {
       section: def.section,
       title: content.title || def.title,
       subtitle: content.subtitle || def.subtitle,
-      imagePaths:
-        content.imagePaths !== undefined ? content.imagePaths : def.imagePaths,
+      imagePaths: content.imagePaths !== undefined ? content.imagePaths : def.imagePaths,
     };
   });
 
@@ -113,45 +113,39 @@ export default function CrmAboutPage() {
     setIsModalOpen(true);
   };
 
-  const handleSave = async (sectionKey: string, content: any) => {
+  const handleSave = async (sectionKey: string, content: Record<string, unknown>) => {
     await upsertMutation.mutateAsync({ sectionKey, content });
   };
 
   const columns: DashboardTableColumn<CrmAboutRow>[] = [
     {
-      id: "section",
-      header: "Section",
+      id: 'section',
+      header: 'Section',
       icon: UserRound,
-      widthClassName: "w-[15%]",
+      widthClassName: 'w-[15%]',
       cell: (row) => <span>{row.section}</span>,
     },
     {
-      id: "title",
-      header: "Title",
+      id: 'title',
+      header: 'Title',
       icon: Calendar,
-      widthClassName: "w-[24%]",
-      cell: (row) => (
-        <span className='block max-w-full truncate text-[#2f2f2f]'>
-          {row.title}
-        </span>
-      ),
+      widthClassName: 'w-[24%]',
+      cell: (row) => <span className='block max-w-full truncate text-[#2f2f2f]'>{row.title}</span>,
     },
     {
-      id: "subtitle",
-      header: "Subtitle",
+      id: 'subtitle',
+      header: 'Subtitle',
       icon: Star,
-      widthClassName: "w-[35%]",
+      widthClassName: 'w-[35%]',
       cell: (row) => (
-        <span className='block max-w-full truncate text-[#2f2f2f]'>
-          {row.subtitle}
-        </span>
+        <span className='block max-w-full truncate text-[#2f2f2f]'>{row.subtitle}</span>
       ),
     },
     {
-      id: "image",
-      header: "Image",
+      id: 'image',
+      header: 'Image',
       icon: ImageIcon,
-      widthClassName: "w-[12%]",
+      widthClassName: 'w-[12%]',
       cell: (row) => {
         if (!row.imagePaths.length) {
           return <span>-</span>;
@@ -173,7 +167,7 @@ export default function CrmAboutPage() {
                 <Image
                   key={`${row.id}-image-${index}`}
                   src={
-                    imagePath.startsWith("/") || imagePath.startsWith("http")
+                    imagePath.startsWith('/') || imagePath.startsWith('http')
                       ? imagePath
                       : CRM_PREVIEW_IMAGE
                   }
@@ -185,24 +179,23 @@ export default function CrmAboutPage() {
               );
             })}
             {row.imagePaths.length > 3 && (
-              <span className='text-xs text-gray-500 ml-1'>
-                +{row.imagePaths.length - 3}
-              </span>
+              <span className='text-xs text-gray-500 ml-1'>+{row.imagePaths.length - 3}</span>
             )}
           </div>
         );
       },
     },
     {
-      id: "action",
-      header: "Action",
+      id: 'action',
+      header: 'Action',
       icon: Forward,
-      widthClassName: "w-[14%]",
+      widthClassName: 'w-[14%]',
       cell: (row) => (
         <button
           type='button'
           onClick={() => handleEdit(row)}
-          className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
+          className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'
+        >
           <span>Edit</span>
           <ArrowRight className='h-3.5 w-3.5' color='#262626' />
         </button>
@@ -212,7 +205,7 @@ export default function CrmAboutPage() {
 
   return (
     <section>
-      {isLoading && <div className="mb-4 text-sm text-gray-500">Loading data...</div>}
+      {isLoading && <div className='mb-4 text-sm text-gray-500'>Loading data...</div>}
       <DashboardDataTable
         searchPlaceholder='Search section'
         data={crmAboutRows}
@@ -241,7 +234,7 @@ export default function CrmAboutPage() {
               }
             : null
         }
-        pageKey="about"
+        pageKey='about'
         onSave={handleSave}
       />
     </section>
