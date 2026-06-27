@@ -17,6 +17,18 @@ type CrmFeedbackRow = {
   type: "hero" | "buttons" | "footer";
 };
 
+type PageSection = {
+  sectionKey: string;
+  content: Record<string, string>;
+};
+
+type PageData = {
+  id: string;
+  pageKey: string;
+  title: string;
+  sections: PageSection[];
+};
+
 function FeedbackEditModal({
   isOpen,
   onClose,
@@ -27,26 +39,26 @@ function FeedbackEditModal({
   isOpen: boolean;
   onClose: () => void;
   rowData: CrmFeedbackRow | null;
-  pageData: any;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  pageData: PageData | null;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm();
 
   useEffect(() => {
     if (isOpen && rowData) {
-      const content = pageData?.sections?.find((s: any) => s.sectionKey === rowData.sectionKey)?.content || {};
+      const content = pageData?.sections?.find((s: PageSection) => s.sectionKey === rowData.sectionKey)?.content || {};
       reset(content);
     }
   }, [isOpen, rowData, pageData, reset]);
 
   if (!isOpen || !rowData) return null;
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     try {
       await onSave(rowData.sectionKey, data);
       toast.success("Saved successfully");
       onClose();
-    } catch (e) {
+    } catch {
       toast.error("Failed to save");
     }
   };
@@ -127,7 +139,7 @@ export default function CrmFeedbackMainPage() {
   }, [isLoading, pageData, queryClient]);
 
   const upsertMutation = useMutation({
-    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) =>
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: Record<string, unknown> }) =>
       upsertSection("feedback-main", sectionKey, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["page", "feedback-main"] });
@@ -139,7 +151,7 @@ export default function CrmFeedbackMainPage() {
     setIsModalOpen(true);
   };
 
-  const getContent = (key: string) => pageData?.sections?.find((s: any) => s.sectionKey === key)?.content || {};
+  const getContent = (key: string) => (pageData as PageData)?.sections?.find((s: PageSection) => s.sectionKey === key)?.content || {};
 
   const rows: CrmFeedbackRow[] = [];
   if (pageData) {

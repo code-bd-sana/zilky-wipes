@@ -30,6 +30,34 @@ type CrmFooterRow = {
   type: 'text' | 'links' | 'social' | 'contact' | 'subscription';
 };
 
+type FooterLink = {
+  label?: string;
+  platform?: string;
+  href: string;
+};
+
+type PageSectionContent = {
+  text?: string;
+  title?: string;
+  buttonText?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  links?: FooterLink[];
+};
+
+type PageSection = {
+  sectionKey: string;
+  content: PageSectionContent;
+};
+
+type PageData = {
+  id: string;
+  pageKey: string;
+  title: string;
+  sections: PageSection[];
+};
+
 // --- Modals ---
 
 // Modal for editing text/basic sections (Company Info, Copyright, Subscription)
@@ -43,8 +71,8 @@ function BasicEditModal({
   isOpen: boolean;
   onClose: () => void;
   rowData: CrmFooterRow | null;
-  pageData: any;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  pageData: PageData | null;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const {
     register,
@@ -56,7 +84,7 @@ function BasicEditModal({
   useEffect(() => {
     if (isOpen && rowData) {
       const content =
-        pageData?.sections?.find((s: any) => s.sectionKey === rowData.sectionKey)?.content || {};
+        pageData?.sections?.find((s: PageSection) => s.sectionKey === rowData.sectionKey)?.content || {};
       reset({
         text: content.text || '',
         title: content.title || '',
@@ -67,7 +95,7 @@ function BasicEditModal({
 
   if (!isOpen || !rowData || !['text', 'subscription'].includes(rowData.type)) return null;
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     try {
       if (rowData.type === 'text') {
         await onSave(rowData.sectionKey, { text: data.text });
@@ -76,7 +104,7 @@ function BasicEditModal({
       }
       toast.success('Saved successfully');
       onClose();
-    } catch (e) {
+    } catch {
       toast.error('Failed to save');
     }
   };
@@ -163,8 +191,8 @@ function ContactEditModal({
   isOpen: boolean;
   onClose: () => void;
   rowData: CrmFooterRow | null;
-  pageData: any;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  pageData: PageData | null;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const {
     register,
@@ -176,7 +204,7 @@ function ContactEditModal({
   useEffect(() => {
     if (isOpen && rowData) {
       const content =
-        pageData?.sections?.find((s: any) => s.sectionKey === rowData.sectionKey)?.content || {};
+        pageData?.sections?.find((s: PageSection) => s.sectionKey === rowData.sectionKey)?.content || {};
       reset({
         email: content.email || '',
         phone: content.phone || '',
@@ -187,7 +215,7 @@ function ContactEditModal({
 
   if (!isOpen || !rowData || rowData.type !== 'contact') return null;
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     try {
       await onSave(rowData.sectionKey, {
         email: data.email,
@@ -196,7 +224,7 @@ function ContactEditModal({
       });
       toast.success('Saved successfully');
       onClose();
-    } catch (e) {
+    } catch {
       toast.error('Failed to save');
     }
   };
@@ -267,8 +295,8 @@ function LinksEditModal({
   isOpen: boolean;
   onClose: () => void;
   rowData: CrmFooterRow | null;
-  pageData: any;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  pageData: PageData | null;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const {
     register,
@@ -277,14 +305,14 @@ function LinksEditModal({
     reset,
     formState: { isSubmitting },
   } = useForm({
-    defaultValues: { links: [] as any[] },
+    defaultValues: { links: [] as FooterLink[] },
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: 'links' });
 
   useEffect(() => {
     if (isOpen && rowData && (rowData.type === 'links' || rowData.type === 'social')) {
-      const content = pageData?.sections?.find((s: any) => s.sectionKey === rowData.sectionKey)
+      const content = pageData?.sections?.find((s: PageSection) => s.sectionKey === rowData.sectionKey)
         ?.content || { links: [] };
       reset({ links: content.links || [] });
     }
@@ -294,12 +322,13 @@ function LinksEditModal({
 
   const isSocial = rowData.type === 'social';
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     try {
-      await onSave(rowData.sectionKey, { links: data.links });
+      const { links } = data as { links: FooterLink[] };
+      await onSave(rowData.sectionKey, { links });
       toast.success('Links updated successfully');
       onClose();
-    } catch (e) {
+    } catch {
       toast.error('Failed to update links');
     }
   };
@@ -393,7 +422,7 @@ function LinksEditModal({
             ))}
             {fields.length === 0 && (
               <p className='text-sm text-gray-500 text-center py-6 bg-gray-50 rounded-lg border border-dashed'>
-                No links added yet. Click "Add Link" to start.
+                No links added yet. Click &quot;Add Link&quot; to start.
               </p>
             )}
           </div>
@@ -434,7 +463,7 @@ export default function CrmFooterPage() {
   }, [isLoading, pageData, queryClient]);
 
   const upsertMutation = useMutation({
-    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) =>
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: Record<string, unknown> }) =>
       upsertSection('footer', sectionKey, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['page', 'footer'] });
@@ -449,7 +478,7 @@ export default function CrmFooterPage() {
   };
 
   const getContent = (key: string) =>
-    pageData?.sections?.find((s: any) => s.sectionKey === key)?.content || {};
+    (pageData as PageData)?.sections?.find((s: PageSection) => s.sectionKey === key)?.content || {};
 
   // Build rows dynamically
   const rows: CrmFooterRow[] = [];
