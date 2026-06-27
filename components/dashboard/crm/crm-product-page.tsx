@@ -29,6 +29,25 @@ type CrmProductRow = {
   imagePaths: string[];
 };
 
+type PageSectionContent = {
+  title?: string;
+  subtitle?: string;
+  imagePaths?: string[];
+};
+
+type PageSection = {
+  id?: string;
+  sectionKey: string;
+  content: PageSectionContent;
+};
+
+type PageData = {
+  id: string;
+  pageKey: string;
+  title: string;
+  sections: PageSection[];
+};
+
 const defaultSections = [
   { sectionKey: "footer-video", section: "Footer Video", title: "-", subtitle: "-", imagePaths: [CRM_PREVIEW_IMAGE] },
 ];
@@ -54,7 +73,7 @@ export default function CrmProductPage() {
   }, [isLoading, pageData, queryClient]);
 
   const upsertMutation = useMutation({
-    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) => 
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: Record<string, unknown> }) => 
       upsertSection("shop", sectionKey, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["page", "shop"] });
@@ -62,7 +81,7 @@ export default function CrmProductPage() {
   });
 
   const crmProductRows: CrmProductRow[] = defaultSections.map((def, index) => {
-    const sectionData = pageData?.sections?.find((s: any) => s.sectionKey === def.sectionKey);
+    const sectionData = (pageData as PageData)?.sections?.find((s: PageSection) => s.sectionKey === def.sectionKey);
     const content = sectionData?.content || {};
     
     return {
@@ -80,7 +99,7 @@ export default function CrmProductPage() {
     setIsModalOpen(true);
   };
 
-  const handleSave = async (sectionKey: string, content: any) => {
+  const handleSave = async (sectionKey: string, content: Record<string, unknown>) => {
     await upsertMutation.mutateAsync({ sectionKey, content });
   };
 

@@ -29,6 +29,25 @@ type CrmHomepageRow = {
   imagePaths: string[];
 };
 
+type PageSectionContent = {
+  title?: string;
+  subtitle?: string;
+  imagePaths?: string[];
+};
+
+type PageSection = {
+  id?: string;
+  sectionKey: string;
+  content: PageSectionContent;
+};
+
+type PageData = {
+  id: string;
+  pageKey: string;
+  title: string;
+  sections: PageSection[];
+};
+
 const defaultSections = [
   { sectionKey: "hero", section: "Homepage (Hero)", title: "A better way to feel clean.", subtitle: "-", imagePaths: [CRM_PREVIEW_IMAGE] },
   { sectionKey: "shop", section: "Shop", title: "Shop ZilkyWipes", subtitle: "Water cleans. Dry paper spreads. ZilkyWipes leaves you genuinely clean - safely, every day.", imagePaths: [CRM_PREVIEW_IMAGE] },
@@ -59,7 +78,7 @@ export default function CrmHomePage() {
   }, [isLoading, pageData, queryClient]);
 
   const upsertMutation = useMutation({
-    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) => 
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: Record<string, unknown> }) => 
       upsertSection("home", sectionKey, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["page", "home"] });
@@ -67,7 +86,7 @@ export default function CrmHomePage() {
   });
 
   const crmHomepageRows: CrmHomepageRow[] = defaultSections.map((def, index) => {
-    const sectionData = pageData?.sections?.find((s: any) => s.sectionKey === def.sectionKey);
+    const sectionData = (pageData as PageData)?.sections?.find((s: PageSection) => s.sectionKey === def.sectionKey);
     const content = sectionData?.content || {};
     
     return {
@@ -85,7 +104,7 @@ export default function CrmHomePage() {
     setIsModalOpen(true);
   };
 
-  const handleSave = async (sectionKey: string, content: any) => {
+  const handleSave = async (sectionKey: string, content: Record<string, unknown>) => {
     await upsertMutation.mutateAsync({ sectionKey, content });
   };
 

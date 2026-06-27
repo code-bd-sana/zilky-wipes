@@ -17,6 +17,25 @@ type CrmPushSubscriptionRow = {
   type: "hero" | "link1" | "link2" | "cta";
 };
 
+type PageSectionContent = {
+  title?: string;
+  subtitle?: string;
+  text?: string;
+};
+
+type PageSection = {
+  id?: string;
+  sectionKey: string;
+  content: PageSectionContent;
+};
+
+type PageData = {
+  id: string;
+  pageKey: string;
+  title: string;
+  sections: PageSection[];
+};
+
 function PushSubscriptionEditModal({
   isOpen,
   onClose,
@@ -27,26 +46,26 @@ function PushSubscriptionEditModal({
   isOpen: boolean;
   onClose: () => void;
   rowData: CrmPushSubscriptionRow | null;
-  pageData: any;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  pageData: PageData | null;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm();
 
   useEffect(() => {
     if (isOpen && rowData) {
-      const content = pageData?.sections?.find((s: any) => s.sectionKey === rowData.sectionKey)?.content || {};
+      const content = pageData?.sections?.find((s: PageSection) => s.sectionKey === rowData.sectionKey)?.content || {};
       reset(content);
     }
   }, [isOpen, rowData, pageData, reset]);
 
   if (!isOpen || !rowData) return null;
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Record<string, unknown>) => {
     try {
       await onSave(rowData.sectionKey, data);
       toast.success("Saved successfully");
       onClose();
-    } catch (e) {
+    } catch {
       toast.error("Failed to save");
     }
   };
@@ -114,7 +133,7 @@ export default function CrmPushSubscriptionPage() {
   }, [isLoading, pageData, queryClient]);
 
   const upsertMutation = useMutation({
-    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: any }) =>
+    mutationFn: ({ sectionKey, content }: { sectionKey: string; content: Record<string, unknown> }) =>
       upsertSection("push-subscription", sectionKey, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["page", "push-subscription"] });
@@ -126,7 +145,7 @@ export default function CrmPushSubscriptionPage() {
     setIsModalOpen(true);
   };
 
-  const getContent = (key: string) => pageData?.sections?.find((s: any) => s.sectionKey === key)?.content || {};
+  const getContent = (key: string) => (pageData as PageData)?.sections?.find((s: PageSection) => s.sectionKey === key)?.content || {};
 
   const rows: CrmPushSubscriptionRow[] = [];
   if (pageData) {
