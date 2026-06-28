@@ -34,55 +34,9 @@ const COLS: {
   },
 ];
 
-type CellValue =
-  | "stars-5"
-  | "stars-2"
-  | "stars-4"
-  | "check-circle"
-  | "x-most-arent"
-  | "x-separate-dispenser"
-  | "x-often-harmful"
-  | "warn-can-irritate"
-  | "warn-often-harsh"
-  | "warn-deforestation";
 
-const benefitData: {
-  label: string;
-  zilky: CellValue;
-  toiletPaper: CellValue;
-  wetWipes: CellValue;
-}[] = [
-  {
-    label: "Cleanliness Level",
-    zilky: "stars-5",
-    toiletPaper: "stars-2",
-    wetWipes: "stars-4",
-  },
-  {
-    label: "Flushable & Safe",
-    zilky: "check-circle",
-    toiletPaper: "check-circle",
-    wetWipes: "x-most-arent",
-  },
-  {
-    label: "Convenience",
-    zilky: "check-circle",
-    toiletPaper: "check-circle",
-    wetWipes: "x-separate-dispenser",
-  },
-  {
-    label: "Skin-Friendly",
-    zilky: "check-circle",
-    toiletPaper: "warn-can-irritate",
-    wetWipes: "warn-often-harsh",
-  },
-  {
-    label: "Environmental Impact",
-    zilky: "check-circle",
-    toiletPaper: "warn-deforestation",
-    wetWipes: "x-often-harmful",
-  },
-];
+
+
 
 // ── Star renderer ──────────────────────────────────────────────────────────────
 function Stars({ filled, total = 5 }: { filled: number; total?: number }) {
@@ -134,10 +88,10 @@ function renderCell(data: { type: string; text?: string }) {
   }
 }
 
-export default function ZilkyAdvantage({ data }: { data?: any }) {
+export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown> }) {
   const [hoveredCol, setHoveredCol] = useState<ColKey | null>(null);
 
-  const title = data?.title || 'The ZilkyWipes Advantage';
+  const title = (data?.title as string) || 'The ZilkyWipes Advantage';
 
   const defaultBenefitData = [
     {
@@ -172,8 +126,8 @@ export default function ZilkyAdvantage({ data }: { data?: any }) {
     },
   ];
 
-  const parsedAdvantageList = data?.advantageList?.length 
-    ? data.advantageList.map((item: any) => ({
+  const parsedAdvantageList = (data?.advantageList as { label: string, zilkyType: string, zilkyText: string, tpType: string, tpText: string, wwType: string, wwText: string }[])?.length 
+    ? (data?.advantageList as { label: string, zilkyType: string, zilkyText: string, tpType: string, tpText: string, wwType: string, wwText: string }[]).map((item) => ({
         label: item.label,
         zilky: { type: item.zilkyType, text: item.zilkyText },
         toiletPaper: { type: item.tpType, text: item.tpText },
@@ -280,7 +234,7 @@ export default function ZilkyAdvantage({ data }: { data?: any }) {
         </div>
 
         {/* Data rows */}
-        {parsedAdvantageList.map((row: any, index: number) => {
+        {parsedAdvantageList.map((row: { label: string, zilky: { type: string, text?: string }, toiletPaper: { type: string, text?: string }, wetWipes: { type: string, text?: string } }, index: number) => {
           const isLast = index === parsedAdvantageList.length - 1;
           return (
             <div key={index} className='flex'>
@@ -380,7 +334,7 @@ export default function ZilkyAdvantage({ data }: { data?: any }) {
               </div>
 
               {/* Card rows */}
-              {parsedAdvantageList.map((row: any, index: number) => {
+              {parsedAdvantageList.map((row: { label: string, zilky: { type: string, text?: string }, toiletPaper: { type: string, text?: string }, wetWipes: { type: string, text?: string } }, index: number) => {
                 const isLast = index === parsedAdvantageList.length - 1;
                 return (
                   <div

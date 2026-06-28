@@ -4,16 +4,16 @@ import { Button } from "@base-ui/react";
 import Image from "next/image";
 import { isVideo } from "@/lib/utils";
 
-export default function AboutSection1({ data }: { data?: any }) {
-  const title = data?.title || 'BRAND STORY';
-  const subtitle = data?.subtitle?.split('\n') || [
+export default function AboutSection1({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'BRAND STORY';
+  const subtitle = (data?.subtitle as string)?.split('\n') || [
     "ZilkyWipes exists because hygiene deserves better.",
     "Not louder. Not more complicated.",
     "Just cleaner, calmer, and more considered.",
     "We didn't reinvent care.",
     "We simply made it make sense.",
   ];
-  const mediaSrc = data?.imagePaths?.[0] || '/video/3.mp4';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/3.mp4';
   const renderVideo = isVideo(mediaSrc);
 
   return (

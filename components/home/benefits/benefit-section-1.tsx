@@ -4,14 +4,14 @@ import SplitContentSection from "@/components/shared/split-content-section";
 import { Button } from "@/components/ui/button";
 import { isVideo } from "@/lib/utils";
 
-export default function BenefitSection1({ data }: { data?: any }) {
-  const title = data?.title || 'Why ZilkyWipes Are Superior to Everything Else';
-  const subtitle = data?.subtitle?.split('\n') || [
+export default function BenefitSection1({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Why ZilkyWipes Are Superior to Everything Else';
+  const subtitle = (data?.subtitle as string)?.split('\n') || [
     "Discover the revolutionary benefits that make ZilkyWipes the ultimate ",
     "choice for personal hygiene. Backed by science, loved by users.",
   ];
 
-  const plans = data?.detailList?.length ? data.detailList.map((d: any) => ({
+  const plans = (data?.detailList as { title: string; description: string }[])?.length ? (data?.detailList as { title: string; description: string }[]).map((d) => ({
     no: d.title,
     title: d.description
   })) : [
@@ -23,7 +23,7 @@ export default function BenefitSection1({ data }: { data?: any }) {
     { no: "Luxury", title: "Soft. Calm. Considered.Every day!" },
   ];
 
-  const mediaSrc = data?.imagePaths?.[0] || '/ZilkyWipes/1000308870.png';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308870.png';
   const renderVideo = isVideo(mediaSrc);
 
   return (
@@ -42,7 +42,7 @@ export default function BenefitSection1({ data }: { data?: any }) {
               subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[22px]!'
             />
             <div className='mt-10 md:mt-14 lg:mt-16'>
-              {plans.map((plan: any, index: number) => (
+              {plans.map((plan: { no: string; title: string }, index: number) => (
                 <div
                   key={plan.no + index}
                   className={`grid grid-cols-[68px_1fr] md:grid-cols-[84px_1fr] items-center gap-x-4 py-5 md:py-6 border-b border-(--checkout-divider) ${

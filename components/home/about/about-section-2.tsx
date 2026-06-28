@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { isVideo } from "@/lib/utils";
 
-export default function AboutSection2({ data }: { data?: any }) {
-  const title = data?.title || "Questions, feedback, or just curious? we'd love to hear from you.";
-  const subtitle = data?.subtitle?.split('\n') || [
+export default function AboutSection2({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || "Questions, feedback, or just curious? we'd love to hear from you.";
+  const subtitle = (data?.subtitle as string)?.split('\n') || [
     "Your experience matters to us.",
     "Good or bad - we're listening.",
     "It helps us do better.",
   ];
-  const mediaSrc = data?.imagePaths?.[0] || '/video/1.mp4';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/1.mp4';
   const renderVideo = isVideo(mediaSrc);
 
   return (

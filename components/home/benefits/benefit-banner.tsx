@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { isVideo } from "@/lib/utils";
 
-export default function BenefitBanner({ data }: { data?: any }) {
-  const title = data?.title || 'A cleaner way to care.';
-  const mediaSrc = data?.imagePaths?.[0] || '/video/4.mp4';
+export default function BenefitBanner({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'A cleaner way to care.';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/4.mp4';
   const renderVideo = isVideo(mediaSrc);
 
   return (

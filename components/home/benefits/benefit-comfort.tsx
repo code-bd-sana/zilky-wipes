@@ -12,8 +12,8 @@ import {
 
 const iconMap = [ShieldCheckIcon, Flower, Recycle, BadgeCheck, Zap, Award, Leaf, Droplet];
 
-export default function BenefitComfort({ data }: { data?: any }) {
-  const title = data?.title || 'Engineered for Comfort';
+export default function BenefitComfort({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Engineered for Comfort';
   
   const defaultComfortData = [
     {
@@ -58,7 +58,7 @@ export default function BenefitComfort({ data }: { data?: any }) {
     },
   ];
 
-  const comfortData = data?.detailList?.length ? data.detailList : defaultComfortData;
+  const comfortData = (data?.detailList as {title: string, description: string}[])?.length ? (data?.detailList as {title: string, description: string}[]) : defaultComfortData;
 
   return (
     <section className='max-w-480 mx-auto px-4 md:px-14 lg:px-40 py-10 md:py-16 '>
@@ -69,7 +69,7 @@ export default function BenefitComfort({ data }: { data?: any }) {
         />
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 '>
-        {comfortData.map((item: any, index: number) => {
+        {comfortData.map((item: {title: string, description: string}, index: number) => {
           const IconComp = iconMap[index % iconMap.length];
           return (
           <div

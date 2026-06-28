@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { isVideo } from "@/lib/utils";
 
-export default function BenefitsFooter({ data }: { data?: any }) {
-  const mediaSrc = data?.imagePaths?.[0] || '/video/2.mp4';
+export default function BenefitsFooter({ data }: { data?: Record<string, unknown> }) {
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/2.mp4';
   const renderVideo = isVideo(mediaSrc);
 
   return (

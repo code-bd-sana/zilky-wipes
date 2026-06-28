@@ -10,8 +10,8 @@ const iconConfigs = [
   { icon: UserCheck, iconColor: "#FBBF24", iconBg: "rgba(251,191,36,0.12)", accentColor: "#FBBF24", valueColor: "#FBBF24" },
 ];
 
-export default function ProvenResults({ data }: { data?: any }) {
-  const title = data?.title || 'Scientifically Proven Results';
+export default function ProvenResults({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Scientifically Proven Results';
   
   const defaultStats = [
     {
@@ -37,7 +37,7 @@ export default function ProvenResults({ data }: { data?: any }) {
     },
   ];
 
-  const stats = data?.statList?.length ? data.statList : defaultStats;
+  const stats = (data?.statList as {value: string, title: string, description: string}[])?.length ? (data?.statList as {value: string, title: string, description: string}[]) : defaultStats;
 
   return (
     <section
@@ -51,7 +51,7 @@ export default function ProvenResults({ data }: { data?: any }) {
 
       {/* Cards grid */}
       <div className='max-w-480 mx-auto  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
-        {stats.map((stat: any, index: number) => {
+        {stats.map((stat: {value: string, title: string, description: string}, index: number) => {
           const config = iconConfigs[index % iconConfigs.length];
           const Icon = config.icon;
           return (

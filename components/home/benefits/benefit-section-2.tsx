@@ -10,9 +10,9 @@ const iconMap = [
   { icon: Package, iconColor: "#D4A843", iconBg: "#D4A8431A" },
 ];
 
-export default function BenefitSection2({ data }: { data?: any }) {
-  const title = data?.title || 'Environmental Responsibility';
-  const subtitle = data?.subtitle?.split('\n') || [
+export default function BenefitSection2({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Environmental Responsibility';
+  const subtitle = (data?.subtitle as string)?.split('\n') || [
     "We're committed to making clean choices that are also green choices. Every ZilkyWipe is designed with the planet in mind.",
   ];
 
@@ -34,9 +34,9 @@ export default function BenefitSection2({ data }: { data?: any }) {
     },
   ];
 
-  const environmentalBenefits = data?.detailList?.length ? data.detailList : defaultEnvironmentalBenefits;
+  const environmentalBenefits = (data?.detailList as {title: string, description: string}[])?.length ? (data?.detailList as {title: string, description: string}[]) : defaultEnvironmentalBenefits;
 
-  const mediaSrc = data?.imagePaths?.[0] || '/video/1.mp4';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/1.mp4';
   const renderVideo = isVideo(mediaSrc);
 
   return (
@@ -53,7 +53,7 @@ export default function BenefitSection2({ data }: { data?: any }) {
               subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]! max-w-130! mx-auto text-center'
             />
             <div className='mt-6'>
-              {environmentalBenefits.map((benefit: any, index: number) => {
+              {environmentalBenefits.map((benefit: {title: string, description: string}, index: number) => {
                 const iconConf = iconMap[index % iconMap.length];
                 const IconComp = iconConf.icon;
                 return (
