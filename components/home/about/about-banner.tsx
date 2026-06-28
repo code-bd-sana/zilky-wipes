@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { isVideo } from "@/lib/utils";
 
-export default function AboutBanner({ data }: { data?: any }) {
-  const titleText = data?.title || "Made for real bathrooms.\nAnd real bodies.";
+export default function AboutBanner({ data }: { data?: Record<string, unknown> }) {
+  const titleText = (data?.title as string) || "Made for real bathrooms.\nAnd real bodies.";
   const titleLines = titleText.split('\n');
-  const mediaSrc = data?.imagePaths?.[0] || '/video/4.mp4';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/4.mp4';
   const renderVideo = isVideo(mediaSrc);
 
   return (

@@ -12,6 +12,27 @@ type Props = {
   onConfirm: () => void;
 };
 
+type PageSectionContent = {
+  title?: string;
+  subtitle?: string;
+  text?: string;
+  submitText?: string;
+  cancelText?: string;
+};
+
+type PageSection = {
+  id?: string;
+  sectionKey: string;
+  content: PageSectionContent;
+};
+
+type PageData = {
+  id: string;
+  pageKey: string;
+  title: string;
+  sections: PageSection[];
+};
+
 export default function CancelSubscriptionModal({
   open,
   onClose,
@@ -25,7 +46,7 @@ export default function CancelSubscriptionModal({
 
   if (!open) return null;
 
-  const getContent = (key: string) => pageData?.sections?.find((s: any) => s.sectionKey === key)?.content || {};
+  const getContent = (key: string) => (pageData as PageData)?.sections?.find((s: PageSection) => s.sectionKey === key)?.content || {};
 
   const hero = getContent("hero");
   const option1 = getContent("option1");

@@ -20,10 +20,11 @@ async function getSubscriptionPageData() {
 
 export default async function Subscription() {
   const pageData = await getSubscriptionPageData();
-  const sections = (pageData?.sections || []).reduce((acc: any, sec: any) => {
+  type Section = { sectionKey: string; content: unknown };
+  const sections = (pageData?.sections || [] as Section[]).reduce((acc: Record<string, unknown>, sec: Section) => {
     acc[sec.sectionKey] = sec.content;
     return acc;
-  }, {});
+  }, {} as Record<string, unknown>);
 
   return (
     <>

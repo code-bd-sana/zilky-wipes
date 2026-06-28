@@ -2,7 +2,12 @@ import PageTitle from "@/components/shared/page-title/page-title";
 import { Input } from "@base-ui/react";
 import { Search } from "lucide-react";
 
-export default function HelpTitle({ data }: { data?: any }) {
+type HelpData = {
+  title?: string;
+  subtitle?: string;
+};
+
+export default function HelpTitle({ data }: { data?: HelpData }) {
   const title = data?.title || 'How can we help?';
   const subtitle = data?.subtitle || 'Find answers to common questions about your subscription';
 

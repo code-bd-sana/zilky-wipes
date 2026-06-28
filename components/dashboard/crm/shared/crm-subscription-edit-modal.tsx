@@ -27,9 +27,9 @@ export default function CRMSubscriptionEditModal({
   onClose: () => void;
   sectionKey: string | null;
   sectionName: string | null;
-  initialContent: any;
+  initialContent: Record<string, unknown> | null;
   pageKey?: string;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const {
     register,
@@ -59,13 +59,13 @@ export default function CRMSubscriptionEditModal({
   useEffect(() => {
     if (isOpen) {
       reset({
-        title: initialContent?.title || "",
-        subtitle: initialContent?.subtitle || "",
-        points: (initialContent?.points || []).map((p: string) => ({ value: p })),
-        col1Points: (initialContent?.col1Points || []).map((p: string) => ({ value: p })),
-        col2Points: (initialContent?.col2Points || []).map((p: string) => ({ value: p })),
+        title: (initialContent?.title as string) || "",
+        subtitle: (initialContent?.subtitle as string) || "",
+        points: ((initialContent?.points as string[]) || []).map((p: string) => ({ value: p })),
+        col1Points: ((initialContent?.col1Points as string[]) || []).map((p: string) => ({ value: p })),
+        col2Points: ((initialContent?.col2Points as string[]) || []).map((p: string) => ({ value: p })),
       });
-      setExistingPaths(initialContent?.imagePaths || []);
+      setExistingPaths((initialContent?.imagePaths as string[]) || []);
       setSelectedFiles([]);
     }
   }, [isOpen, initialContent, reset]);

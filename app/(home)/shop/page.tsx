@@ -16,7 +16,7 @@ async function getShopPageData() {
 
 export default async function Shop() {
   const pageData = await getShopPageData();
-  const sections = (pageData?.sections || []).reduce((acc: any, sec: any) => {
+  const sections = (pageData?.sections || []).reduce((acc: Record<string, unknown>, sec: { sectionKey: string; content: unknown }) => {
     acc[sec.sectionKey] = sec.content;
     return acc;
   }, {});

@@ -24,9 +24,9 @@ export default function CRMHomeEditModal({
   onClose: () => void;
   sectionKey: string | null;
   sectionName: string | null;
-  initialContent: any;
+  initialContent: Record<string, unknown> | null;
   pageKey?: string;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const {
     register,
@@ -48,10 +48,10 @@ export default function CRMHomeEditModal({
   useEffect(() => {
     if (isOpen) {
       reset({
-        title: initialContent?.title || "",
-        subtitle: initialContent?.subtitle || "",
+        title: (initialContent?.title as string) || "",
+        subtitle: (initialContent?.subtitle as string) || "",
       });
-      setExistingPaths(initialContent?.imagePaths || []);
+      setExistingPaths((initialContent?.imagePaths as string[]) || []);
       setSelectedFiles([]);
     }
   }, [isOpen, initialContent, reset]);

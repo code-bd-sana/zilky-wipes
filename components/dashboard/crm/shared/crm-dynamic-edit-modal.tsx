@@ -28,9 +28,9 @@ export default function CRMDynamicEditModal({
   onClose: () => void;
   sectionKey: string | null;
   sectionName: string | null;
-  initialContent: any;
+  initialContent: Record<string, unknown> | null;
   pageKey?: string;
-  onSave: (sectionKey: string, content: any) => Promise<void>;
+  onSave: (sectionKey: string, content: Record<string, unknown>) => Promise<void>;
 }) {
   const {
     register,
@@ -62,14 +62,14 @@ export default function CRMDynamicEditModal({
   useEffect(() => {
     if (isOpen) {
       reset({
-        title: initialContent?.title || "",
-        subtitle: initialContent?.subtitle || "",
-        points: (initialContent?.points || []).map((p: string) => ({ value: p })),
-        detailList: initialContent?.detailList || [],
-        statList: initialContent?.statList || [],
-        advantageList: initialContent?.advantageList || [],
+        title: (initialContent?.title as string) || "",
+        subtitle: (initialContent?.subtitle as string) || "",
+        points: ((initialContent?.points as string[]) || []).map((p: string) => ({ value: p })),
+        detailList: (initialContent?.detailList as { title: string; description: string }[]) || [],
+        statList: (initialContent?.statList as { value: string; title: string; description: string }[]) || [],
+        advantageList: (initialContent?.advantageList as { label: string; zilkyType: string; zilkyText: string; tpType: string; tpText: string; wwType: string; wwText: string }[]) || [],
       });
-      setExistingPaths(initialContent?.imagePaths || []);
+      setExistingPaths((initialContent?.imagePaths as string[]) || []);
       setSelectedFiles([]);
     }
   }, [isOpen, initialContent, reset]);

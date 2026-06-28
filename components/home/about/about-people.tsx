@@ -136,12 +136,12 @@ function BenefitPeopleCard({
   );
 }
 
-export default function AboutPeople({ data }: { data?: any }) {
+export default function AboutPeople({ data }: { data?: Record<string, unknown> }) {
   const [desktopSlide, setDesktopSlide] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [tabletSlide, setTabletSlide] = useState(0);
 
-  const title = data?.title || "People don't talk about this. ....Until they try it!";
+  const title = (data?.title as string) || "People don't talk about this. ....Until they try it!";
 
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);

@@ -1,7 +1,12 @@
 import PageTitle from "@/components/shared/page-title/page-title";
 import { Button } from "@/components/ui/button";
 
-export default function HaveQuestions({ data }: { data?: any }) {
+type HaveQuestionsData = {
+  title?: string;
+  subtitle?: string;
+};
+
+export default function HaveQuestions({ data }: { data?: HaveQuestionsData }) {
   const title = data?.title || 'Still have questions?';
   const subtitle = data?.subtitle || 'Our support team is here to help Monday–Friday, 9am–5pm EST';
 
