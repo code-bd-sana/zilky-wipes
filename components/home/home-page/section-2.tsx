@@ -1,21 +1,21 @@
-import PageTitle from "@/components/shared/page-title/page-title";
-import SplitContentSection from "@/components/shared/split-content-section";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { isVideo } from "@/lib/utils";
+import PageTitle from '@/components/shared/page-title/page-title';
+import SplitContentSection from '@/components/shared/split-content-section';
+import { Button } from '@/components/ui/button';
+import { isVideo } from '@/lib/utils';
+import Image from 'next/image';
 
-export default function Section2({ data }: { data?: any }) {
-  const title = data?.title || 'Made for real bathrooms. And real bodies.';
-  const subtitle = data?.subtitle?.split('\n') || [
-    "Everyday moments. Private spaces.",
-    "ZilkyWipes, exactly where it belongs.",
+export default function Section2({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Made for real bathrooms. And real bodies.';
+  const subtitle = (data?.subtitle as string)?.split('\n') || [
+    'Everyday moments. Private spaces.',
+    'ZilkyWipes, exactly where it belongs.',
   ];
-  const mediaSrc = data?.imagePaths?.[0] || '/video/3.mp4';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/3.mp4';
   const renderVideo = isVideo(mediaSrc);
 
   return (
     <section>
-      {" "}
+      {' '}
       <SplitContentSection
         desktopDirection='media-content'
         sectionClassName='md:mt-50'
@@ -44,18 +44,14 @@ export default function Section2({ data }: { data?: any }) {
               loop
               muted
               playsInline
-              className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
+              className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'
+            >
               <source src={mediaSrc} type='video/mp4' />
               Your browser does not support the video tag.
             </video>
           ) : (
             <div className='relative w-full aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] overflow-hidden'>
-              <Image 
-                src={mediaSrc} 
-                alt="Section Image" 
-                fill 
-                className="object-cover"
-              />
+              <Image src={mediaSrc} alt='Section Image' fill className='object-cover' />
             </div>
           )
         }

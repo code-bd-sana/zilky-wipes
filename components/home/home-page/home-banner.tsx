@@ -1,10 +1,10 @@
-import PageTitle from "@/components/shared/page-title/page-title";
-import Image from "next/image";
-import { isVideo } from "@/lib/utils";
+import PageTitle from '@/components/shared/page-title/page-title';
+import { isVideo } from '@/lib/utils';
+import Image from 'next/image';
 
-export default function HomeBanner({ data }: { data?: any }) {
-  const title = data?.title || 'A better way to feel clean.';
-  const mediaSrc = data?.imagePaths?.[0] || '/ZilkyWipes/hero.mp4';
+export default function HomeBanner({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'A better way to feel clean.';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/ZilkyWipes/hero.mp4';
   const renderVideo = isVideo(mediaSrc);
 
   return (
@@ -18,18 +18,13 @@ export default function HomeBanner({ data }: { data?: any }) {
             loop
             muted
             playsInline
-            className='absolute inset-0 w-full h-full object-cover'>
+            className='absolute inset-0 w-full h-full object-cover'
+          >
             <source src={mediaSrc} type='video/mp4' />
             Your browser does not support the video tag.
           </video>
         ) : (
-          <Image 
-            src={mediaSrc} 
-            alt="Hero Background" 
-            fill 
-            className="object-cover"
-            priority
-          />
+          <Image src={mediaSrc} alt='Hero Background' fill className='object-cover' priority />
         )}
 
         {/* Dark overlay for text contrast */}

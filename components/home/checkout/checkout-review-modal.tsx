@@ -23,7 +23,7 @@ export default function CheckoutReviewModal({
     enabled: open, // Only fetch when modal opens
   });
 
-  const getContent = (key: string) => pageData?.sections?.find((s: any) => s.sectionKey === key)?.content || {};
+  const getContent = (key: string) => pageData?.sections?.find((s: { sectionKey: string; content: Record<string, unknown> }) => s.sectionKey === key)?.content || {};
 
   const promptData = getContent("prompt");
   const inputData = getContent("input");

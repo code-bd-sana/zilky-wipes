@@ -23,13 +23,13 @@ export default async function Help() {
     return acc;
   }, {} as Record<string, Record<string, unknown>>);
 
-  const faqs = sections['faqs']?.topics || [];
+  const faqs = (sections['faqs']?.topics as { name?: string; questions?: { id?: string; question: string; answer: string; }[] }[]) || [];
 
   return (
     <>
       <HelpTitle data={sections['hero']} />
 
-      {faqs.map((topic: { name?: string; questions?: unknown[] }, index: number) => (
+      {faqs.map((topic: { name?: string; questions?: { id?: string; question: string; answer: string; }[] }, index: number) => (
         <FaqCategory key={topic.name || index} data={topic} />
       ))}
 

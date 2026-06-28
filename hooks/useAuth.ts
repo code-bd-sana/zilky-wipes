@@ -1,7 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
-import { authApi } from "../lib/api/auth";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { authApi } from '../lib/api/auth';
 
 export const useLogin = () => {
   const router = useRouter();
@@ -10,21 +10,23 @@ export const useLogin = () => {
     mutationFn: authApi.login,
     onSuccess: (data) => {
       const { accessToken, user } = data.data;
-      
+
       // Store tokens and user
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("zilky_user", JSON.stringify(user));
-      
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('zilky_user', JSON.stringify(user));
+
       toast.success(`Welcome back, ${user.firstName}!`);
-      
-      if (user.role === "ADMIN") {
-        router.push("/dashboard");
+
+      if (user.role === 'ADMIN') {
+        router.push('/dashboard');
       } else {
-        router.push("/");
+        router.push('/');
       }
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || "Invalid email or password";
+    onError: (error: unknown) => {
+      const message =
+        (error as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        'Invalid email or password';
       toast.error(message);
     },
   });
@@ -35,12 +37,14 @@ export const useRegister = () => {
 
   return useMutation({
     mutationFn: authApi.register,
-    onSuccess: (data) => {
-      toast.success("Account created successfully! Please log in.");
-      router.push("/login");
+    onSuccess: () => {
+      toast.success('Account created successfully! Please log in.');
+      router.push('/login');
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || "Failed to create account";
+    onError: (error: unknown) => {
+      const message =
+        (error as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        'Failed to create account';
       toast.error(message);
     },
   });

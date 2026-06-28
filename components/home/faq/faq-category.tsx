@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
 
-export default function FaqCategory({ data }: { data: any }) {
+export default function FaqCategory({ data }: { data: { name?: string, questions?: { id?: string, question: string, answer: string }[] } }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   if (!data || !data.questions || data.questions.length === 0) {
@@ -21,7 +21,7 @@ export default function FaqCategory({ data }: { data: any }) {
       </p>
 
       <div className="mt-6 space-y-8">
-        {data.questions.map((item: any, index: number) => (
+        {data.questions.map((item: { id?: string, question: string, answer: string }, index: number) => (
           <div key={item.id || index}>
             <button
               onClick={() => handleToggle(index)}

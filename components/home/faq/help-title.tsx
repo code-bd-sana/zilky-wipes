@@ -2,9 +2,9 @@ import PageTitle from "@/components/shared/page-title/page-title";
 import { Input } from "@base-ui/react";
 import { Search } from "lucide-react";
 
-export default function HelpTitle({ data }: { data?: any }) {
-  const title = data?.title || 'Everything you need to know.';
-  const subtitle = data?.subtitle || 'Find answers to common questions about your subscription';
+export default function HelpTitle({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Everything you need to know.';
+  const subtitle = (data?.subtitle as string) || 'Find answers to common questions about your subscription';
 
   return (
     <section className='mt-30 mx-6'>

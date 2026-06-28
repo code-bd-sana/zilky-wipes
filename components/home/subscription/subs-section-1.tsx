@@ -1,28 +1,31 @@
-import Image from "next/image";
-import PageTitle from "@/components/shared/page-title/page-title";
-import SplitContentSection from "@/components/shared/split-content-section";
-import { isVideo } from "@/lib/utils";
+import PageTitle from '@/components/shared/page-title/page-title';
+import SplitContentSection from '@/components/shared/split-content-section';
+import { isVideo } from '@/lib/utils';
+import Image from 'next/image';
 
-export default function SubsSection1({ data }: { data?: any }) {
+export default function SubsSection1({ data }: { data?: Record<string, unknown> }) {
   const defaultPlans = [
-    { no: "01", title: "Better value than one-time purchases" },
-    { no: "02", title: "Flexible delivery, monthly or bi-monthly" },
-    { no: "03", title: "Pause, skip, or cancel anytime" },
-    { no: "04", title: "Change plans in seconds" },
+    { no: '01', title: 'Better value than one-time purchases' },
+    { no: '02', title: 'Flexible delivery, monthly or bi-monthly' },
+    { no: '03', title: 'Pause, skip, or cancel anytime' },
+    { no: '04', title: 'Change plans in seconds' },
   ];
 
-  const plans = data?.points?.length 
-    ? data.points.map((p: string, idx: number) => ({ no: String(idx + 1).padStart(2, '0'), title: p }))
+  const plans = (data?.points as string[])?.length
+    ? (data?.points as string[]).map((p: string, idx: number) => ({
+        no: String(idx + 1).padStart(2, '0'),
+        title: p,
+      }))
     : defaultPlans;
 
-  const title = data?.title || '.....Because comfort shouldn’t be a reminder!';
-  const subtitle = data?.subtitle?.split('\n') || [
-    "ZilkyWipes arrives before you need it.",
-    "No last-minute runs. No guessing.",
-    "Just the right amount, on your schedule.",
+  const title = (data?.title as string) || '.....Because comfort shouldn’t be a reminder!';
+  const subtitle = (data?.subtitle as string)?.split('\n') || [
+    'ZilkyWipes arrives before you need it.',
+    'No last-minute runs. No guessing.',
+    'Just the right amount, on your schedule.',
   ];
 
-  const mediaSrc = data?.imagePaths?.[0] || '/ZilkyWipes/1000308869.png';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308869.png';
   const renderVideo = isVideo(mediaSrc);
 
   return (
@@ -40,12 +43,13 @@ export default function SubsSection1({ data }: { data?: any }) {
               subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]!'
             />
             <div className='mt-10 md:mt-14 lg:mt-16'>
-              {plans.map((plan: any, index: number) => (
+              {plans.map((plan: { no: string; title: string }, index: number) => (
                 <div
                   key={plan.no}
                   className={`grid grid-cols-[68px_1fr] md:grid-cols-[84px_1fr] items-center gap-x-4 py-5 md:py-6 border-b border-(--checkout-divider) ${
-                    index === 0 ? "border-t" : ""
-                  }`}>
+                    index === 0 ? 'border-t' : ''
+                  }`}
+                >
                   <div className='text-sm md:text-base leading-none font-medium text-(--text-primary)'>
                     / {plan.no}
                   </div>
@@ -57,7 +61,11 @@ export default function SubsSection1({ data }: { data?: any }) {
             </div>
           </>
         }
-        mediaClassName={renderVideo ? "relative aspect-37/45 overflow-hidden rounded-[36px] sm:rounded-[72px] lg:rounded-[120px]" : ""}
+        mediaClassName={
+          renderVideo
+            ? 'relative aspect-37/45 overflow-hidden rounded-[36px] sm:rounded-[72px] lg:rounded-[120px]'
+            : ''
+        }
         media={
           renderVideo ? (
             <video

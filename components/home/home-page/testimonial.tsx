@@ -1,79 +1,79 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import PageTitle from "@/components/shared/page-title/page-title";
+import PageTitle from '@/components/shared/page-title/page-title';
+import { useRef, useState } from 'react';
 
 const allTestimonials = [
   {
-    name: "Sarah Jhonson",
+    name: 'Sarah Jhonson',
     feedback:
-      "I had a great experience! The website is easy to navigate and I found everything I needed quickly. Highly recommend it!",
+      'I had a great experience! The website is easy to navigate and I found everything I needed quickly. Highly recommend it!',
     stars: 5,
   },
   {
-    name: "Daniel Carter",
+    name: 'Daniel Carter',
     feedback:
-      "The products are exactly as described. The checkout process was smooth, and delivery was on time. Love this site!",
+      'The products are exactly as described. The checkout process was smooth, and delivery was on time. Love this site!',
     stars: 5,
   },
   {
-    name: "Sophia Martinez",
+    name: 'Sophia Martinez',
     feedback:
-      "Very good experience overall. Only thing is I wish there were more payment options, but service is top-notch.",
+      'Very good experience overall. Only thing is I wish there were more payment options, but service is top-notch.',
     stars: 5,
   },
   {
-    name: "Charlotte Wilson",
+    name: 'Charlotte Wilson',
     feedback:
-      "Great website! Easy to use and products arrived quickly. I just wish they had more variety in colors and sizes.",
+      'Great website! Easy to use and products arrived quickly. I just wish they had more variety in colors and sizes.',
     stars: 5,
   },
   {
-    name: "James Anderson",
+    name: 'James Anderson',
     feedback:
-      "Absolutely love the quality of their products. Customer support was very responsive and helpful throughout.",
+      'Absolutely love the quality of their products. Customer support was very responsive and helpful throughout.',
     stars: 5,
   },
   {
-    name: "Emily Davis",
+    name: 'Emily Davis',
     feedback:
-      "Fast shipping and great packaging. The product exceeded my expectations. Will definitely order again!",
+      'Fast shipping and great packaging. The product exceeded my expectations. Will definitely order again!',
     stars: 5,
   },
   {
-    name: "Michael Brown",
+    name: 'Michael Brown',
     feedback:
-      "Really impressed with the overall experience. The site is intuitive and the products are top quality.",
+      'Really impressed with the overall experience. The site is intuitive and the products are top quality.',
     stars: 5,
   },
   {
-    name: "Olivia Taylor",
+    name: 'Olivia Taylor',
     feedback:
-      "Wonderful experience from start to finish. The team clearly cares about their customers and it shows.",
+      'Wonderful experience from start to finish. The team clearly cares about their customers and it shows.',
     stars: 5,
   },
   {
-    name: "Liam Wilson",
+    name: 'Liam Wilson',
     feedback:
       "I was skeptical at first but I'm so glad I tried it. The quality is outstanding and delivery was super fast.",
     stars: 5,
   },
   {
-    name: "Ava Johnson",
+    name: 'Ava Johnson',
     feedback:
       "Smooth checkout process and my order arrived earlier than expected. Couldn't be happier with my purchase.",
     stars: 5,
   },
   {
-    name: "Noah Martinez",
+    name: 'Noah Martinez',
     feedback:
-      "Excellent service and product quality. The website is easy to use and the prices are very competitive.",
+      'Excellent service and product quality. The website is easy to use and the prices are very competitive.',
     stars: 5,
   },
   {
-    name: "Isabella Garcia",
+    name: 'Isabella Garcia',
     feedback:
-      "Amazing experience! The product is exactly what I was looking for. Will recommend to all my friends.",
+      'Amazing experience! The product is exactly what I was looking for. Will recommend to all my friends.',
     stars: 5,
   },
 ];
@@ -105,7 +105,8 @@ function StarRating({ count }: { count: number }) {
           height='20'
           viewBox='0 0 20 20'
           fill='none'
-          xmlns='http://www.w3.org/2000/svg'>
+          xmlns='http://www.w3.org/2000/svg'
+        >
           <path
             d='M10 1L12.39 6.26L18.18 7.11L14.09 11.1L15.12 16.87L10 14.12L4.88 16.87L5.91 11.1L1.82 7.11L7.61 6.26L10 1Z'
             fill='#1B2F6E'
@@ -128,17 +129,15 @@ function BenefitPeopleCard({
   return (
     <div className='w-full bg-white rounded-sm border border-gray-100 p-6 shadow-sm'>
       <StarRating count={person.stars} />
-      <p className='text-sm text-gray-700 leading-relaxed mb-6'>
-        {person.feedback}
-      </p>
+      <p className='text-sm text-gray-700 leading-relaxed mb-6'>{person.feedback}</p>
       <p className='text-sm text-gray-600'>— {person.name}</p>
     </div>
   );
 }
 
-export default function BenefitPeople({ data }: { data?: any }) {
-  const title = data?.title || "People don't talk about this. ....Until they try it!";
-  
+export default function BenefitPeople({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || "People don't talk about this. ....Until they try it!";
+
   const [desktopSlide, setDesktopSlide] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [tabletSlide, setTabletSlide] = useState(0);
@@ -162,24 +161,17 @@ export default function BenefitPeople({ data }: { data?: any }) {
 
     if (Math.abs(diff) > SWIPE_THRESHOLD) {
       const isTablet =
-        typeof window !== "undefined" &&
-        window.innerWidth >= 768 &&
-        window.innerWidth < 1024;
-      const isDesktop =
-        typeof window !== "undefined" && window.innerWidth >= 1024;
+        typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1024;
+      const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024;
 
       if (diff > 0) {
         // Swipe left (next)
         if (isDesktop) {
-          setDesktopSlide((prev) =>
-            Math.min(prev + 1, desktopSlides.length - 1),
-          );
+          setDesktopSlide((prev) => Math.min(prev + 1, desktopSlides.length - 1));
         } else if (isTablet) {
           setTabletSlide((prev) => Math.min(prev + 1, tabletSlides.length - 1));
         } else {
-          setMobileIndex((prev) =>
-            Math.min(prev + 1, allTestimonials.length - 1),
-          );
+          setMobileIndex((prev) => Math.min(prev + 1, allTestimonials.length - 1));
         }
       } else {
         // Swipe right (prev)
@@ -200,10 +192,7 @@ export default function BenefitPeople({ data }: { data?: any }) {
   return (
     <section className='bg-[#FBFAF9]'>
       <div className='max-w-480 mx-auto px-5 md:px-12 lg:px-20 xl:px-40 mt-20 py-25'>
-        <PageTitle
-          title={title}
-          titleClassName='max-w-250!'
-        />
+        <PageTitle title={title} titleClassName='max-w-250!' />
 
         {/* ── MOBILE: 1 card at a time with swipe ── */}
         <div className='block md:hidden mt-16'>
@@ -211,10 +200,12 @@ export default function BenefitPeople({ data }: { data?: any }) {
             className='relative overflow-hidden'
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}>
+            onTouchEnd={handleTouchEnd}
+          >
             <div
               className='flex transition-transform duration-300 ease-in-out'
-              style={{ transform: `translateX(-${mobileIndex * 100}%)` }}>
+              style={{ transform: `translateX(-${mobileIndex * 100}%)` }}
+            >
               {allTestimonials.map((person, i) => (
                 <div key={i} className='w-full shrink-0 px-1'>
                   <BenefitPeopleCard person={person} />
@@ -230,9 +221,7 @@ export default function BenefitPeople({ data }: { data?: any }) {
                 key={i}
                 onClick={() => setMobileIndex(i)}
                 className={`rounded-full transition-all duration-200 ${
-                  i === mobileIndex
-                    ? "w-2.5 h-2.5 bg-[#1B2F6E]"
-                    : "w-2 h-2 bg-gray-300"
+                  i === mobileIndex ? 'w-2.5 h-2.5 bg-[#1B2F6E]' : 'w-2 h-2 bg-gray-300'
                 }`}
                 aria-label={`Go to review ${i + 1}`}
               />
@@ -245,11 +234,13 @@ export default function BenefitPeople({ data }: { data?: any }) {
           className='hidden md:block lg:hidden mt-16'
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}>
+          onTouchEnd={handleTouchEnd}
+        >
           <div className='relative overflow-hidden'>
             <div
               className='flex transition-transform duration-300 ease-in-out'
-              style={{ transform: `translateX(-${tabletSlide * 100}%)` }}>
+              style={{ transform: `translateX(-${tabletSlide * 100}%)` }}
+            >
               {tabletSlides.map((slide, slideIdx) => (
                 <div key={slideIdx} className='w-full shrink-0 flex gap-6 px-1'>
                   {slide.map((person, personIdx) => (
@@ -269,9 +260,7 @@ export default function BenefitPeople({ data }: { data?: any }) {
                 key={index}
                 onClick={() => setTabletSlide(index)}
                 className={`rounded-full transition-all duration-200 ${
-                  index === tabletSlide
-                    ? "w-2.5 h-2.5 bg-[#1B2F6E]"
-                    : "w-2 h-2 bg-gray-300"
+                  index === tabletSlide ? 'w-2.5 h-2.5 bg-[#1B2F6E]' : 'w-2 h-2 bg-gray-300'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
@@ -284,15 +273,15 @@ export default function BenefitPeople({ data }: { data?: any }) {
           className='hidden lg:block mt-16'
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}>
+          onTouchEnd={handleTouchEnd}
+        >
           <div className='relative overflow-hidden'>
             <div
               className='flex transition-transform duration-300 ease-in-out gap-x-6'
-              style={{ transform: `translateX(-${desktopSlide * 100}%)` }}>
+              style={{ transform: `translateX(-${desktopSlide * 100}%)` }}
+            >
               {desktopSlides.map((slide, slideIdx) => (
-                <div
-                  key={slideIdx}
-                  className='w-full shrink-0 flex gap-x-6 justify-center'>
+                <div key={slideIdx} className='w-full shrink-0 flex gap-x-6 justify-center'>
                   {slide.map((person, personIdx) => (
                     <div key={personIdx} className='flex-1'>
                       <BenefitPeopleCard person={person} />
@@ -310,7 +299,7 @@ export default function BenefitPeople({ data }: { data?: any }) {
                 key={index}
                 onClick={() => setDesktopSlide(index)}
                 className={`w-2.5 h-2.5 rounded-full transition-colors duration-200 ${
-                  index === desktopSlide ? "bg-[#1B2F6E]" : "bg-gray-300"
+                  index === desktopSlide ? 'bg-[#1B2F6E]' : 'bg-gray-300'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />

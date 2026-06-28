@@ -1,9 +1,9 @@
-import Image from "next/image";
-import { isVideo } from "@/lib/utils";
+import { isVideo } from '@/lib/utils';
+import Image from 'next/image';
 
-export default function SubscriptionBanner({ data }: { data?: any }) {
-  const title = data?.title || 'Never run out again.';
-  const mediaSrc = data?.imagePaths?.[0] || '/video/2.mp4';
+export default function SubscriptionBanner({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Never run out again.';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/2.mp4';
   const renderVideo = isVideo(mediaSrc);
 
   return (
@@ -17,18 +17,13 @@ export default function SubscriptionBanner({ data }: { data?: any }) {
             loop
             muted
             playsInline
-            className='absolute inset-0 w-full h-full object-cover'>
+            className='absolute inset-0 w-full h-full object-cover'
+          >
             <source src={mediaSrc} type='video/mp4' />
             Your browser does not support the video tag.
           </video>
         ) : (
-          <Image 
-            src={mediaSrc} 
-            alt="Hero Background" 
-            fill 
-            className="object-cover"
-            priority
-          />
+          <Image src={mediaSrc} alt='Hero Background' fill className='object-cover' priority />
         )}
 
         {/* Dark overlay for text contrast */}

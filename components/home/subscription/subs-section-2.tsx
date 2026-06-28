@@ -1,17 +1,17 @@
-import Image from "next/image";
-import PageTitle from "@/components/shared/page-title/page-title";
-import SplitContentSection from "@/components/shared/split-content-section";
-import { Button } from "@/components/ui/button";
-import { isVideo } from "@/lib/utils";
+import PageTitle from '@/components/shared/page-title/page-title';
+import SplitContentSection from '@/components/shared/split-content-section';
+import { Button } from '@/components/ui/button';
+import { isVideo } from '@/lib/utils';
+import Image from 'next/image';
 
-export default function SubsSection2({ data }: { data?: any }) {
-  const title = data?.title || 'Choose your rhythm.';
-  const subtitle = data?.subtitle?.split('\n') || [
-    " Monthly delivery / Bi-monthly delivery",
-    "You can change this anytime.",
+export default function SubsSection2({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Choose your rhythm.';
+  const subtitle = (data?.subtitle as string)?.split('\n') || [
+    ' Monthly delivery / Bi-monthly delivery',
+    'You can change this anytime.',
   ];
 
-  const mediaSrc = data?.imagePaths?.[0] || '/ZilkyWipes/1000308869.png';
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308869.png';
   const renderVideo = isVideo(mediaSrc);
 
   return (
@@ -20,7 +20,11 @@ export default function SubsSection2({ data }: { data?: any }) {
         desktopDirection='media-content'
         sectionClassName='md:mt-45'
         contentClassName='max-w-180 lg:max-w-160'
-        mediaClassName={renderVideo ? "relative aspect-37/45 overflow-hidden rounded-[36px] sm:rounded-[72px] lg:rounded-[120px]" : ""}
+        mediaClassName={
+          renderVideo
+            ? 'relative aspect-37/45 overflow-hidden rounded-[36px] sm:rounded-[72px] lg:rounded-[120px]'
+            : ''
+        }
         content={
           <>
             <PageTitle

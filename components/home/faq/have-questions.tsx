@@ -1,9 +1,9 @@
 import PageTitle from "@/components/shared/page-title/page-title";
 import { Button } from "@/components/ui/button";
 
-export default function HaveQuestions({ data }: { data?: any }) {
-  const title = data?.title || 'Still have questions?';
-  const subtitle = data?.subtitle || 'Our support team is here to help Monday–Friday, 9am–5pm EST';
+export default function HaveQuestions({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Still have questions?';
+  const subtitle = (data?.subtitle as string) || 'Our support team is here to help Monday–Friday, 9am–5pm EST';
 
   return (
     <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 py-20'>
