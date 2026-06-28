@@ -18,10 +18,10 @@ async function getFaqPageData() {
 
 export default async function FaqPage() {
   const pageData = await getFaqPageData();
-  const sections = (pageData?.sections || []).reduce((acc: any, sec: any) => {
+  const sections = (pageData?.sections || []).reduce((acc: Record<string, Record<string, unknown>>, sec: { sectionKey: string; content: Record<string, unknown> }) => {
     acc[sec.sectionKey] = sec.content;
     return acc;
-  }, {});
+  }, {} as Record<string, Record<string, unknown>>);
 
   const faqs = sections['faqs']?.topics || [];
 
@@ -29,7 +29,7 @@ export default async function FaqPage() {
     <>
       <HelpTitle data={sections['hero']} />
       
-      {faqs.map((topic: any, index: number) => (
+      {faqs.map((topic: { name?: string; questions?: unknown[] }, index: number) => (
         <FaqCategory key={topic.name || index} data={topic} />
       ))}
 

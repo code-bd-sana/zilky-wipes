@@ -16,10 +16,10 @@ async function getFeedbackMainData() {
 
 export default async function FeedbackPage() {
   const pageData = await getFeedbackMainData();
-  const sections = (pageData?.sections || []).reduce((acc: any, sec: any) => {
+  const sections = (pageData?.sections || []).reduce((acc: Record<string, Record<string, unknown>>, sec: { sectionKey: string; content: Record<string, unknown> }) => {
     acc[sec.sectionKey] = sec.content;
     return acc;
-  }, {});
+  }, {} as Record<string, Record<string, unknown>>);
 
   return (
     <div className='min-h-screen pb-20'>
