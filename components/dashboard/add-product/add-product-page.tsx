@@ -83,6 +83,15 @@ export default function AddProductPage() {
     name: 'variants',
   });
 
+  const {
+    fields: accordionFields,
+    append: appendAccordion,
+    remove: removeAccordion,
+  } = useFieldArray({
+    control,
+    name: 'accordionDetails',
+  });
+
   const handleImageUpload = (files: FileList | null) => {
     if (!files) return;
     const newFiles = Array.from(files).slice(0, 5 - productImages.length);
@@ -265,6 +274,66 @@ export default function AddProductPage() {
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Accordion Details */}
+          <div className='bg-white p-6 rounded-lg border border-[#E7E5E4] shadow-sm'>
+            <div className='flex justify-between items-center mb-4'>
+              <h2 className='text-lg font-semibold'>Accordion Details</h2>
+              <button
+                type='button'
+                onClick={() =>
+                  appendAccordion({
+                    title: '',
+                    content: '',
+                  })
+                }
+                className='flex items-center gap-1 text-sm bg-black text-white px-3 py-1.5 rounded-md hover:bg-gray-800'
+              >
+                <Plus size={14} /> Add Detail
+              </button>
+            </div>
+
+            <div className='space-y-4'>
+              {accordionFields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className='p-4 border border-[#E7E5E4] rounded-md relative bg-gray-50/50'
+                >
+                  <button
+                    type='button'
+                    onClick={() => removeAccordion(index)}
+                    className='absolute top-3 right-3 text-red-500 hover:text-red-700'
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                  
+                  <div className='grid grid-cols-1 gap-4 mt-2 pr-8'>
+                    <div>
+                      <label className='block text-xs font-medium text-gray-700 mb-1'>
+                        Title
+                      </label>
+                      <input
+                        {...register(`accordionDetails.${index}.title`)}
+                        className='w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#1e2d4a]'
+                        placeholder='e.g. Materials'
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-xs font-medium text-gray-700 mb-1'>
+                        Content
+                      </label>
+                      <textarea
+                        {...register(`accordionDetails.${index}.content`)}
+                        rows={3}
+                        className='w-full px-3 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-1 focus:ring-[#1e2d4a]'
+                        placeholder='e.g. 100% plant-based'
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Variants */}
