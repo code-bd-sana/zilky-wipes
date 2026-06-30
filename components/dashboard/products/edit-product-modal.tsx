@@ -155,7 +155,7 @@ export default function EditProductModal({
         tagIds: data.tagIds,
         accordionDetails: data.accordionDetails,
         variants: data.variants,
-        existingImages: existingImages, // Pass this so backend can reconcile images
+        images: existingImages, // Sent as `images` so the backend route merges it with new fileUrls
       }),
     );
 
