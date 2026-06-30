@@ -25,4 +25,12 @@ export const productsApi = {
     const response = await api.delete(`/products/${id}`);
     return response.data;
   },
+  updateProduct: async ({ id, formData }: { id: string; formData: FormData }) => {
+    const response = await api.patch(`/products/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  },
 };

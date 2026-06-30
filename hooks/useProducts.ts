@@ -61,3 +61,21 @@ export const useDeleteProduct = () => {
     },
   });
 };
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: productsApi.updateProduct,
+    onSuccess: () => {
+      toast.success("Product updated successfully!");
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (error: unknown) => {
+      const message =
+        (error as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        "Failed to update product";
+      toast.error(message);
+    },
+  });
+};

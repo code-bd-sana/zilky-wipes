@@ -21,8 +21,9 @@ import {
   Trash2,
 } from "lucide-react";
 import { useState, useMemo } from "react";
-import EditProductModal, { type ProductRow as EditProductRow } from "./edit-product-modal";
+import EditProductModal from "./edit-product-modal";
 import ViewProductModal from "./view-product-modal";
+import DeleteConfirmationModal from "./delete-confirmation-modal";
 import { useProducts, useDeleteProduct } from "@/hooks/useProducts";
 
 export type BackendVariant = {
@@ -68,9 +69,10 @@ export default function ProductListPage() {
   // Modals state
   const [editingProduct, setEditingProduct] = useState<ProductRow | null>(null);
   const [viewingProduct, setViewingProduct] = useState<ProductRow | null>(null);
+  const [productToDelete, setProductToDelete] = useState<ProductRow | null>(null);
 
   const { data: responseData, isLoading } = useProducts();
-  const { mutate: deleteProduct } = useDeleteProduct();
+  const { mutate: deleteProduct, isPending: isDeleting } = useDeleteProduct();
 
   // Transform backend data to frontend table data
   const productsData = useMemo<ProductRow[]>(() => {
@@ -117,15 +119,21 @@ export default function ProductListPage() {
     setViewingProduct(null);
   };
 
-  const handleSaveProduct = async (updatedData: EditProductRow) => {
-    // TODO: implement API save via useUpdateProduct when ready
-    console.log("Saving product:", updatedData);
-    handleCloseModals();
+  const handleDeleteProduct = (product: ProductRow) => {
+    setProductToDelete(product);
   };
 
-  const handleDeleteProduct = (id: string) => {
-    if (confirm("Are you sure you want to delete this product?")) {
-      deleteProduct(id);
+  const confirmDelete = () => {
+    if (productToDelete) {
+      deleteProduct(productToDelete.id, {
+        onSuccess: () => {
+          setProductToDelete(null);
+          // Also close edit modal if we deleted from there
+          if (editingProduct?.id === productToDelete.id) {
+            setEditingProduct(null);
+          }
+        }
+      });
     }
   };
 
@@ -197,7 +205,7 @@ export default function ProductListPage() {
           </button>
           <button
             type='button'
-            onClick={() => handleDeleteProduct(row.id)}
+            onClick={() => handleDeleteProduct(row)}
             className='inline-flex items-center gap-1 rounded-md border border-[#fca5a5] bg-red-50 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 cursor-pointer'>
             <Trash2 className='h-3.5 w-3.5' />
             <span>Delete</span>
@@ -285,11 +293,10 @@ export default function ProductListPage() {
       {/* Edit Product Modal */}
       {editingProduct && (
         <EditProductModal
-          key={editingProduct.id}
-          product={editingProduct} // Note: This will need refactoring in a future step to support the new payload
+          key={`edit-${editingProduct.id}`}
+          product={editingProduct.raw}
           onClose={handleCloseModals}
-          onSave={handleSaveProduct}
-          onDelete={() => handleDeleteProduct(editingProduct.id)}
+          onDelete={() => handleDeleteProduct(editingProduct)}
         />
       )}
 
@@ -299,6 +306,16 @@ export default function ProductListPage() {
           key={`view-${viewingProduct.id}`}
           product={viewingProduct.raw}
           onClose={handleCloseModals}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {productToDelete && (
+        <DeleteConfirmationModal
+          productName={productToDelete.name}
+          isDeleting={isDeleting}
+          onClose={() => setProductToDelete(null)}
+          onConfirm={confirmDelete}
         />
       )}
     </section>
