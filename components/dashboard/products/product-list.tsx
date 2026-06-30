@@ -10,6 +10,7 @@ import DateRangePicker, {
 import {
   CalendarDays,
   DollarSign,
+  Eye,
   Forward,
   IndentIncrease,
   ListFilter,
@@ -17,192 +18,114 @@ import {
   Package,
   PencilLine,
   Settings2,
+  Trash2,
 } from "lucide-react";
-import { useState } from "react";
-import EditProductModal from "./edit-product-modal";
+import { useState, useMemo } from "react";
+import EditProductModal, { type ProductRow as EditProductRow } from "./edit-product-modal";
+import ViewProductModal from "./view-product-modal";
+import { useProducts, useDeleteProduct } from "@/hooks/useProducts";
+
+export type BackendVariant = {
+  id?: string;
+  price: number;
+  stock: number;
+  name?: string;
+  subscriptionEligible?: boolean;
+  subscriptionDiscount?: number;
+};
+
+export type BackendCategory = { id: string; name: string };
+export type BackendTag = { id: string; name: string };
+export type BackendProduct = {
+  id: string;
+  name: string;
+  description?: string;
+  images?: string[];
+  isFeatured?: boolean;
+  categories?: BackendCategory[];
+  tags?: BackendTag[];
+  variants?: BackendVariant[];
+  accordionDetails?: { title: string; content: string }[];
+};
 
 type ProductRow = {
   id: string;
   name: string;
   price: number;
+  maxPrice: number;
   stock: number;
   status?: "low" | "out";
-  description?: string;
   sku?: string;
   category?: string;
+  raw: BackendProduct;
 };
-
-const initialProducts: ProductRow[] = [
-  {
-    id: "1",
-    name: "CleanSweep Wipes Roll",
-    price: 24,
-    stock: 120,
-    sku: "CS-WR-001",
-    category: "Wipes",
-  },
-  {
-    id: "2",
-    name: "FreshWave Wipes Roll",
-    price: 23,
-    stock: 3,
-    status: "low",
-    sku: "FW-WR-002",
-    category: "Wipes",
-  },
-  {
-    id: "3",
-    name: "QuickDry Wipes Roll",
-    price: 22,
-    stock: 0,
-    status: "out",
-    sku: "QD-WR-003",
-    category: "Wipes",
-  },
-  {
-    id: "4",
-    name: "NatureClean Towels Roll",
-    price: 20,
-    stock: 150,
-    sku: "NC-TR-004",
-    category: "Towels",
-  },
-  {
-    id: "5",
-    name: "AllergenFree Wipes Roll",
-    price: 18,
-    stock: 190,
-    sku: "AF-WR-005",
-    category: "Wipes",
-  },
-  {
-    id: "6",
-    name: "SootheSkin Towels Roll",
-    price: 19,
-    stock: 130,
-    sku: "SS-TR-006",
-    category: "Towels",
-  },
-  {
-    id: "7",
-    name: "StainAway Cloths Roll",
-    price: 13,
-    stock: 160,
-    sku: "SA-CR-007",
-    category: "Cloths",
-  },
-  {
-    id: "8",
-    name: "FreshGuard Towels Roll",
-    price: 17,
-    stock: 170,
-    sku: "FG-TR-008",
-    category: "Towels",
-  },
-  {
-    id: "9",
-    name: "PureSoft Wipes Roll",
-    price: 16,
-    stock: 200,
-    sku: "PS-WR-009",
-    category: "Wipes",
-  },
-  {
-    id: "10",
-    name: "GentleTouch Wipes Roll",
-    price: 14,
-    stock: 120,
-    sku: "GT-WR-010",
-    category: "Wipes",
-  },
-  {
-    id: "11",
-    name: "UltraSoft Cloths Roll",
-    price: 21,
-    stock: 180,
-    sku: "US-CR-011",
-    category: "Cloths",
-  },
-  {
-    id: "12",
-    name: "EcoClean Cloths Roll",
-    price: 15,
-    stock: 140,
-    sku: "EC-CR-012",
-    category: "Cloths",
-  },
-  {
-    id: "13",
-    name: "ZilkyWipes Roll",
-    price: 12,
-    stock: 210,
-    sku: "ZW-WR-013",
-    category: "Wipes",
-  },
-];
 
 export default function ProductListPage() {
   const [customDateRange, setCustomDateRange] = useState<
     DateRange | undefined
   >();
-  const [selectedProduct, setSelectedProduct] = useState<ProductRow | null>(
-    null,
-  );
-  const [productsData, setProductsData] =
-    useState<ProductRow[]>(initialProducts);
+  
+  // Modals state
+  const [editingProduct, setEditingProduct] = useState<ProductRow | null>(null);
+  const [viewingProduct, setViewingProduct] = useState<ProductRow | null>(null);
+
+  const { data: responseData, isLoading } = useProducts();
+  const { mutate: deleteProduct } = useDeleteProduct();
+
+  // Transform backend data to frontend table data
+  const productsData = useMemo<ProductRow[]>(() => {
+    if (!responseData?.data) return [];
+    return responseData.data.map((p: BackendProduct) => {
+      let minPrice = 0;
+      let maxPrice = 0;
+      let totalStock = 0;
+      
+      if (p.variants && p.variants.length > 0) {
+        minPrice = Math.min(...p.variants.map((v: BackendVariant) => v.price));
+        maxPrice = Math.max(...p.variants.map((v: BackendVariant) => v.price));
+        totalStock = p.variants.reduce((acc: number, v: BackendVariant) => acc + v.stock, 0);
+      }
+      
+      let status: "low" | "out" | undefined = undefined;
+      if (totalStock === 0) status = "out";
+      else if (totalStock <= 5) status = "low";
+      
+      return {
+        id: p.id,
+        name: p.name,
+        price: minPrice,
+        maxPrice: maxPrice,
+        stock: totalStock,
+        status: status,
+        sku: p.id.slice(0, 8).toUpperCase(),
+        category: p.categories?.map((c: BackendCategory) => c.name).join(", "),
+        raw: p,
+      };
+    });
+  }, [responseData]);
 
   const handleEditProduct = (product: ProductRow) => {
-    setSelectedProduct(product);
+    setEditingProduct(product);
   };
 
-  const handleCloseModal = () => {
-    setSelectedProduct(null);
+  const handleViewProduct = (product: ProductRow) => {
+    setViewingProduct(product);
   };
 
-  const handleSaveProduct = async (updatedData: ProductRow) => {
-    try {
-      // Here you would make your API call to update the product
-      console.log("Saving product:", updatedData);
-
-      // Update the local state
-      setProductsData((prevData) =>
-        prevData.map((product) =>
-          product.id === updatedData.id
-            ? {
-                ...updatedData,
-                // Recalculate status based on stock
-                status:
-                  updatedData.stock === 0
-                    ? "out"
-                    : updatedData.stock <= 5
-                      ? "low"
-                      : undefined,
-              }
-            : product,
-        ),
-      );
-
-      // Close the modal
-      handleCloseModal();
-    } catch (error) {
-      console.error("Failed to save product:", error);
-    }
+  const handleCloseModals = () => {
+    setEditingProduct(null);
+    setViewingProduct(null);
   };
 
-  const handleDeleteProduct = async (id: string) => {
-    try {
-      // Here you would make your API call to delete the product
-      console.log("Deleting product:", id);
+  const handleSaveProduct = async (updatedData: EditProductRow) => {
+    // TODO: implement API save via useUpdateProduct when ready
+    console.log("Saving product:", updatedData);
+    handleCloseModals();
+  };
 
-      // Update the local state by removing the deleted product
-      setProductsData((prevData) =>
-        prevData.filter((product) => product.id !== id),
-      );
-
-      // Close the modal
-      handleCloseModal();
-    } catch (error) {
-      console.error("Failed to delete product:", error);
+  const handleDeleteProduct = (id: string) => {
+    if (confirm("Are you sure you want to delete this product?")) {
+      deleteProduct(id);
     }
   };
 
@@ -211,7 +134,7 @@ export default function ProductListPage() {
       id: "product-name",
       header: "Product Name",
       icon: Package,
-      widthClassName: "w-[45%]",
+      widthClassName: "w-[40%]",
       cell: (row) => <span>{row.name}</span>,
     },
     {
@@ -219,13 +142,18 @@ export default function ProductListPage() {
       header: "Price",
       icon: DollarSign,
       widthClassName: "w-[15%]",
-      cell: (row) => <span>${row.price.toFixed(2)}</span>,
+      cell: (row) => (
+        <span>
+          ${row.price.toFixed(2)}
+          {row.maxPrice > row.price && ` - $${row.maxPrice.toFixed(2)}`}
+        </span>
+      ),
     },
     {
       id: "stock",
       header: "Stock",
       icon: IndentIncrease,
-      widthClassName: "w-[18%]",
+      widthClassName: "w-[20%]",
       cell: (row) => {
         if (row.status === "out") {
           return (
@@ -250,20 +178,28 @@ export default function ProductListPage() {
       id: "action",
       header: "Action",
       icon: Forward,
-      widthClassName: "w-[23%]",
+      widthClassName: "w-[25%]",
       cell: (row) => (
         <div className='flex items-center gap-2'>
           <button
             type='button'
-            onClick={() => handleEditProduct(row)}
-            className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
-            <PencilLine className='h-3.5 w-3.5' color='#262626' />
-            <span>Edit Product</span>
+            onClick={() => handleViewProduct(row)}
+            className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2 py-1 text-xs font-medium text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
+            <Eye className='h-3.5 w-3.5' />
+            <span>View</span>
           </button>
           <button
             type='button'
-            className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
-            <PencilLine className='h-3.5 w-3.5' color='#262626' />
+            onClick={() => handleEditProduct(row)}
+            className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2 py-1 text-xs font-medium text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
+            <PencilLine className='h-3.5 w-3.5' />
+            <span>Edit</span>
+          </button>
+          <button
+            type='button'
+            onClick={() => handleDeleteProduct(row.id)}
+            className='inline-flex items-center gap-1 rounded-md border border-[#fca5a5] bg-red-50 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 cursor-pointer'>
+            <Trash2 className='h-3.5 w-3.5' />
             <span>Delete</span>
           </button>
         </div>
@@ -293,7 +229,6 @@ export default function ProductListPage() {
                 onChange={setCustomDateRange}
                 onApply={(range) => {
                   setCustomDateRange(range);
-                  // TODO: filter data by range
                   console.log("Applied date range:", range);
                 }}
               />
@@ -326,6 +261,10 @@ export default function ProductListPage() {
     ],
   };
 
+  if (isLoading) {
+    return <div className="p-8 text-center text-gray-500">Loading products...</div>;
+  }
+
   return (
     <section className=''>
       <DashboardDataTable
@@ -343,13 +282,23 @@ export default function ProductListPage() {
         defaultPageSize={10}
       />
 
-      {selectedProduct && (
+      {/* Edit Product Modal */}
+      {editingProduct && (
         <EditProductModal
-          key={selectedProduct.id}
-          product={selectedProduct}
-          onClose={handleCloseModal}
+          key={editingProduct.id}
+          product={editingProduct} // Note: This will need refactoring in a future step to support the new payload
+          onClose={handleCloseModals}
           onSave={handleSaveProduct}
-          onDelete={handleDeleteProduct}
+          onDelete={() => handleDeleteProduct(editingProduct.id)}
+        />
+      )}
+
+      {/* View Product Modal */}
+      {viewingProduct && (
+        <ViewProductModal
+          key={`view-${viewingProduct.id}`}
+          product={viewingProduct.raw}
+          onClose={handleCloseModals}
         />
       )}
     </section>

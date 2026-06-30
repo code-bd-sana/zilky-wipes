@@ -36,3 +36,28 @@ export const useAddProduct = () => {
     },
   });
 };
+
+export const useProducts = (params?: Record<string, unknown>) => {
+  return useQuery({
+    queryKey: ["products", params],
+    queryFn: () => productsApi.getProducts(params),
+  });
+};
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: productsApi.deleteProduct,
+    onSuccess: () => {
+      toast.success("Product deleted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (error: unknown) => {
+      const message =
+        (error as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        "Failed to delete product";
+      toast.error(message);
+    },
+  });
+};
