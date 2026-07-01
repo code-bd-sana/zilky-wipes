@@ -24,6 +24,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ComponentType } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 type SidebarItem = {
   label: string;
@@ -145,9 +146,12 @@ export default function DashboardSidebar({
   const pathname = usePathname();
   const activeView =
     pathname === "/dashboard" ? "home" : (pathname.split("/")[2] ?? "home");
+  const queryClient = useQueryClient();
 
   const handleLogout = () => {
     localStorage.removeItem("zilky_user");
+    localStorage.removeItem("accessToken");
+    queryClient.setQueryData(['me'], null);
     toast.info("Logged out successfully");
     router.push("/");
   };
