@@ -1,24 +1,27 @@
 "use client";
 
-import type { ProductDetailContent, ShopProduct } from "@/constants/shop-products";
 import { Minus, Plus, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
+import type { BackendProduct, BackendVariant } from "@/components/dashboard/products/product-list";
 
 type ProductDetailsViewProps = {
-  product: ShopProduct;
-  details: ProductDetailContent;
+  product: BackendProduct;
 };
 
 export default function ProductDetailsView({
   product,
-  details,
 }: ProductDetailsViewProps) {
   const [quantity, setQuantity] = useState(1);
-  const totalPrice = product.price * quantity;
+  const [selectedVariant, setSelectedVariant] = useState<BackendVariant | null>(
+    product.variants?.[0] || null
+  );
+  const totalPrice = (selectedVariant?.price || 0) * quantity;
+  
+  const sections = Array.isArray(product.accordionDetails) ? product.accordionDetails : [];
   const [openSectionTitle, setOpenSectionTitle] = useState(
-    details.sections[0]?.title ?? "",
+    sections[0]?.title ?? "",
   );
 
   const handleDecrease = () => {
@@ -31,7 +34,7 @@ export default function ProductDetailsView({
 
   const handleAddToCart = () => {
     toast.success("Product successfully added to cart.", {
-      description: `${product.name} x${quantity}`,
+      description: `${product.name}${selectedVariant ? ` - ${selectedVariant.name}` : ''} x${quantity}`,
     });
   };
 
@@ -43,8 +46,8 @@ export default function ProductDetailsView({
         <div className='grid flex-1 grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[1fr_1fr]'>
           <div className='relative min-h-[38vh] sm:min-h-[45vh] bg-(--shop-card-bg) lg:min-h-0 lg:h-full'>
           <Image
-            src={product.image}
-            alt={product.imageAlt}
+            src={product.images?.[0] || ""}
+            alt={product.name}
             fill
             quality={100}
             loading='eager'
@@ -59,13 +62,13 @@ export default function ProductDetailsView({
               {product.name}
             </h1>
               <p className='pt-3 md:pt-4 text-base sm:text-lg leading-relaxed text-(--text-secondary) md:text-2xl'>
-              {details.headlineDescription}
+              {product.description}
             </p>
           </div>
 
             <div className='flex flex-1 items-center py-4 md:py-6'>
             <div className='w-full '>
-              {details.sections.map((section) => {
+              {sections.map((section: any) => {
                 const isOpen = section.title === openSectionTitle;
 
                 return (
@@ -94,6 +97,28 @@ export default function ProductDetailsView({
           </div>
 
           <div className='space-y-4'>
+            {product.variants && product.variants.length > 0 && (
+              <div className='flex flex-col gap-2 pb-2'>
+                <p className='text-sm sm:text-base font-medium text-(--text-secondary)'>Select Option:</p>
+                <div className='flex flex-wrap gap-2 md:gap-3'>
+                  {product.variants.map((variant) => (
+                    <button
+                      key={variant.id}
+                      type='button'
+                      onClick={() => setSelectedVariant(variant)}
+                      className={`rounded-full px-4 py-2 border-2 text-sm sm:text-base transition-colors ${
+                        selectedVariant?.id === variant.id
+                          ? 'border-(--text-primary) bg-(--text-primary) text-white'
+                          : 'border-(--text-primary) text-(--text-primary) hover:bg-(--text-primary)/10'
+                      }`}
+                    >
+                      {variant.name} (${variant.price.toFixed(2)})
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
               <div className='flex h-12 sm:h-14 md:h-18 px-4 sm:px-5 md:px-6 items-center justify-between rounded-full border-2 border-(--text-primary) text-(--text-primary)'>
               <button
                 type='button'

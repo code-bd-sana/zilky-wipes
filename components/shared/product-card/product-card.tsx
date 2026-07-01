@@ -21,7 +21,7 @@ export default function ProductCard({
   productId,
   image,
   imageAlt = "Product image",
-  subscribeLabel = "Subscribe & Save 15%",
+  subscribeLabel,
   name,
   price,
   tags = [],
