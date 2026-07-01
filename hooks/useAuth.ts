@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authApi } from '../lib/api/auth';
@@ -47,5 +47,14 @@ export const useRegister = () => {
         'Failed to create account';
       toast.error(message);
     },
+  });
+};
+
+export const useGetMe = () => {
+  return useQuery({
+    queryKey: ['me'],
+    queryFn: authApi.getMe,
+    retry: false, // Do not retry if we're just checking auth
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
