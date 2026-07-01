@@ -197,22 +197,8 @@ export default function CheckoutLeftPanel() {
 
         <section className='space-y-3'>
           <h2 className='text-xl md:text-2xl leading-none text-(--checkout-muted-text)'>
-            Country/Region
+            Shipping Address
           </h2>
-
-          <div>
-            <label htmlFor={countryId} className='sr-only'>
-              Country or region
-            </label>
-            <input
-              id={countryId}
-              type='text'
-              autoComplete='country-name'
-              placeholder='Country or region'
-              {...register('country')}
-              className={inputBaseClass}
-            />
-          </div>
 
           <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
             <div>
@@ -317,6 +303,20 @@ export default function CheckoutLeftPanel() {
           </div>
 
           <div>
+            <label htmlFor={countryId} className='sr-only'>
+              Country or region
+            </label>
+            <input
+              id={countryId}
+              type='text'
+              autoComplete='country-name'
+              placeholder='Country or region'
+              {...register('country')}
+              className={inputBaseClass}
+            />
+          </div>
+
+          <div>
             <label htmlFor={phoneId} className='sr-only'>
               Phone Number
             </label>
@@ -343,7 +343,7 @@ export default function CheckoutLeftPanel() {
           </div>
         </section>
 
-        <section className='space-y-3'>
+        {/* <section className='space-y-3'>
           <h2 className='text-xl md:text-2xl leading-none text-(--checkout-muted-text)'>
             Shipping method
           </h2>
@@ -351,7 +351,7 @@ export default function CheckoutLeftPanel() {
           <div className='flex items-center justify-center rounded-[8px] bg-(--checkout-panel-bg) px-4 py-4 text-center text-base text-(--checkbox-muted-subtext)'>
             <span>Enter your shipping address to view available shipping methods.</span>
           </div>
-        </section>
+        </section> */}
 
         <section className='space-y-3'>
           <h2 className='text-xl md:text-2xl leading-none text-(--checkout-muted-text)'>Payment</h2>
