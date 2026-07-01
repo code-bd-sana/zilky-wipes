@@ -6,6 +6,9 @@ import CheckoutSuccessModal from "@/components/home/checkout/checkout-success-mo
 import { ChevronDown, Lock, Search, Store, Truck } from "lucide-react";
 import { useId, useState } from "react";
 import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
+import { useCartStore } from "@/store/useCartStore";
+import { useCreateOrder } from "@/hooks/useOrders";
+import { toast } from "sonner";
 
 type DeliveryMethod = "ship" | "pickup";
 
@@ -38,6 +41,12 @@ export default function CheckoutLeftPanel() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isReferModalOpen, setIsReferModalOpen] = useState(false);
+  const { items } = useCartStore();
+  const createOrder = useCreateOrder(() => {
+    setIsReferModalOpen(false);
+    setIsReviewModalOpen(false);
+    setIsSuccessModalOpen(true);
+  });
   const { register, control, handleSubmit } = useForm<CheckoutFormValues>({
     mode: "onBlur",
     reValidateMode: "onChange",
@@ -65,10 +74,38 @@ export default function CheckoutLeftPanel() {
   });
   const deliveryMethod = useWatch({ control, name: "deliveryMethod" });
 
-  const onSubmit: SubmitHandler<CheckoutFormValues> = () => {
-    setIsReferModalOpen(false);
-    setIsReviewModalOpen(false);
-    setIsSuccessModalOpen(true);
+  const onSubmit: SubmitHandler<CheckoutFormValues> = (data) => {
+    if (items.length === 0) {
+      toast.error("Your cart is empty");
+      return;
+    }
+
+    const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const discount = 10;
+    const total = Math.max(0, subtotal - discount);
+
+    const orderPayload = {
+      items: items.map((item) => ({
+        productVariantId: item.productVariantId,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      shippingAddress: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        streetAddress: data.address + (data.apartment ? ` ${data.apartment}` : ""),
+        city: data.city,
+        state: data.state,
+        postalCode: data.zipCode,
+        country: data.country,
+        phone: data.phoneNumber || undefined,
+      },
+      subtotal,
+      shippingCost: 0,
+      total,
+    };
+
+    createOrder.mutate(orderPayload);
   };
 
   const handleOpenReviewModal = () => {
@@ -491,8 +528,9 @@ export default function CheckoutLeftPanel() {
 
         <button
           type='submit'
-          className='w-full rounded-full bg-(--text-primary) px-6 py-4 text-xl text-white transition hover:opacity-95 sm:py-5 sm:text-2xl'>
-          Pay Now
+          disabled={createOrder.isPending}
+          className='w-full rounded-full bg-(--text-primary) px-6 py-4 text-xl text-white transition hover:opacity-95 disabled:opacity-50 sm:py-5 sm:text-2xl'>
+          {createOrder.isPending ? "Processing..." : "Pay Now"}
         </button>
       </form>
 

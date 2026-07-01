@@ -29,10 +29,13 @@ export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
             
           const subscribeLabel = maxDiscount > 0 ? `Subscribe & Save ${maxDiscount}%` : undefined;
           
+          const firstVariantId = product.variants?.[0]?.id;
+          
           return (
             <ProductCard
               key={product.id}
               productId={product.id}
+              variantId={firstVariantId}
               image={product.images?.[0] || ""}
               imageAlt={product.name}
               name={product.name}

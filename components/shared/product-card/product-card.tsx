@@ -5,9 +5,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useCartStore } from "@/store/useCartStore";
 
 type ProductCardProps = {
   productId: string;
+  variantId?: string;
   image: string;
   imageAlt: string;
   name: string;
@@ -19,6 +21,7 @@ type ProductCardProps = {
 
 export default function ProductCard({
   productId,
+  variantId,
   image,
   imageAlt = "Product image",
   subscribeLabel,
@@ -40,7 +43,18 @@ export default function ProductCard({
     setQuantity((current) => current + 1);
   };
 
+  const addItem = useCartStore((state) => state.addItem);
+
   const handleAddToCart = () => {
+    addItem({
+      productId,
+      productVariantId: variantId || productId,
+      name,
+      price,
+      quantity,
+      image,
+    });
+
     toast.success("Product successfully added to cart.", {
       description: `${name} x${quantity}`,
     });

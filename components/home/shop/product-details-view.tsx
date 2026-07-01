@@ -4,6 +4,7 @@ import { Minus, Plus, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useCartStore } from "@/store/useCartStore";
 import type { BackendProduct, BackendVariant } from "@/components/dashboard/products/product-list";
 
 type ProductDetailsViewProps = {
@@ -32,7 +33,26 @@ export default function ProductDetailsView({
     setQuantity((current) => current + 1);
   };
 
+  const addItem = useCartStore((state) => state.addItem);
+
   const handleAddToCart = () => {
+    const targetVariant = selectedVariant || product.variants?.[0];
+    if (!targetVariant) {
+      toast.error("No variant selected");
+      return;
+    }
+    
+    addItem({
+      productId: product.id,
+      productVariantId: targetVariant.id || product.id,
+      name: product.name,
+      variantName: targetVariant.name || "",
+      price: targetVariant.price,
+      quantity,
+      image: product.images?.[0] || "",
+      isSubscription: targetVariant.subscriptionEligible
+    });
+
     toast.success("Product successfully added to cart.", {
       description: `${product.name}${selectedVariant ? ` - ${selectedVariant.name}` : ''} x${quantity}`,
     });
