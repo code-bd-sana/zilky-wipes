@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { Coupon } from '../lib/api/coupons';
 
 export type CartItem = {
   productId: string;
@@ -18,6 +19,9 @@ type CartState = {
   removeItem: (productVariantId: string) => void;
   updateQuantity: (productVariantId: string, quantity: number) => void;
   clearCart: () => void;
+  appliedCoupon: Coupon | null;
+  applyCoupon: (coupon: Coupon) => void;
+  removeCoupon: () => void;
 };
 
 export const useCartStore = create<CartState>()(
@@ -51,7 +55,10 @@ export const useCartStore = create<CartState>()(
           ),
         }));
       },
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], appliedCoupon: null }),
+      appliedCoupon: null,
+      applyCoupon: (coupon) => set({ appliedCoupon: coupon }),
+      removeCoupon: () => set({ appliedCoupon: null }),
     }),
     {
       name: 'zilky-cart-storage',

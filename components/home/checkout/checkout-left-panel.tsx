@@ -26,7 +26,7 @@ const inputBaseClass =
   'w-full rounded-[8px] border border-(--checkout-divider) bg-white px-3 py-4 text-base text-(--checkout-muted-text) placeholder:text-(--checkbox-muted-subtext) focus:border-(--text-primary) focus:outline-none';
 
 export default function CheckoutLeftPanel() {
-  const { items } = useCartStore();
+  const { items, appliedCoupon } = useCartStore();
   const createOrder = useCreateOrder();
   const { register, control, handleSubmit } = useForm<CheckoutFormValues>({
     mode: 'onBlur',
@@ -75,6 +75,7 @@ export default function CheckoutLeftPanel() {
       subtotal,
       shippingCost: 0,
       total,
+      ...(appliedCoupon && { couponCode: appliedCoupon.code }),
     };
 
     createOrder.mutate(orderPayload);
@@ -287,8 +288,6 @@ export default function CheckoutLeftPanel() {
               className={inputBaseClass}
             />
           </div>
-
-
         </section>
 
         {/* <section className='space-y-3'>

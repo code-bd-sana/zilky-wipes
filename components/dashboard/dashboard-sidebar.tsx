@@ -18,6 +18,7 @@ import {
   LibraryBig,
   FileChartLine,
   LogOut,
+  Ticket,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -71,6 +72,12 @@ const operationItems: SidebarItem[] = [
     key: "analytics",
     href: "/dashboard/analytics",
     icon: FileChartLine,
+  },
+  {
+    label: "Coupons",
+    key: "coupons",
+    href: "/dashboard/coupons",
+    icon: Ticket,
   },
 ];
 
