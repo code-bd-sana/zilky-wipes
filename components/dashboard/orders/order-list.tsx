@@ -35,7 +35,7 @@ const STATUS_STYLES: Record<BackendOrder["status"], string> = {
 };
 
 export default function OrderListPage() {
-  const [selectedOrder, setSelectedOrder] = useState<BackendOrder | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [customDateRange, setCustomDateRange] = useState<
     DateRange | undefined
   >();
@@ -46,8 +46,10 @@ export default function OrderListPage() {
   const { data: ordersResponse, isLoading } = useGetOrders({ page, limit, searchTerm: query });
 
   const handleSeeDetails = (row: BackendOrder) => {
-    setSelectedOrder(row);
+    setSelectedOrderId(row.id);
   };
+
+  const selectedOrder = ordersResponse?.data?.find(o => o.id === selectedOrderId) || null;
 
   const columns: DashboardTableColumn<BackendOrder>[] = [
     {
@@ -191,9 +193,9 @@ export default function OrderListPage() {
           defaultPageSize={10}
         />
         <OrderDetail
-          key={selectedOrder?.id ?? "order-detail-empty"}
+          key={selectedOrderId ?? "order-detail-empty"}
           order={selectedOrder}
-          onClose={() => setSelectedOrder(null)}
+          onClose={() => setSelectedOrderId(null)}
         />
       </section>
     );
