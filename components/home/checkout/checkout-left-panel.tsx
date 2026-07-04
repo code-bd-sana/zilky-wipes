@@ -20,7 +20,6 @@ type CheckoutFormValues = {
   state: string;
   zipCode: string;
   phoneNumber: string;
-  saveInfo: boolean;
 };
 
 const inputBaseClass =
@@ -43,7 +42,6 @@ export default function CheckoutLeftPanel() {
       state: '',
       zipCode: '',
       phoneNumber: '',
-      saveInfo: true,
     },
   });
   const deliveryMethod = useWatch({ control, name: 'deliveryMethod' });
@@ -92,7 +90,6 @@ export default function CheckoutLeftPanel() {
   const stateId = useId();
   const zipId = useId();
   const phoneId = useId();
-  const saveInfoId = useId();
 
   return (
     <aside className='mx-auto w-full px-4 py-6 sm:px-6 md:px-8 md:py-8 lg:px-12.5'>
@@ -291,17 +288,7 @@ export default function CheckoutLeftPanel() {
             />
           </div>
 
-          <div className='flex items-center gap-3'>
-            <input
-              id={saveInfoId}
-              type='checkbox'
-              {...register('saveInfo')}
-              className='h-4 w-4 rounded border-(--checkout-divider) accent-(--text-primary)'
-            />
-            <label htmlFor={saveInfoId} className='text-base text-(--checkbox-muted-foreground)'>
-              Save this information for next time
-            </label>
-          </div>
+
         </section>
 
         {/* <section className='space-y-3'>
