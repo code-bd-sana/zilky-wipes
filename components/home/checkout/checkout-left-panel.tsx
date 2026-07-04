@@ -1,12 +1,9 @@
 'use client';
 
-import CheckoutReferFriendModal from '@/components/home/checkout/checkout-refer-friend-modal';
-import CheckoutReviewModal from '@/components/home/checkout/checkout-review-modal';
-import CheckoutSuccessModal from '@/components/home/checkout/checkout-success-modal';
 import { useCreateOrder } from '@/hooks/useOrders';
 import { useCartStore } from '@/store/useCartStore';
-import { Lock, Search, Store, Truck } from 'lucide-react';
-import { useId, useState } from 'react';
+import { Search, Store, Truck } from 'lucide-react';
+import { useId } from 'react';
 import { useForm, useWatch, type SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -24,27 +21,14 @@ type CheckoutFormValues = {
   zipCode: string;
   phoneNumber: string;
   saveInfo: boolean;
-  paymentMethod: 'credit-card';
-  cardNumber: string;
-  expiry: string;
-  securityCode: string;
-  cardName: string;
-  billingSameAsShipping: boolean;
 };
 
 const inputBaseClass =
   'w-full rounded-[8px] border border-(--checkout-divider) bg-white px-3 py-4 text-base text-(--checkout-muted-text) placeholder:text-(--checkbox-muted-subtext) focus:border-(--text-primary) focus:outline-none';
 
 export default function CheckoutLeftPanel() {
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [isReferModalOpen, setIsReferModalOpen] = useState(false);
   const { items } = useCartStore();
-  const createOrder = useCreateOrder(() => {
-    setIsReferModalOpen(false);
-    setIsReviewModalOpen(false);
-    setIsSuccessModalOpen(true);
-  });
+  const createOrder = useCreateOrder();
   const { register, control, handleSubmit } = useForm<CheckoutFormValues>({
     mode: 'onBlur',
     reValidateMode: 'onChange',
@@ -60,12 +44,6 @@ export default function CheckoutLeftPanel() {
       zipCode: '',
       phoneNumber: '',
       saveInfo: true,
-      paymentMethod: 'credit-card',
-      cardNumber: '',
-      expiry: '',
-      securityCode: '',
-      cardName: '',
-      billingSameAsShipping: true,
     },
   });
   const deliveryMethod = useWatch({ control, name: 'deliveryMethod' });
@@ -104,18 +82,6 @@ export default function CheckoutLeftPanel() {
     createOrder.mutate(orderPayload);
   };
 
-  const handleOpenReviewModal = () => {
-    setIsReferModalOpen(false);
-    setIsSuccessModalOpen(false);
-    setIsReviewModalOpen(true);
-  };
-
-  const handleOpenReferModal = () => {
-    setIsSuccessModalOpen(false);
-    setIsReviewModalOpen(false);
-    setIsReferModalOpen(true);
-  };
-
   const deliveryId = useId();
   const countryId = useId();
   const firstNameId = useId();
@@ -127,11 +93,6 @@ export default function CheckoutLeftPanel() {
   const zipId = useId();
   const phoneId = useId();
   const saveInfoId = useId();
-  const cardNumberId = useId();
-  const expiryId = useId();
-  const securityCodeId = useId();
-  const cardNameId = useId();
-  const billingAddressId = useId();
 
   return (
     <aside className='mx-auto w-full px-4 py-6 sm:px-6 md:px-8 md:py-8 lg:px-12.5'>
@@ -353,123 +314,6 @@ export default function CheckoutLeftPanel() {
           </div>
         </section> */}
 
-        <section className='space-y-3'>
-          <h2 className='text-xl md:text-2xl leading-none text-(--checkout-muted-text)'>Payment</h2>
-
-          <p className='text-base text-(--checkbox-muted-subtext)'>
-            All transactions are secure and encrypted.
-          </p>
-
-          <div className='overflow-hidden rounded-[8px] border border-(--checkout-divider)'>
-            <label className='flex flex-wrap items-center justify-between gap-2 border-b border-(--checkout-divider) bg-[#FEF4F4] px-3 py-3'>
-              <span className='flex items-center gap-2'>
-                <input
-                  type='radio'
-                  {...register('paymentMethod')}
-                  value='credit-card'
-                  className='h-4 w-4 accent-(--text-primary)'
-                />
-                <span className='text-base text-(--checkout-muted-text)'>Credit card</span>
-              </span>
-
-              <span className='ml-auto flex items-center gap-1 sm:ml-0'>
-                <span className='rounded-lg border border-(--checkout-divider) bg-white px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-[#3556a7]'>
-                  VISA
-                </span>
-                <span className='rounded-lg border border-(--checkout-divider) bg-white px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-[#e45a4a]'>
-                  MC
-                </span>
-                <span className='rounded-lg border border-(--checkout-divider) bg-white px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-[#4f86d9]'>
-                  AMEX
-                </span>
-                <span className='rounded-lg border border-(--checkout-divider) bg-white px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-(--checkout-muted-text)'>
-                  +5
-                </span>
-              </span>
-            </label>
-
-            <div className='space-y-3 bg-(--checkout-panel-bg) p-4'>
-              <div className='relative'>
-                <label htmlFor={cardNumberId} className='sr-only'>
-                  Card Number
-                </label>
-                <input
-                  id={cardNumberId}
-                  type='text'
-                  autoComplete='cc-number'
-                  inputMode='numeric'
-                  placeholder='Card Number'
-                  {...register('cardNumber')}
-                  className={`${inputBaseClass} pr-10`}
-                />
-                <Lock className='pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-(--checkbox-muted-subtext)' />
-              </div>
-
-              <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-                <div>
-                  <label htmlFor={expiryId} className='sr-only'>
-                    Expire Date (MM/YY)
-                  </label>
-                  <input
-                    id={expiryId}
-                    type='text'
-                    autoComplete='cc-exp'
-                    inputMode='numeric'
-                    placeholder='Expire Date (MM/YY)'
-                    {...register('expiry')}
-                    className={inputBaseClass}
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor={securityCodeId} className='sr-only'>
-                    Security Code
-                  </label>
-                  <input
-                    id={securityCodeId}
-                    type='text'
-                    autoComplete='cc-csc'
-                    inputMode='numeric'
-                    placeholder='Security Code'
-                    {...register('securityCode')}
-                    className={inputBaseClass}
-                  />
-                </div>
-              </div>
-
-              <div className='relative'>
-                <label htmlFor={cardNameId} className='sr-only'>
-                  Name on Card
-                </label>
-                <input
-                  id={cardNameId}
-                  type='text'
-                  autoComplete='cc-name'
-                  placeholder='Name on Card'
-                  {...register('cardName')}
-                  className={`${inputBaseClass} pr-10`}
-                />
-                <Lock className='pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-(--checkbox-muted-subtext)' />
-              </div>
-
-              <div className='flex items-center gap-3'>
-                <input
-                  id={billingAddressId}
-                  type='checkbox'
-                  {...register('billingSameAsShipping')}
-                  className='h-4 w-4 rounded border-(--checkout-divider) accent-(--text-primary)'
-                />
-                <label
-                  htmlFor={billingAddressId}
-                  className='text-base text-(--checkout-muted-text)'
-                >
-                  Use shipping address as billing address
-                </label>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <button
           type='submit'
           disabled={createOrder.isPending}
@@ -478,23 +322,6 @@ export default function CheckoutLeftPanel() {
           {createOrder.isPending ? 'Processing...' : 'Pay Now'}
         </button>
       </form>
-
-      <CheckoutSuccessModal
-        open={isSuccessModalOpen}
-        onClose={() => setIsSuccessModalOpen(false)}
-        onOpenReview={handleOpenReviewModal}
-      />
-
-      <CheckoutReviewModal
-        open={isReviewModalOpen}
-        onClose={() => setIsReviewModalOpen(false)}
-        onOpenReferFriend={handleOpenReferModal}
-      />
-
-      <CheckoutReferFriendModal
-        open={isReferModalOpen}
-        onClose={() => setIsReferModalOpen(false)}
-      />
     </aside>
   );
 }
