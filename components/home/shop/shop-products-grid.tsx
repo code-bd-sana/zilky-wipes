@@ -30,6 +30,8 @@ export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
           const subscribeLabel = maxDiscount > 0 ? `Subscribe & Save ${maxDiscount}%` : undefined;
           
           const firstVariantId = product.variants?.[0]?.id;
+          const hasMultipleVariants = (product.variants?.length || 0) > 1;
+          const stock = product.variants?.[0]?.stock || 0;
           
           return (
             <ProductCard
@@ -43,6 +45,8 @@ export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
               tags={tags}
               subscribeLabel={subscribeLabel}
               imageLoading={index < 3 ? "eager" : "lazy"}
+              stock={stock}
+              hasMultipleVariants={hasMultipleVariants}
             />
           );
         })}

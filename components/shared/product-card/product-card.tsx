@@ -18,6 +18,7 @@ type ProductCardProps = {
   subscribeLabel?: string;
   imageLoading?: "eager" | "lazy";
   stock?: number;
+  hasMultipleVariants?: boolean;
 };
 
 export default function ProductCard({
@@ -31,6 +32,7 @@ export default function ProductCard({
   tags = [],
   imageLoading = "lazy",
   stock = 0,
+  hasMultipleVariants = false,
 }: ProductCardProps) {
   const router = useRouter();
   const shouldReduceMotion = useReducedMotion();
@@ -127,54 +129,64 @@ export default function ProductCard({
         <div
           className='absolute inset-x-5 bottom-5 hidden flex-col gap-3 group-hover:flex'
           onClick={(event) => event.stopPropagation()}>
-          <div
-            className='flex h-12 md:h-14 items-center justify-between rounded-full border border-white px-4 md:px-5 text-white'
-            onClick={(event) => event.stopPropagation()}>
-            <button
-              type='button'
-              aria-label='Decrease quantity'
-              onClick={(event) => {
-                event.stopPropagation();
-                handleDecrease();
-              }}
-              className='text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80'>
-              -
-            </button>
-            <span className='text-xl md:text-2xl leading-none'>{quantity}</span>
-            <button
-              type='button'
-              aria-label='Increase quantity'
-              disabled={quantity >= availableToAdd || availableToAdd === 0}
-              onClick={(event) => {
-                event.stopPropagation();
-                handleIncrease();
-              }}
-              className='text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed'>
-              +
-            </button>
-          </div>
+          {!hasMultipleVariants && (
+            <div
+              className='flex h-12 md:h-14 items-center justify-between rounded-full border border-white px-4 md:px-5 text-white'
+              onClick={(event) => event.stopPropagation()}>
+              <button
+                type='button'
+                aria-label='Decrease quantity'
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleDecrease();
+                }}
+                className='text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80'>
+                -
+              </button>
+              <span className='text-xl md:text-2xl leading-none'>{quantity}</span>
+              <button
+                type='button'
+                aria-label='Increase quantity'
+                disabled={quantity >= availableToAdd || availableToAdd === 0}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleIncrease();
+                }}
+                className='text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed'>
+                +
+              </button>
+            </div>
+          )}
 
           <button
             type='button'
-            disabled={availableToAdd === 0}
+            disabled={!hasMultipleVariants && availableToAdd === 0}
             onClick={(event) => {
               event.stopPropagation();
-              handleAddToCart();
+              if (hasMultipleVariants) {
+                handleOpenDetails();
+              } else {
+                handleAddToCart();
+              }
             }}
             className='h-12 md:h-14 rounded-full bg-white text-base md:text-lg font-medium text-(--text-primary) transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed'>
-            {stock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}
+            {hasMultipleVariants ? "Select Options" : stock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}
           </button>
         </div>
 
         <button
           type='button'
-          disabled={availableToAdd === 0}
+          disabled={!hasMultipleVariants && availableToAdd === 0}
           onClick={(event) => {
             event.stopPropagation();
-            handleAddToCart();
+            if (hasMultipleVariants) {
+              handleOpenDetails();
+            } else {
+              handleAddToCart();
+            }
           }}
           className='absolute inset-x-4 md:inset-x-5 bottom-4 md:bottom-5 flex h-13 md:h-16 items-center justify-between rounded-full bg-white px-5 md:px-6 text-(--text-primary) transition-opacity group-hover:hidden disabled:opacity-50 disabled:cursor-not-allowed'>
-          <span className='text-base md:text-lg font-medium leading-none'>{stock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}</span>
+          <span className='text-base md:text-lg font-medium leading-none'>{hasMultipleVariants ? "Select Options" : stock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}</span>
           <span className='text-3xl md:text-4xl leading-none'>+</span>
         </button>
       </div>
