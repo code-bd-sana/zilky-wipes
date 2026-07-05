@@ -46,8 +46,8 @@ export const useUpdateOrderStatus = (onSuccess?: () => void) => {
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       if (onSuccess) onSuccess();
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Failed to update order status';
+    onError: (error: unknown) => {
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to update order status';
       toast.error(message);
     },
   });
@@ -63,8 +63,8 @@ export const useUpdateOrderTracking = (onSuccess?: () => void) => {
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       if (onSuccess) onSuccess();
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Failed to update tracking number';
+    onError: (error: unknown) => {
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to update tracking number';
       toast.error(message);
     },
   });

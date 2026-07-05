@@ -21,7 +21,7 @@ export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
           // Calculate subscribe label dynamically
           const maxDiscount = product.variants?.length
             ? Math.max(
-                ...product.variants.map((v: any) =>
+                ...product.variants.map((v: { subscriptionEligible?: boolean; subscriptionDiscount?: number }) =>
                   v.subscriptionEligible ? v.subscriptionDiscount || 0 : 0
                 )
               )

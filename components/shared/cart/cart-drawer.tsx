@@ -1,7 +1,7 @@
 'use client';
 
 import { useCartStore } from '@/store/useCartStore';
-import { Minus, Plus, TicketPercent, Trash2 } from 'lucide-react';
+import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -19,6 +19,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
   const { data: liveProducts, isSuccess: liveProductsSuccess } = useProducts({ limit: 100 });
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -42,8 +43,8 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
     if (open && liveProductsSuccess && liveProducts?.data) {
       const stockUpdates: { productVariantId: string; maxStock: number }[] = [];
 
-      liveProducts.data.forEach((p: any) => {
-        p.variants?.forEach((v: any) => {
+      liveProducts.data.forEach((p: { variants?: { id: string; stock: number }[] }) => {
+        p.variants?.forEach((v: { id: string; stock: number }) => {
           stockUpdates.push({ productVariantId: v.id, maxStock: v.stock });
         });
       });

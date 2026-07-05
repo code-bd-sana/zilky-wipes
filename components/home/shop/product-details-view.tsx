@@ -107,7 +107,7 @@ export default function ProductDetailsView({
 
             <div className='flex flex-1 items-center py-4 md:py-6'>
             <div className='w-full '>
-              {sections.map((section: any) => {
+              {sections.map((section: { title: string; content: string }) => {
                 const isOpen = section.title === openSectionTitle;
 
                 return (

@@ -28,8 +28,8 @@ export const useCreateCoupon = (onSuccess?: () => void) => {
       queryClient.invalidateQueries({ queryKey: ['coupons'] });
       if (onSuccess) onSuccess();
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Failed to create coupon';
+    onError: (error: unknown) => {
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to create coupon';
       toast.error(message);
     },
   });
@@ -45,8 +45,8 @@ export const useUpdateCoupon = (onSuccess?: () => void) => {
       queryClient.invalidateQueries({ queryKey: ['coupons'] });
       if (onSuccess) onSuccess();
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Failed to update coupon';
+    onError: (error: unknown) => {
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to update coupon';
       toast.error(message);
     },
   });
@@ -61,8 +61,8 @@ export const useDeleteCoupon = () => {
       toast.success('Coupon deleted successfully');
       queryClient.invalidateQueries({ queryKey: ['coupons'] });
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Failed to delete coupon';
+    onError: (error: unknown) => {
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to delete coupon';
       toast.error(message);
     },
   });
