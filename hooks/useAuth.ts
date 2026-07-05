@@ -1,10 +1,11 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authApi } from '../lib/api/auth';
 
 export const useLogin = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: authApi.login,
@@ -14,6 +15,9 @@ export const useLogin = () => {
       // Store tokens and user
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('zilky_user', JSON.stringify(user));
+
+      // Update the 'me' query instantly so Navbar knows we are logged in
+      queryClient.setQueryData(['me'], { success: true, data: user });
 
       toast.success(`Welcome back, ${user.firstName}!`);
 
