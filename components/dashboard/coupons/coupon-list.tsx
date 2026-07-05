@@ -9,7 +9,7 @@ import CouponFormModal from "./coupon-form-modal";
 import DeleteCouponModal from "./delete-coupon-modal";
 
 export default function CouponList() {
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [couponToEdit, setCouponToEdit] = useState<Coupon | null>(null);
   const [couponToDelete, setCouponToDelete] = useState<Coupon | null>(null);

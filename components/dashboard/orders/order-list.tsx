@@ -39,9 +39,9 @@ export default function OrderListPage() {
   const [customDateRange, setCustomDateRange] = useState<
     DateRange | undefined
   >();
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [query, setQuery] = useState("");
+  const [page] = useState(1);
+  const [limit] = useState(10);
+  const [query] = useState("");
 
   const { data: ordersResponse, isLoading } = useGetOrders({ page, limit, searchTerm: query });
 

@@ -41,18 +41,18 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
   useEffect(() => {
     if (open && liveProductsSuccess && liveProducts?.data) {
       const stockUpdates: { productVariantId: string; maxStock: number }[] = [];
-      
+
       liveProducts.data.forEach((p: any) => {
         p.variants?.forEach((v: any) => {
           stockUpdates.push({ productVariantId: v.id, maxStock: v.stock });
         });
       });
-      
+
       if (stockUpdates.length > 0) {
         const { adjusted } = syncStock(stockUpdates);
         if (adjusted) {
-          toast.warning("Cart Updated", {
-            description: "Some items in your cart were adjusted due to limited stock."
+          toast.warning('Cart Updated', {
+            description: 'Some items in your cart were adjusted due to limited stock.',
           });
         }
       }
@@ -154,15 +154,6 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
             ))
           )}
         </div>
-
-        <button
-          type='button'
-          className='flex items-center justify-between border-y border-white/35 py-4 md:py-6 text-left text-lg sm:text-xl md:text-3xl'
-        >
-          <span>Apply a Coupon</span>
-          <TicketPercent className='h-5 w-5' />
-        </button>
-
         <div className='mt-auto pt-6 border-t border-white/35'>
           <div className='flex justify-between items-center mb-6 text-xl md:text-3xl font-medium'>
             <span>Subtotal</span>

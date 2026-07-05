@@ -68,7 +68,7 @@ export default function CheckoutRightPanel() {
       applyCoupon(coupon);
       setCouponCode('');
       toast.success('Coupon applied successfully!');
-    } catch (error: any) {
+    } catch {
       toast.error('Invalid coupon code');
     } finally {
       setIsApplying(false);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   ChevronsRight,
   DollarSign,
@@ -54,14 +54,14 @@ const ORDER_STATUSES: BackendOrder['status'][] = [
 
 export default function OrderDetail({ order, onClose }: OrderDetailPanelProps) {
   const [trackingNumber, setTrackingNumber] = useState('');
+  const [prevOrderId, setPrevOrderId] = useState<string | null>(null);
   const updateStatus = useUpdateOrderStatus();
   const updateTracking = useUpdateOrderTracking();
 
-  useEffect(() => {
-    if (order) {
-      setTrackingNumber(order.trackingNumber || '');
-    }
-  }, [order]);
+  if (order?.id !== prevOrderId) {
+    setPrevOrderId(order?.id || null);
+    setTrackingNumber(order?.trackingNumber || '');
+  }
 
   if (!order) return null;
 
