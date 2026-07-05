@@ -11,13 +11,15 @@ export type CartItem = {
   image: string;
   variantName?: string;
   isSubscription?: boolean;
+  maxStock: number;
 };
 
 type CartState = {
   items: CartItem[];
   addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
   removeItem: (productVariantId: string) => void;
-  updateQuantity: (productVariantId: string, quantity: number) => void;
+  updateQuantity: (productVariantId: string, quantity: number, currentMaxStock?: number) => void;
+  syncStock: (stockUpdates: { productVariantId: string; maxStock: number }[]) => { adjusted: boolean };
   clearCart: () => void;
   appliedCoupon: Coupon | null;
   applyCoupon: (coupon: Coupon) => void;
@@ -36,11 +38,18 @@ export const useCartStore = create<CartState>()(
 
           if (existingItemIndex > -1) {
             const newItems = [...state.items];
-            newItems[existingItemIndex].quantity += item.quantity || 1;
+            const existing = newItems[existingItemIndex];
+            const newQuantity = existing.quantity + (item.quantity || 1);
+            
+            // Ensure we don't exceed stock
+            existing.quantity = Math.min(newQuantity, item.maxStock);
+            existing.maxStock = item.maxStock; // Update to latest known stock
+            
             return { items: newItems };
           }
 
-          return { items: [...state.items, { ...item, quantity: item.quantity || 1 }] };
+          const initialQuantity = Math.min(item.quantity || 1, item.maxStock);
+          return { items: [...state.items, { ...item, quantity: initialQuantity }] };
         });
       },
       removeItem: (productVariantId) => {
@@ -48,12 +57,45 @@ export const useCartStore = create<CartState>()(
           items: state.items.filter((i) => i.productVariantId !== productVariantId),
         }));
       },
-      updateQuantity: (productVariantId, quantity) => {
+      updateQuantity: (productVariantId, quantity, currentMaxStock) => {
         set((state) => ({
-          items: state.items.map((i) =>
-            i.productVariantId === productVariantId ? { ...i, quantity: Math.max(1, quantity) } : i
-          ),
+          items: state.items.map((i) => {
+            if (i.productVariantId === productVariantId) {
+              const stockLimit = currentMaxStock !== undefined ? currentMaxStock : i.maxStock;
+              return { 
+                ...i, 
+                quantity: Math.min(Math.max(1, quantity), stockLimit),
+                maxStock: stockLimit
+              };
+            }
+            return i;
+          }),
         }));
+      },
+      syncStock: (stockUpdates) => {
+        let adjusted = false;
+        set((state) => {
+          const newItems = state.items.map((i) => {
+            const update = stockUpdates.find(s => s.productVariantId === i.productVariantId);
+            if (update) {
+              const newQuantity = Math.min(i.quantity, update.maxStock);
+              if (newQuantity < i.quantity) {
+                adjusted = true;
+              }
+              return {
+                ...i,
+                quantity: Math.max(1, newQuantity), // if stock is 0, we should technically remove it, but keeping it at 1 or letting UI handle it. Actually, if stock is 0, quantity becomes 0.
+                maxStock: update.maxStock
+              };
+            }
+            return i;
+          });
+          // Remove items that dropped to 0 stock
+          const filteredItems = newItems.filter(i => i.maxStock > 0);
+          if (filteredItems.length !== state.items.length) adjusted = true;
+          return { items: filteredItems };
+        });
+        return { adjusted };
       },
       clearCart: () => set({ items: [], appliedCoupon: null }),
       appliedCoupon: null,

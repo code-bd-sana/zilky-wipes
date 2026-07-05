@@ -18,7 +18,18 @@ export default function ProductDetailsView({
   const [selectedVariant, setSelectedVariant] = useState<BackendVariant | null>(
     product.variants?.[0] || null
   );
-  const totalPrice = (selectedVariant?.price || 0) * quantity;
+  const targetVariant = selectedVariant || product.variants?.[0];
+  const totalPrice = (targetVariant?.price || 0) * quantity;
+  
+  const addItem = useCartStore((state) => state.addItem);
+  const cartItems = useCartStore((state) => state.items);
+  
+  const currentCartQuantity = targetVariant 
+    ? (cartItems.find(i => i.productVariantId === targetVariant.id)?.quantity || 0) 
+    : 0;
+    
+  const maxStock = targetVariant?.stock || 0;
+  const availableToAdd = Math.max(0, maxStock - currentCartQuantity);
   
   const sections = Array.isArray(product.accordionDetails) ? product.accordionDetails : [];
   const [openSectionTitle, setOpenSectionTitle] = useState(
@@ -30,15 +41,19 @@ export default function ProductDetailsView({
   };
 
   const handleIncrease = () => {
-    setQuantity((current) => current + 1);
+    setQuantity((current) => Math.min(availableToAdd, current + 1));
   };
 
-  const addItem = useCartStore((state) => state.addItem);
-
   const handleAddToCart = () => {
-    const targetVariant = selectedVariant || product.variants?.[0];
     if (!targetVariant) {
       toast.error("No variant selected");
+      return;
+    }
+    
+    if (quantity > availableToAdd) {
+      toast.error("Not enough stock available", {
+        description: `You already have ${currentCartQuantity} in your cart. Only ${maxStock} available in total.`
+      });
       return;
     }
     
@@ -50,8 +65,12 @@ export default function ProductDetailsView({
       price: targetVariant.price,
       quantity,
       image: product.images?.[0] || "",
-      isSubscription: targetVariant.subscriptionEligible
+      isSubscription: targetVariant.subscriptionEligible,
+      maxStock: maxStock
     });
+
+    // Reset quantity after successful add if the remaining stock allows
+    setQuantity(1);
 
     toast.success("Product successfully added to cart.", {
       description: `${product.name}${selectedVariant ? ` - ${selectedVariant.name}` : ''} x${quantity}`,
@@ -151,8 +170,9 @@ export default function ProductDetailsView({
               <button
                 type='button'
                 aria-label='Increase quantity'
+                disabled={quantity >= availableToAdd || availableToAdd === 0}
                 onClick={handleIncrease}
-                  className='leading-none'>
+                  className='leading-none disabled:opacity-30 disabled:cursor-not-allowed'>
                 <Plus className='h-5 w-5' />
               </button>
             </div>
@@ -160,9 +180,10 @@ export default function ProductDetailsView({
             <button
               type='button'
               onClick={handleAddToCart}
-                className='flex h-12 sm:h-14 md:h-18 text-base sm:text-lg md:text-2xl px-4 sm:px-5 md:px-6 w-full items-center justify-between rounded-full bg-(--text-primary) text-white'>
+              disabled={availableToAdd === 0}
+                className='flex h-12 sm:h-14 md:h-18 text-base sm:text-lg md:text-2xl px-4 sm:px-5 md:px-6 w-full items-center justify-between rounded-full bg-(--text-primary) text-white disabled:opacity-50 disabled:cursor-not-allowed'>
               <span>${totalPrice.toFixed(2)}</span>
-              <span className='font-medium'>Add to Cart</span>
+              <span className='font-medium'>{maxStock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}</span>
             </button>
           </div>
         </div>

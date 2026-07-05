@@ -5,6 +5,8 @@ import { Minus, Plus, TicketPercent, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useProducts } from '@/hooks/useProducts';
+import { toast } from 'sonner';
 
 type CartDrawerProps = {
   open: boolean;
@@ -12,8 +14,9 @@ type CartDrawerProps = {
 };
 
 export default function CartDrawer({ open, onClose }: CartDrawerProps) {
-  const { items, removeItem, updateQuantity, clearCart } = useCartStore();
+  const { items, removeItem, updateQuantity, clearCart, syncStock } = useCartStore();
   const [mounted, setMounted] = useState(false);
+  const { data: liveProducts, isSuccess: liveProductsSuccess } = useProducts({ limit: 100 });
 
   useEffect(() => {
     setMounted(true);
@@ -33,6 +36,28 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
   }, [open, onClose]);
+
+  // Layer 2: Sync stock and auto-adjust if needed
+  useEffect(() => {
+    if (open && liveProductsSuccess && liveProducts?.data) {
+      const stockUpdates: { productVariantId: string; maxStock: number }[] = [];
+      
+      liveProducts.data.forEach((p: any) => {
+        p.variants?.forEach((v: any) => {
+          stockUpdates.push({ productVariantId: v.id, maxStock: v.stock });
+        });
+      });
+      
+      if (stockUpdates.length > 0) {
+        const { adjusted } = syncStock(stockUpdates);
+        if (adjusted) {
+          toast.warning("Cart Updated", {
+            description: "Some items in your cart were adjusted due to limited stock."
+          });
+        }
+      }
+    }
+  }, [open, liveProductsSuccess, liveProducts, syncStock]);
 
   if (!open) {
     return null;
@@ -118,7 +143,8 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     <span className='text-sm font-medium w-3 text-center'>{item.quantity}</span>
                     <button
                       onClick={() => updateQuantity(item.productVariantId, item.quantity + 1)}
-                      className='hover:opacity-75 transition-opacity'
+                      disabled={item.quantity >= item.maxStock}
+                      className='hover:opacity-75 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                       <Plus className='h-3.5 w-3.5' />
                     </button>

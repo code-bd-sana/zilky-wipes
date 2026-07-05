@@ -17,6 +17,7 @@ type ProductCardProps = {
   tags: string[];
   subscribeLabel?: string;
   imageLoading?: "eager" | "lazy";
+  stock?: number;
 };
 
 export default function ProductCard({
@@ -29,23 +30,35 @@ export default function ProductCard({
   price,
   tags = [],
   imageLoading = "lazy",
+  stock = 0,
 }: ProductCardProps) {
   const router = useRouter();
   const shouldReduceMotion = useReducedMotion();
   const [quantity, setQuantity] = useState(1);
   const livePriceLabel = `Price: $${(price * quantity).toFixed(2)}`;
 
+  const addItem = useCartStore((state) => state.addItem);
+  const cartItems = useCartStore((state) => state.items);
+  
+  const currentCartQuantity = (cartItems.find(i => i.productVariantId === (variantId || productId))?.quantity || 0);
+  const availableToAdd = Math.max(0, stock - currentCartQuantity);
+
   const handleDecrease = () => {
     setQuantity((current) => Math.max(1, current - 1));
   };
 
   const handleIncrease = () => {
-    setQuantity((current) => current + 1);
+    setQuantity((current) => Math.min(availableToAdd, current + 1));
   };
 
-  const addItem = useCartStore((state) => state.addItem);
-
   const handleAddToCart = () => {
+    if (quantity > availableToAdd) {
+      toast.error("Not enough stock available", {
+        description: `You already have ${currentCartQuantity} in your cart. Only ${stock} available in total.`
+      });
+      return;
+    }
+
     addItem({
       productId,
       productVariantId: variantId || productId,
@@ -53,7 +66,10 @@ export default function ProductCard({
       price,
       quantity,
       image,
+      maxStock: stock,
     });
+
+    setQuantity(1);
 
     toast.success("Product successfully added to cart.", {
       description: `${name} x${quantity}`,
@@ -128,34 +144,37 @@ export default function ProductCard({
             <button
               type='button'
               aria-label='Increase quantity'
+              disabled={quantity >= availableToAdd || availableToAdd === 0}
               onClick={(event) => {
                 event.stopPropagation();
                 handleIncrease();
               }}
-              className='text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80'>
+              className='text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed'>
               +
             </button>
           </div>
 
           <button
             type='button'
+            disabled={availableToAdd === 0}
             onClick={(event) => {
               event.stopPropagation();
               handleAddToCart();
             }}
-            className='h-12 md:h-14 rounded-full bg-white text-base md:text-lg font-medium text-(--text-primary) transition-opacity hover:opacity-90'>
-            Add to Cart
+            className='h-12 md:h-14 rounded-full bg-white text-base md:text-lg font-medium text-(--text-primary) transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed'>
+            {stock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}
           </button>
         </div>
 
         <button
           type='button'
+          disabled={availableToAdd === 0}
           onClick={(event) => {
             event.stopPropagation();
             handleAddToCart();
           }}
-          className='absolute inset-x-4 md:inset-x-5 bottom-4 md:bottom-5 flex h-13 md:h-16 items-center justify-between rounded-full bg-white px-5 md:px-6 text-(--text-primary) transition-opacity group-hover:hidden'>
-          <span className='text-base md:text-lg font-medium leading-none'>Add to Cart</span>
+          className='absolute inset-x-4 md:inset-x-5 bottom-4 md:bottom-5 flex h-13 md:h-16 items-center justify-between rounded-full bg-white px-5 md:px-6 text-(--text-primary) transition-opacity group-hover:hidden disabled:opacity-50 disabled:cursor-not-allowed'>
+          <span className='text-base md:text-lg font-medium leading-none'>{stock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}</span>
           <span className='text-3xl md:text-4xl leading-none'>+</span>
         </button>
       </div>
