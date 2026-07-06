@@ -29,6 +29,7 @@ export default function AccountInfo() {
 
   useEffect(() => {
     if (userResponse?.data) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setProfileData({
         firstName: userResponse.data.firstName || "",
         lastName: userResponse.data.lastName || "",
