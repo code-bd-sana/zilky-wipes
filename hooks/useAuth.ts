@@ -62,3 +62,42 @@ export const useGetMe = () => {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
+
+export const useUpdateProfile = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: authApi.updateProfile,
+    onSuccess: (data) => {
+      const user = data?.data;
+      if (user) {
+        localStorage.setItem('zilky_user', JSON.stringify(user));
+        queryClient.setQueryData(['me'], { success: true, data: user });
+      }
+      toast.success('Profile updated successfully!');
+      if (onSuccess) onSuccess();
+    },
+    onError: (error: unknown) => {
+      const message =
+        (error as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        'Failed to update profile';
+      toast.error(message);
+    },
+  });
+};
+
+export const useChangePassword = (onSuccess?: () => void) => {
+  return useMutation({
+    mutationFn: authApi.changePassword,
+    onSuccess: () => {
+      toast.success('Password changed successfully!');
+      if (onSuccess) onSuccess();
+    },
+    onError: (error: unknown) => {
+      const message =
+        (error as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        'Failed to change password';
+      toast.error(message);
+    },
+  });
+};

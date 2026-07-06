@@ -13,4 +13,12 @@ export const authApi = {
     const response = await api.get('/users/me');
     return response.data;
   },
+  changePassword: async (data: Record<string, unknown>) => {
+    const response = await api.post('/auth/change-password', data);
+    return response.data;
+  },
+  updateProfile: async (data: Record<string, unknown>) => {
+    const response = await api.patch('/users/me', data);
+    return response.data;
+  },
 };
