@@ -7,6 +7,7 @@ import DashboardDataTable, {
 } from '@/components/shared/dashboard-data-table';
 import { useGetGeneralFeedbacks } from '@/hooks/useFeedback';
 import { format } from 'date-fns';
+import { useSearchParams } from 'next/navigation';
 import {
   Calendar,
   Image as ImageIcon,
@@ -16,7 +17,6 @@ import {
   Star,
   User,
 } from 'lucide-react';
-import { useState } from 'react';
 
 type FeedbackRow = {
   id: string;
@@ -87,10 +87,9 @@ const columns: DashboardTableColumn<FeedbackRow>[] = [
   },
 ];
 
-type TabType = 'general' | 'market';
-
 export default function FeedbackListPage() {
-  const [activeTab, setActiveTab] = useState<TabType>('general');
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'general';
   const { data: feedbackResponse, isLoading } = useGetGeneralFeedbacks();
 
   const feedbacks = feedbackResponse?.data || [];
@@ -107,31 +106,6 @@ export default function FeedbackListPage() {
 
   return (
     <section>
-      <div className='flex gap-8 border-b border-[#F0F0F0] mb-8'>
-        <button
-          onClick={() => setActiveTab('general')}
-          className={`pb-4 text-sm font-medium transition-colors relative ${
-            activeTab === 'general' ? 'text-[#333333]' : 'text-[#979191] hover:text-[#333333]'
-          }`}
-        >
-          General Feedback
-          {activeTab === 'general' && (
-            <div className='absolute bottom-0 left-0 w-full h-0.5 bg-[#333333]' />
-          )}
-        </button>
-        <button
-          onClick={() => setActiveTab('market')}
-          className={`pb-4 text-sm font-medium transition-colors relative ${
-            activeTab === 'market' ? 'text-[#333333]' : 'text-[#979191] hover:text-[#333333]'
-          }`}
-        >
-          Market Research Survey
-          {activeTab === 'market' && (
-            <div className='absolute bottom-0 left-0 w-full h-0.5 bg-[#333333]' />
-          )}
-        </button>
-      </div>
-
       {activeTab === 'general' && (
         <>
           {isLoading ? (
