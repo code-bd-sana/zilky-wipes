@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { Star, CloudUpload, Loader2, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useSubmitMarketResearch } from "@/hooks/useFeedback";
-import { useState, useRef } from "react";
-import { api } from "@/lib/api/axios";
+import { Button } from '@/components/ui/button';
+import { useSubmitMarketResearch } from '@/hooks/useFeedback';
+import { api } from '@/lib/api/axios';
+import { CloudUpload, Loader2, Star, X } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 
 type MarketResearchFormValues = {
   fullName: string;
@@ -24,16 +24,9 @@ type MarketResearchFormValues = {
 };
 
 const inputBaseClass =
-  "w-full rounded-[8px] border border-[#F2F2F2] bg-white px-4 py-3.5 text-sm md:text-base text-(--checkout-muted-text) placeholder:text-[#979191] focus:border-(--text-primary) focus:outline-none";
+  'w-full rounded-[8px] border border-[#F2F2F2] bg-white px-4 py-3.5 text-sm md:text-base text-(--checkout-muted-text) placeholder:text-[#979191] focus:border-(--text-primary) focus:outline-none';
 
-const sectionOptions = [
-  "Products",
-  "Subscription",
-  "Benefits",
-  "About",
-  "FAQ",
-  "Contact",
-];
+const sectionOptions = ['Products', 'Subscription', 'Benefits', 'About', 'FAQ', 'Contact'];
 
 export default function MarketResearchSurvey() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -43,19 +36,19 @@ export default function MarketResearchSurvey() {
 
   const { register, handleSubmit, watch, setValue, reset } = useForm<MarketResearchFormValues>({
     defaultValues: {
-      fullName: "",
-      email: "",
-      ageRange: "",
-      gender: "",
+      fullName: '',
+      email: '',
+      ageRange: '',
+      gender: '',
       navigationEase: 5,
-      informationFound: "",
+      informationFound: '',
       visualAppeal: 0,
       recommendLikelihood: -1,
       usefulSections: [],
-      improvementSuggest: "",
-      issuesEncountered: "",
+      improvementSuggest: '',
+      issuesEncountered: '',
       overallRating: 0,
-      additionalComments: "",
+      additionalComments: '',
     },
   });
 
@@ -67,18 +60,18 @@ export default function MarketResearchSurvey() {
       try {
         const formData = new FormData();
         uploadedFiles.forEach((file) => {
-          formData.append("files", file);
+          formData.append('files', file);
         });
-        
-        const response = await api.post("/upload/public/feedback", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+
+        const response = await api.post('/upload/public/feedback', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
 
         if (response.data?.success && response.data?.data?.urls) {
           attachmentUrls = response.data.data.urls;
         }
       } catch (error) {
-        console.error("Failed to upload files", error);
+        console.error('Failed to upload files', error);
         setIsUploading(false);
         return; // Don't submit the form if upload fails
       }
@@ -91,11 +84,11 @@ export default function MarketResearchSurvey() {
         onSuccess: () => {
           reset();
           setUploadedFiles([]);
-          setValue("visualAppeal", 0);
-          setValue("recommendLikelihood", -1);
-          setValue("overallRating", 0);
+          setValue('visualAppeal', 0);
+          setValue('recommendLikelihood', -1);
+          setValue('overallRating', 0);
         },
-      }
+      },
     );
   };
 
@@ -111,16 +104,16 @@ export default function MarketResearchSurvey() {
   };
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const visualAppeal = watch("visualAppeal");
-  const recommendLikelihood = watch("recommendLikelihood");
-  const overallRating = watch("overallRating");
+  const visualAppeal = watch('visualAppeal');
+  const recommendLikelihood = watch('recommendLikelihood');
+  const overallRating = watch('overallRating');
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='bg-white rounded-[8px] p-6 md:p-10 lg:p-12 border border-[#F2F2F2]'>
+      className='bg-white rounded-[8px] p-6 md:p-10 lg:p-12 border border-[#F2F2F2]'
+    >
       <div className='flex flex-col gap-10 md:gap-12'>
-        
         {/* PERSONAL INFO */}
         <section className='space-y-6'>
           <div className='flex items-baseline gap-2'>
@@ -134,38 +127,43 @@ export default function MarketResearchSurvey() {
             <input
               type='text'
               placeholder='Full Name'
-              {...register("fullName")}
+              {...register('fullName')}
               className={inputBaseClass}
             />
             <input
               type='email'
               placeholder='Email'
-              {...register("email")}
+              {...register('email')}
               className={inputBaseClass}
             />
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-center'>
             <select
-              {...register("ageRange")}
-              className={`${inputBaseClass} appearance-none text-[#979191]`}>
-              <option value='' disabled>Age Range</option>
+              {...register('ageRange')}
+              className={`${inputBaseClass} appearance-none text-[#979191]`}
+            >
+              <option value='' disabled>
+                Age Range
+              </option>
               <option value='18-24'>18-24</option>
               <option value='25-34'>25-34</option>
               <option value='35-44'>35-44</option>
               <option value='45-54'>45-54</option>
               <option value='55+'>55+</option>
             </select>
-            
+
             <div className='flex flex-col gap-2'>
-              <label className='text-xs uppercase tracking-widest text-[#979191] font-medium'>Gender</label>
+              <label className='text-xs uppercase tracking-widest text-[#979191] font-medium'>
+                Gender
+              </label>
               <div className='flex items-center gap-6'>
-                {["Female", "Male", "Other"].map((g) => (
+                {['Female', 'Male', 'Other'].map((g) => (
                   <label key={g} className='flex items-center gap-2 cursor-pointer'>
                     <input
                       type='radio'
                       value={g.toLowerCase()}
-                      {...register("gender")}
+                      {...register('gender')}
                       className='h-4 w-4 accent-(--text-primary) border-[#F2F2F2]'
                     />
                     <span className='text-sm md:text-base text-[#474747]'>{g}</span>
@@ -193,7 +191,7 @@ export default function MarketResearchSurvey() {
                 type='range'
                 min='1'
                 max='10'
-                {...register("navigationEase")}
+                {...register('navigationEase', { valueAsNumber: true })}
                 className='w-full h-1 bg-[#F2F2F2] rounded-lg appearance-none cursor-pointer accent-(--text-primary)'
               />
               <div className='flex justify-between text-xs text-[#979191] font-mono'>
@@ -208,18 +206,15 @@ export default function MarketResearchSurvey() {
               Did you find the information you were looking for?
             </p>
             <div className='flex flex-col gap-3'>
-              {[
-                "Yes, easily",
-                "Somewhat, it took some time",
-                "No, I gave up",
-              ].map((opt) => (
+              {['Yes, easily', 'Somewhat, it took some time', 'No, I gave up'].map((opt) => (
                 <label
                   key={opt}
-                  className='flex items-center gap-3 w-full rounded-[8px] border border-[#F2F2F2] px-4 py-3.5 cursor-pointer hover:bg-gray-50/50 transition-colors'>
+                  className='flex items-center gap-3 w-full rounded-[8px] border border-[#F2F2F2] px-4 py-3.5 cursor-pointer hover:bg-gray-50/50 transition-colors'
+                >
                   <input
                     type='radio'
                     value={opt}
-                    {...register("informationFound")}
+                    {...register('informationFound')}
                     className='h-4 w-4 accent-(--text-primary)'
                   />
                   <span className='text-sm md:text-base text-[#979191]'>{opt}</span>
@@ -237,11 +232,12 @@ export default function MarketResearchSurvey() {
                 <button
                   type='button'
                   key={star}
-                  onClick={() => setValue("visualAppeal", star)}
-                  className='focus:outline-none transition-colors'>
+                  onClick={() => setValue('visualAppeal', star)}
+                  className='focus:outline-none transition-colors'
+                >
                   <Star
                     className={`h-7 w-7 ${
-                      visualAppeal >= star ? "fill-[#F2F2F2] text-[#E5E5E5]" : "text-[#F2F2F2]"
+                      visualAppeal >= star ? 'fill-[#F2F2F2] text-[#E5E5E5]' : 'text-[#F2F2F2]'
                     }`}
                     strokeWidth={1.5}
                   />
@@ -261,12 +257,13 @@ export default function MarketResearchSurvey() {
                   <button
                     key={num}
                     type='button'
-                    onClick={() => setValue("recommendLikelihood", num)}
+                    onClick={() => setValue('recommendLikelihood', num)}
                     className={`h-9 w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center text-sm transition-colors ${
                       isSelected
-                        ? "bg-(--text-primary) text-white"
-                        : "bg-[#F2F2F2] text-[#979191] hover:bg-[#E5E5E5]"
-                    }`}>
+                        ? 'bg-(--text-primary) text-white'
+                        : 'bg-[#F2F2F2] text-[#979191] hover:bg-[#E5E5E5]'
+                    }`}
+                  >
                     {num}
                   </button>
                 );
@@ -291,11 +288,12 @@ export default function MarketResearchSurvey() {
               {sectionOptions.map((opt) => (
                 <label
                   key={opt}
-                  className='flex items-center gap-3 w-full rounded-[8px] border border-[#F2F2F2] px-4 py-3.5 cursor-pointer hover:bg-gray-50/50 transition-colors'>
+                  className='flex items-center gap-3 w-full rounded-[8px] border border-[#F2F2F2] px-4 py-3.5 cursor-pointer hover:bg-gray-50/50 transition-colors'
+                >
                   <input
                     type='checkbox'
                     value={opt}
-                    {...register("usefulSections")}
+                    {...register('usefulSections')}
                     className='h-4 w-4 rounded-lg border-[#CCCCCC] accent-(--text-primary)'
                   />
                   <span className='text-sm md:text-base text-[#474747]'>{opt}</span>
@@ -305,13 +303,11 @@ export default function MarketResearchSurvey() {
           </div>
 
           <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
-              What would you improve?
-            </p>
+            <p className='text-[15px] md:text-lg text-(--text-primary)'>What would you improve?</p>
             <textarea
               rows={4}
-              placeholder="Tell us how we can make it better..."
-              {...register("improvementSuggest")}
+              placeholder='Tell us how we can make it better...'
+              {...register('improvementSuggest')}
               className={`${inputBaseClass} resize-none`}
             />
           </div>
@@ -323,7 +319,7 @@ export default function MarketResearchSurvey() {
             <input
               type='text'
               placeholder='e.g. Broken links, slow loading...'
-              {...register("issuesEncountered")}
+              {...register('issuesEncountered')}
               className={inputBaseClass}
             />
           </div>
@@ -346,11 +342,12 @@ export default function MarketResearchSurvey() {
                 <button
                   type='button'
                   key={`overall-${star}`}
-                  onClick={() => setValue("overallRating", star)}
-                  className='focus:outline-none transition-colors'>
+                  onClick={() => setValue('overallRating', star)}
+                  className='focus:outline-none transition-colors'
+                >
                   <Star
                     className={`h-7 w-7 ${
-                      overallRating >= star ? "fill-[#F2F2F2] text-[#E5E5E5]" : "text-[#F2F2F2]"
+                      overallRating >= star ? 'fill-[#F2F2F2] text-[#E5E5E5]' : 'text-[#F2F2F2]'
                     }`}
                     strokeWidth={1.5}
                   />
@@ -360,13 +357,11 @@ export default function MarketResearchSurvey() {
           </div>
 
           <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
-              Any Additional Comments?
-            </p>
+            <p className='text-[15px] md:text-lg text-(--text-primary)'>Any Additional Comments?</p>
             <textarea
               rows={4}
               placeholder="We're all ears..."
-              {...register("additionalComments")}
+              {...register('additionalComments')}
               className={`${inputBaseClass} resize-none`}
             />
           </div>
@@ -375,7 +370,7 @@ export default function MarketResearchSurvey() {
             <p className='text-[15px] md:text-lg text-(--text-primary)'>
               Upload Screenshots (Optional)
             </p>
-            <div 
+            <div
               className='relative w-full rounded-[12px] border border-dashed border-[#CCCCCC] px-6 py-10 transition-colors hover:bg-gray-50/50 cursor-pointer'
               onClick={() => fileInputRef.current?.click()}
             >
@@ -393,16 +388,21 @@ export default function MarketResearchSurvey() {
                 <p className='text-xs text-[#979191]'>
                   Drag and drop files here, or click to select
                 </p>
-                <p className='text-[10px] text-[#979191] mt-1 uppercase'>PNG, JPG, or PDF up to 5MB</p>
+                <p className='text-[10px] text-[#979191] mt-1 uppercase'>
+                  PNG, JPG, or PDF up to 5MB
+                </p>
               </div>
             </div>
-            
+
             {/* Uploaded Files Preview */}
             {uploadedFiles.length > 0 && (
               <div className='flex flex-wrap gap-3 mt-4'>
                 {uploadedFiles.map((file, index) => (
-                  <div key={index} className='relative flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2'>
-                    <span className='text-xs text-gray-600 truncate max-w-[150px]'>{file.name}</span>
+                  <div
+                    key={index}
+                    className='relative flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2'
+                  >
+                    <span className='text-xs text-gray-600 truncate max-w-37.5'>{file.name}</span>
                     <button
                       type='button'
                       onClick={(e) => {
@@ -425,18 +425,18 @@ export default function MarketResearchSurvey() {
           <Button
             type='submit'
             disabled={isPending || isUploading}
-            className='bg-(--text-primary) px-10 py-6 text-base md:text-lg rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 font-normal disabled:opacity-50 disabled:cursor-not-allowed'>
+            className='bg-(--text-primary) px-10 py-6 text-base md:text-lg rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 font-normal disabled:opacity-50 disabled:cursor-not-allowed'
+          >
             {isPending || isUploading ? (
               <span className='flex items-center gap-2'>
                 <Loader2 className='h-5 w-5 animate-spin' />
-                {isUploading ? "Uploading..." : "Submitting..."}
+                {isUploading ? 'Uploading...' : 'Submitting...'}
               </span>
             ) : (
-              "Submit Feedback"
+              'Submit Feedback'
             )}
           </Button>
         </div>
-
       </div>
     </form>
   );
