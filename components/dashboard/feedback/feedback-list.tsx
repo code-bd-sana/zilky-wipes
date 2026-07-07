@@ -14,10 +14,14 @@ import {
   Star,
   User,
   Info,
+  Eye,
 } from 'lucide-react';
 import { useGetGeneralFeedbacks, useGetMarketResearchFeedbacks } from '@/hooks/useFeedback';
 import { format } from 'date-fns';
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import ViewGeneralFeedbackModal from './view-general-feedback-modal';
+import ViewMarketResearchModal from './view-market-research-modal';
 
 type FeedbackRow = {
   id: string;
@@ -26,6 +30,8 @@ type FeedbackRow = {
   starLabel: string;
   feedback: string;
   attachmentUrls: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  raw: any;
 };
 
 const columns: DashboardTableColumn<FeedbackRow>[] = [
@@ -97,6 +103,8 @@ type MarketResearchRow = {
   recommend: string;
   overallRating: string;
   attachmentUrls: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  raw: any;
 };
 
 const marketColumns: DashboardTableColumn<MarketResearchRow>[] = [
@@ -178,6 +186,11 @@ export default function FeedbackListPage() {
   const marketResearches = marketResponse?.data || [];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectedGeneral, setSelectedGeneral] = useState<any | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectedMarket, setSelectedMarket] = useState<any | null>(null);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const generalFeedbackRows: FeedbackRow[] = feedbacks.map((fb: any) => ({
     id: fb.id,
     customerName: `${fb.firstName} ${fb.lastName}`,
@@ -185,6 +198,7 @@ export default function FeedbackListPage() {
     starLabel: fb.experienceOverall,
     feedback: fb.message,
     attachmentUrls: fb.attachmentUrls || [],
+    raw: fb,
   }));
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -197,6 +211,7 @@ export default function FeedbackListPage() {
     recommend: `${mr.recommendLikelihood}/10`,
     overallRating: `${mr.overallRating} Stars`,
     attachmentUrls: mr.attachmentUrls || [],
+    raw: mr,
   }));
 
   return (
@@ -212,7 +227,23 @@ export default function FeedbackListPage() {
               filterAction={{ label: 'Filter', icon: ListFilter }}
               searchPlaceholder='Search by name or feedback...'
               data={generalFeedbackRows}
-              columns={columns}
+              columns={[
+                ...columns,
+                {
+                  id: "actions",
+                  header: "Actions",
+                  icon: Eye,
+                  widthClassName: "w-[10%]",
+                  cell: (row) => (
+                    <button
+                      onClick={() => setSelectedGeneral(row.raw)}
+                      className="px-3 py-1.5 text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition"
+                    >
+                      View Details
+                    </button>
+                  ),
+                },
+              ]}
               getRowId={(row) => row.id}
               searchPredicate={(row, query) => {
                 const text = `${row.customerName} ${row.date} ${row.starLabel} ${row.feedback}`;
@@ -236,7 +267,23 @@ export default function FeedbackListPage() {
               filterAction={{ label: "Filter", icon: ListFilter }}
               searchPlaceholder='Search by name or email...'
               data={marketResearchRows}
-              columns={marketColumns}
+              columns={[
+                ...marketColumns,
+                {
+                  id: "actions",
+                  header: "Actions",
+                  icon: Eye,
+                  widthClassName: "w-[10%]",
+                  cell: (row) => (
+                    <button
+                      onClick={() => setSelectedMarket(row.raw)}
+                      className="px-3 py-1.5 text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition"
+                    >
+                      View Details
+                    </button>
+                  ),
+                },
+              ]}
               getRowId={(row) => row.id}
               searchPredicate={(row, query) => {
                 const text = `${row.nameOrEmail} ${row.date}`;
@@ -247,6 +294,20 @@ export default function FeedbackListPage() {
             />
           )}
         </>
+      )}
+
+      {selectedGeneral && (
+        <ViewGeneralFeedbackModal
+          feedback={selectedGeneral}
+          onClose={() => setSelectedGeneral(null)}
+        />
+      )}
+
+      {selectedMarket && (
+        <ViewMarketResearchModal
+          data={selectedMarket}
+          onClose={() => setSelectedMarket(null)}
+        />
       )}
     </section>
   );

@@ -67,8 +67,8 @@ export default function MarketResearchSurvey() {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 
-        if (response.data?.success && response.data?.data?.urls) {
-          attachmentUrls = response.data.data.urls;
+        if (response.data?.success && response.data?.data) {
+          attachmentUrls = response.data.data;
         }
       } catch (error) {
         console.error('Failed to upload files', error);
