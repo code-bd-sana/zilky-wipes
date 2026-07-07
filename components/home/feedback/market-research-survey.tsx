@@ -1,8 +1,11 @@
 "use client";
 
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Star, CloudUpload } from "lucide-react";
+import { Star, CloudUpload, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSubmitMarketResearch } from "@/hooks/useFeedback";
+import { useState, useRef } from "react";
+import { api } from "@/lib/api/axios";
 
 type MarketResearchFormValues = {
   fullName: string;
@@ -33,7 +36,12 @@ const sectionOptions = [
 ];
 
 export default function MarketResearchSurvey() {
-  const { register, handleSubmit, watch, setValue } = useForm<MarketResearchFormValues>({
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { mutate: submitSurvey, isPending } = useSubmitMarketResearch();
+
+  const { register, handleSubmit, watch, setValue, reset } = useForm<MarketResearchFormValues>({
     defaultValues: {
       fullName: "",
       email: "",
@@ -51,8 +59,55 @@ export default function MarketResearchSurvey() {
     },
   });
 
-  const onSubmit: SubmitHandler<MarketResearchFormValues> = (data) => {
-    console.log("Market research data:", data);
+  const onSubmit: SubmitHandler<MarketResearchFormValues> = async (data) => {
+    let attachmentUrls: string[] = [];
+
+    if (uploadedFiles.length > 0) {
+      setIsUploading(true);
+      try {
+        const formData = new FormData();
+        uploadedFiles.forEach((file) => {
+          formData.append("files", file);
+        });
+        
+        const response = await api.post("/upload/public/feedback", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        if (response.data?.success && response.data?.data?.urls) {
+          attachmentUrls = response.data.data.urls;
+        }
+      } catch (error) {
+        console.error("Failed to upload files", error);
+        setIsUploading(false);
+        return; // Don't submit the form if upload fails
+      }
+      setIsUploading(false);
+    }
+
+    submitSurvey(
+      { ...data, attachmentUrls },
+      {
+        onSuccess: () => {
+          reset();
+          setUploadedFiles([]);
+          setValue("visualAppeal", 0);
+          setValue("recommendLikelihood", -1);
+          setValue("overallRating", 0);
+        },
+      }
+    );
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      setUploadedFiles((prev) => [...prev, ...filesArray]);
+    }
+  };
+
+  const removeFile = (indexToRemove: number) => {
+    setUploadedFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -320,12 +375,18 @@ export default function MarketResearchSurvey() {
             <p className='text-[15px] md:text-lg text-(--text-primary)'>
               Upload Screenshots (Optional)
             </p>
-            <div className='relative w-full rounded-[12px] border border-dashed border-[#CCCCCC] px-6 py-10 transition-colors hover:bg-gray-50/50 cursor-pointer'>
+            <div 
+              className='relative w-full rounded-[12px] border border-dashed border-[#CCCCCC] px-6 py-10 transition-colors hover:bg-gray-50/50 cursor-pointer'
+              onClick={() => fileInputRef.current?.click()}
+            >
               <input
                 type='file'
                 title='File Upload'
-                className='absolute inset-0 h-full w-full opacity-0 cursor-pointer'
+                className='hidden'
                 accept='.png,.jpg,.jpeg,.pdf'
+                multiple
+                ref={fileInputRef}
+                onChange={handleFileChange}
               />
               <div className='flex flex-col items-center justify-center text-center'>
                 <CloudUpload className='h-6 w-6 text-[#979191] mb-2' strokeWidth={1.5} />
@@ -335,20 +396,44 @@ export default function MarketResearchSurvey() {
                 <p className='text-[10px] text-[#979191] mt-1 uppercase'>PNG, JPG, or PDF up to 5MB</p>
               </div>
             </div>
+            
+            {/* Uploaded Files Preview */}
+            {uploadedFiles.length > 0 && (
+              <div className='flex flex-wrap gap-3 mt-4'>
+                {uploadedFiles.map((file, index) => (
+                  <div key={index} className='relative flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2'>
+                    <span className='text-xs text-gray-600 truncate max-w-[150px]'>{file.name}</span>
+                    <button
+                      type='button'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFile(index);
+                      }}
+                      className='text-gray-400 hover:text-red-500 transition-colors'
+                    >
+                      <X className='h-4 w-4' />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
         {/* Actions */}
         <div className='flex flex-col sm:flex-row gap-4 mt-2'>
           <Button
-            type='button'
-            className='bg-transparent border-2 border-(--text-primary) px-10 py-6 text-base md:text-lg rounded-full text-(--text-primary) hover:bg-(--text-primary)/5 transition-all duration-300 font-normal'>
-            Refer a Friend
-          </Button>
-          <Button
             type='submit'
-            className='bg-(--text-primary) px-10 py-6 text-base md:text-lg rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 font-normal'>
-            Submit Feedback
+            disabled={isPending || isUploading}
+            className='bg-(--text-primary) px-10 py-6 text-base md:text-lg rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 font-normal disabled:opacity-50 disabled:cursor-not-allowed'>
+            {isPending || isUploading ? (
+              <span className='flex items-center gap-2'>
+                <Loader2 className='h-5 w-5 animate-spin' />
+                {isUploading ? "Uploading..." : "Submitting..."}
+              </span>
+            ) : (
+              "Submit Feedback"
+            )}
           </Button>
         </div>
 
