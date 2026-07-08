@@ -5,58 +5,23 @@ import {
   ChevronsRight,
   Maximize2,
   X,
-  Calendar,
   ChevronDown,
 } from "lucide-react";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-export interface SubscriptionRow {
-  id: string;
-  customerName: string;
-  email: string;
-  frequency: string;
-  status:
-    | "Active"
-    | "Canceled"
-    | "Skipped next delivery"
-    | "Paused indefinitely";
-  startingDate: string;
-  subscriptionType?: string;
-  note?: string;
-}
+import type { BackendSubscription } from "@/lib/api/subscriptions";
+import { useUpdateSubscriptionStatus } from "@/hooks/useSubscriptions";
 
 export interface EditSubscriptionModalProps {
-  subscription: SubscriptionRow;
+  subscription: BackendSubscription;
   onClose: () => void;
-  /** Called when "Save Changes" is clicked. Wire up your PATCH /subscriptions/:id here. */
-  onSave?: (data: SubscriptionRow) => Promise<void> | void;
-  /** Called when "Delete" is clicked. Wire up your DELETE /subscriptions/:id here. */
-  onDelete?: (id: string) => Promise<void> | void;
-  /** Read-only metadata shown at the bottom */
-  customerSince?: string;
-  lifetimeValue?: string;
-  /** Option lists – swap with API-fetched data */
-  frequencyOptions?: string[];
-  statusOptions?: string[];
 }
 
-// ─── Defaults (replace / fetch from API) ─────────────────────────────────────
-
-const DEFAULT_FREQUENCY_OPTIONS = [
-  "Every 1 Month",
-  "Every 3 Months",
-  "Every 6 Months",
-  "Every 12 Months",
+const STATUS_OPTIONS = [
+  "ACTIVE",
+  "PAST_DUE",
+  "CANCELED",
+  "PAUSED",
+  "UNPAID"
 ];
-const DEFAULT_STATUS_OPTIONS = [
-  "Active",
-  "Canceled",
-  "Skipped next delivery",
-  "Paused indefinitely",
-];
-
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
@@ -67,23 +32,18 @@ function Label({ children }: { children: React.ReactNode }) {
 }
 
 function TextInput({
-  placeholder,
   value,
-  onChange,
-  type = "text",
+  readOnly = false,
 }: {
-  placeholder: string;
   value: string;
-  onChange: (v: string) => void;
-  type?: string;
+  readOnly?: boolean;
 }) {
   return (
     <input
-      type={type}
-      placeholder={placeholder}
+      type="text"
       value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className='w-full h-9.5 border border-[#E5E5E5] rounded-[6px] px-3 text-[13px] text-[#2B2D2E] placeholder:text-[#979191] placeholder:text-sm outline-none focus:border-[#A0A0A0] transition-colors bg-white'
+      readOnly={readOnly}
+      className={`w-full h-9.5 border border-[#E5E5E5] rounded-[6px] px-3 text-[13px] text-[#2B2D2E] outline-none transition-colors ${readOnly ? 'bg-gray-50 cursor-not-allowed text-gray-500' : 'bg-white focus:border-[#A0A0A0]'}`}
     />
   );
 }
@@ -117,27 +77,6 @@ function SelectInput({
   );
 }
 
-function DateInput({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div className='relative flex-1'>
-      <input
-        type='date'
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className='w-full h-9.5 border border-[#E5E5E5] rounded-[6px] px-3 pr-9 text-[13px] text-[#2B2D2E] outline-none focus:border-[#A0A0A0] transition-colors bg-white appearance-none [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer'
-        placeholder='mm/dd/yyyy'
-      />
-      <Calendar className='pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#A0A0A0]' />
-    </div>
-  );
-}
-
 function FormRow({
   label,
   children,
@@ -153,43 +92,20 @@ function FormRow({
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 export default function EditSubscriptionModal({
   subscription,
   onClose,
-  onSave,
-  onDelete,
-  frequencyOptions = DEFAULT_FREQUENCY_OPTIONS,
-  statusOptions = DEFAULT_STATUS_OPTIONS,
 }: EditSubscriptionModalProps) {
-  const [form, setForm] = useState<SubscriptionRow>({ ...subscription });
-  const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [status, setStatus] = useState<BackendSubscription['status']>(subscription.status);
+  
+  const updateStatusMutation = useUpdateSubscriptionStatus(onClose);
 
-  function set(key: keyof SubscriptionRow) {
-    return (value: string) => setForm((prev) => ({ ...prev, [key]: value }));
+  function handleSave() {
+    updateStatusMutation.mutate({ id: subscription.id, status });
   }
 
-  async function handleSave() {
-    if (!onSave) return;
-    setSaving(true);
-    try {
-      await onSave(form);
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function handleDelete() {
-    if (!onDelete) return;
-    setDeleting(true);
-    try {
-      await onDelete(subscription.id);
-    } finally {
-      setDeleting(false);
-    }
-  }
+  const customerName = `${subscription.user?.firstName || ''} ${subscription.user?.lastName || ''}`.trim() || 'Unknown Customer';
+  const customerEmail = subscription.user?.email || 'No email';
 
   return (
     <section
@@ -225,99 +141,62 @@ export default function EditSubscriptionModal({
           </button>
         </div>
 
-        {/* ── Title row (name + Delete button) ── */}
+        {/* ── Title row ── */}
         <div className='px-5 pb-4 flex items-start justify-between'>
           <div>
             <h2 className='text-2xl font-medium text-[#2B2D2E] leading-tight'>
-              {subscription.customerName}
+              {customerName}
             </h2>
             <p className='text-[13px] text-[#8A8A8A] mt-0.5'>
-              {subscription.email}
+              {customerEmail}
             </p>
           </div>
-          {onDelete && (
-            <button
-              type='button'
-              onClick={handleDelete}
-              disabled={deleting}
-              className='h-8 px-3.5 rounded-[6px] border border-[#E5E7EB] text-[13px] bg-[#FAFAF9] text-[#1D3A5F] hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors cursor-pointer disabled:opacity-60 mt-0.5'>
-              {deleting ? "Deleting..." : "Delete"}
-            </button>
-          )}
         </div>
 
         {/* ── Form card ── */}
         <div className='mx-5 bg-[#FBFAF9] border border-[#E5E5E5] rounded-[10px] px-5 py-5 flex flex-col gap-2 md:gap-5'>
-          {/* Active Columns badge */}
           <div className='mb-2'>
             <span className='inline-flex items-center gap-1.5 text-sm text-[#2B2D2E] bg-white border border-[#E5E5E5] rounded-[10px] px-3 py-1'>
-              <span className='w-2 h-2 rounded-full bg-[#008236] inline-block' />
-              Active Columns
+              <span className={`w-2 h-2 rounded-full inline-block ${subscription.status === 'ACTIVE' ? 'bg-[#008236]' : 'bg-red-500'}`} />
+              {subscription.status}
             </span>
           </div>
 
-          {/* Fields — pre-filled from subscription row */}
           <FormRow label='Customer Name'>
-            <TextInput
-              placeholder='Enter customer name...'
-              value={form.customerName}
-              onChange={set("customerName")}
-            />
+            <TextInput value={customerName} readOnly />
           </FormRow>
 
           <FormRow label='Email'>
-            <TextInput
-              placeholder='email@example.com...'
-              value={form.email}
-              onChange={set("email")}
-              type='email'
-            />
+            <TextInput value={customerEmail} readOnly />
+          </FormRow>
+
+          <FormRow label='Product'>
+            <TextInput value={subscription.productVariant?.product?.name || 'Unknown Product'} readOnly />
+          </FormRow>
+
+          <FormRow label='Variant'>
+            <TextInput value={subscription.productVariant?.name || 'Unknown Variant'} readOnly />
           </FormRow>
 
           <FormRow label='Frequency'>
-            <SelectInput
-              value={form.frequency}
-              onChange={set("frequency")}
-              options={frequencyOptions}
-            />
+            <TextInput value={subscription.frequency} readOnly />
+          </FormRow>
+
+          <FormRow label='Starting Date'>
+            <TextInput value={new Date(subscription.startingDate).toLocaleDateString()} readOnly />
           </FormRow>
 
           <FormRow label='Status'>
             <SelectInput
-              value={form.status}
-              onChange={set("status")}
-              options={statusOptions}
-            />
-          </FormRow>
-
-          <FormRow label='Starting Date'>
-            <DateInput
-              value={form.startingDate}
-              onChange={set("startingDate")}
-            />
-          </FormRow>
-
-          <FormRow label='Subscription Type'>
-            <TextInput
-              placeholder='Enter Subscription type'
-              value={form.subscriptionType ?? ""}
-              onChange={set("subscriptionType")}
-            />
-          </FormRow>
-
-          <FormRow label='Note'>
-            <textarea
-              placeholder='Optional note...'
-              value={form.note ?? ""}
-              onChange={(e) => set("note")(e.target.value)}
-              rows={4}
-              className='w-full border border-[#E5E5E5] rounded-[6px] px-3 py-2 text-[13px] text-[#2B2D2E] placeholder:text-[#C0C0C0] outline-none focus:border-[#A0A0A0] transition-colors bg-white resize-none'
+              value={status}
+              onChange={(val) => setStatus(val as BackendSubscription['status'])}
+              options={STATUS_OPTIONS}
             />
           </FormRow>
         </div>
 
         {/* ── Actions ── */}
-        <div className='mt-auto px-5 pb-5 flex justify-end gap-2 md:mb-14'>
+        <div className='mt-auto px-5 pb-5 flex justify-end gap-2 md:mb-14 pt-4'>
           <button
             type='button'
             onClick={onClose}
@@ -327,9 +206,9 @@ export default function EditSubscriptionModal({
           <button
             type='button'
             onClick={handleSave}
-            disabled={saving}
+            disabled={updateStatusMutation.isPending || status === subscription.status}
             className='h-9 px-4 rounded-[6px] border border-[#E5E7EB] text-[15px] bg-[#FAFAF9] text-[#1D3A5F] hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-60'>
-            {saving ? "Saving..." : "Save Changes"}
+            {updateStatusMutation.isPending ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>
