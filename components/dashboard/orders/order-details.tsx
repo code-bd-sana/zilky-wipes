@@ -53,15 +53,9 @@ const ORDER_STATUSES: BackendOrder['status'][] = [
 ];
 
 export default function OrderDetail({ order, onClose }: OrderDetailPanelProps) {
-  const [trackingNumber, setTrackingNumber] = useState('');
-  const [prevOrderId, setPrevOrderId] = useState<string | null>(null);
+  const [trackingNumber, setTrackingNumber] = useState(order?.trackingNumber || '');
   const updateStatus = useUpdateOrderStatus();
   const updateTracking = useUpdateOrderTracking();
-
-  if (order?.id !== prevOrderId) {
-    setPrevOrderId(order?.id || null);
-    setTrackingNumber(order?.trackingNumber || '');
-  }
 
   if (!order) return null;
 

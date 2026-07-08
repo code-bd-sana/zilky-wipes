@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import DashboardDataTable, {
   type DashboardFilterMenuConfig,
   type DashboardTableColumn,
@@ -49,9 +49,11 @@ export default function OrderListPage() {
     setSelectedOrderId(row.id);
   };
 
-  const selectedOrder = ordersResponse?.data?.find(o => o.id === selectedOrderId) || null;
+  const selectedOrder = useMemo(() => {
+    return ordersResponse?.data?.find(o => o.id === selectedOrderId) || null;
+  }, [ordersResponse, selectedOrderId]);
 
-  const columns: DashboardTableColumn<BackendOrder>[] = [
+  const columns: DashboardTableColumn<BackendOrder>[] = useMemo(() => [
     {
       id: "order-name",
       header: "Order",
@@ -115,9 +117,9 @@ export default function OrderListPage() {
         </div>
       ),
     },
-  ];
+  ], []);
 
-  const productFilterMenu: DashboardFilterMenuConfig = {
+  const productFilterMenu: DashboardFilterMenuConfig = useMemo(() => ({
     searchPlaceholder: "Search...",
     groups: [
       {
@@ -170,7 +172,7 @@ export default function OrderListPage() {
         ],
       },
     ],
-  };
+  }), [customDateRange, setCustomDateRange]);
 
     if (isLoading) {
       return <div className="p-8 text-center text-gray-500">Loading orders...</div>;
