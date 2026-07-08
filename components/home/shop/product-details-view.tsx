@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useCartStore } from "@/store/useCartStore";
+import { useCreateSubscription } from "@/hooks/useSubscriptions";
 import type { BackendProduct, BackendVariant } from "@/components/dashboard/products/product-list";
 
 type ProductDetailsViewProps = {
@@ -19,7 +20,25 @@ export default function ProductDetailsView({
     product.variants?.[0] || null
   );
   const targetVariant = selectedVariant || product.variants?.[0];
-  const totalPrice = (targetVariant?.price || 0) * quantity;
+
+  const isSubEligible = targetVariant?.subscriptionEligible ?? false;
+  const discountRate = targetVariant?.subscriptionDiscount ?? 0.15;
+  const basePrice = targetVariant?.price || 0;
+  const subPrice = basePrice * (1 - discountRate);
+
+  const [purchaseTypeState, setPurchaseType] = useState<"one-time" | "subscription">("one-time");
+  const purchaseType = isSubEligible ? purchaseTypeState : "one-time";
+  
+  const [frequency, setFrequency] = useState("Every 1 Month");
+  
+  const createSubMutation = useCreateSubscription();
+
+
+
+  // For subscriptions, quantity is locked to 1 on the backend currently.
+  const displayQuantity = purchaseType === "subscription" ? 1 : quantity;
+  const totalPrice = purchaseType === "subscription" ? subPrice : (basePrice * quantity);
+  
   
   const addItem = useCartStore((state) => state.addItem);
   const cartItems = useCartStore((state) => state.items);
@@ -49,6 +68,14 @@ export default function ProductDetailsView({
       toast.error("No variant selected");
       return;
     }
+
+    if (purchaseType === "subscription") {
+      createSubMutation.mutate({
+        productVariantId: targetVariant.id || product.id,
+        frequency,
+      });
+      return;
+    }
     
     if (quantity > availableToAdd) {
       toast.error("Not enough stock available", {
@@ -65,7 +92,7 @@ export default function ProductDetailsView({
       price: targetVariant.price,
       quantity,
       image: product.images?.[0] || "",
-      isSubscription: targetVariant.subscriptionEligible,
+      isSubscription: false, // Standard items are false in cart
       maxStock: maxStock
     });
 
@@ -158,19 +185,71 @@ export default function ProductDetailsView({
               </div>
             )}
 
-              <div className='flex h-12 sm:h-14 md:h-18 px-4 sm:px-5 md:px-6 items-center justify-between rounded-full border-2 border-(--text-primary) text-(--text-primary)'>
+            {isSubEligible && (
+              <div className='flex flex-col gap-3 py-4 border-y border-(--text-primary)/20'>
+                <p className='text-sm sm:text-base font-medium text-(--text-secondary)'>Purchase Type:</p>
+                <div className='flex flex-col gap-2'>
+                  <label className='flex items-center gap-3 cursor-pointer'>
+                    <input 
+                      type="radio" 
+                      name="purchaseType" 
+                      value="one-time"
+                      checked={purchaseType === "one-time"}
+                      onChange={() => setPurchaseType("one-time")}
+                      className='w-5 h-5 accent-(--text-primary)'
+                    />
+                    <span className='text-base text-(--text-primary)'>One-time purchase (${basePrice.toFixed(2)})</span>
+                  </label>
+                  
+                  <label className='flex items-center gap-3 cursor-pointer'>
+                    <input 
+                      type="radio" 
+                      name="purchaseType" 
+                      value="subscription"
+                      checked={purchaseType === "subscription"}
+                      onChange={() => setPurchaseType("subscription")}
+                      className='w-5 h-5 accent-(--text-primary)'
+                    />
+                    <div className='flex flex-col'>
+                      <span className='text-base font-bold text-(--text-primary)'>
+                        Subscribe & Save {discountRate * 100}% (${subPrice.toFixed(2)})
+                      </span>
+                    </div>
+                  </label>
+                </div>
+
+                {purchaseType === "subscription" && (
+                  <div className='mt-2 pl-8'>
+                    <p className='text-sm mb-1 text-(--text-secondary)'>Deliver:</p>
+                    <select 
+                      value={frequency}
+                      onChange={(e) => setFrequency(e.target.value)}
+                      className='w-full max-w-[200px] border border-(--text-primary) rounded-md px-3 py-2 text-sm text-(--text-primary) outline-none focus:ring-1 focus:ring-(--text-primary)'
+                    >
+                      <option value="Every 1 Month">Every 1 Month</option>
+                      <option value="Every 2 Months">Every 2 Months</option>
+                      <option value="Every 3 Months">Every 3 Months</option>
+                      <option value="Every 6 Months">Every 6 Months</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+            )}
+
+              <div className={`flex h-12 sm:h-14 md:h-18 px-4 sm:px-5 md:px-6 items-center justify-between rounded-full border-2 border-(--text-primary) text-(--text-primary) ${purchaseType === 'subscription' ? 'opacity-50' : ''}`}>
               <button
                 type='button'
                 aria-label='Decrease quantity'
                 onClick={handleDecrease}
-                  className='leading-none'>
+                disabled={purchaseType === 'subscription'}
+                  className='leading-none disabled:cursor-not-allowed'>
                 <Minus className='h-5 w-5' />
               </button>
-                <span className='text-2xl sm:text-3xl leading-none'>{quantity}</span>
+                <span className='text-2xl sm:text-3xl leading-none'>{displayQuantity}</span>
               <button
                 type='button'
                 aria-label='Increase quantity'
-                disabled={quantity >= availableToAdd || availableToAdd === 0}
+                disabled={purchaseType === 'subscription' || quantity >= availableToAdd || availableToAdd === 0}
                 onClick={handleIncrease}
                   className='leading-none disabled:opacity-30 disabled:cursor-not-allowed'>
                 <Plus className='h-5 w-5' />
@@ -180,10 +259,14 @@ export default function ProductDetailsView({
             <button
               type='button'
               onClick={handleAddToCart}
-              disabled={availableToAdd === 0}
+              disabled={createSubMutation.isPending || (purchaseType === "one-time" && availableToAdd === 0)}
                 className='flex h-12 sm:h-14 md:h-18 text-base sm:text-lg md:text-2xl px-4 sm:px-5 md:px-6 w-full items-center justify-between rounded-full bg-(--text-primary) text-white disabled:opacity-50 disabled:cursor-not-allowed'>
               <span>${totalPrice.toFixed(2)}</span>
-              <span className='font-medium'>{maxStock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}</span>
+              <span className='font-medium'>
+                {createSubMutation.isPending ? "Processing..." : 
+                 purchaseType === "subscription" ? "Subscribe Now" :
+                 (maxStock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart")}
+              </span>
             </button>
           </div>
         </div>
