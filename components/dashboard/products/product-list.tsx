@@ -33,6 +33,7 @@ export type BackendVariant = {
   name?: string;
   subscriptionEligible?: boolean;
   subscriptionDiscount?: number;
+  stripePriceId?: string;
 };
 
 export type BackendCategory = { id: string; name: string };
@@ -70,6 +71,8 @@ export default function ProductListPage() {
   const [editingProduct, setEditingProduct] = useState<ProductRow | null>(null);
   const [viewingProduct, setViewingProduct] = useState<ProductRow | null>(null);
   const [productToDelete, setProductToDelete] = useState<ProductRow | null>(null);
+  
+  const [isAddingProduct, setIsAddingProduct] = useState(false);
 
   const { data: responseData, isLoading } = useProducts();
   const { mutate: deleteProduct, isPending: isDeleting } = useDeleteProduct();
@@ -117,6 +120,7 @@ export default function ProductListPage() {
   const handleCloseModals = () => {
     setEditingProduct(null);
     setViewingProduct(null);
+    setIsAddingProduct(false);
   };
 
   const handleDeleteProduct = (product: ProductRow) => {
@@ -282,6 +286,8 @@ export default function ProductListPage() {
         data={productsData}
         columns={columns}
         getRowId={(row) => row.id}
+        addButton="Add Product"
+        onAddClick={() => setIsAddingProduct(true)}
         searchPredicate={(row, query) => {
           const text = `${row.name} ${row.price} ${row.stock} ${row.status ?? ""} ${row.sku ?? ""} ${row.category ?? ""}`;
           return text.toLowerCase().includes(query);
@@ -289,6 +295,15 @@ export default function ProductListPage() {
         pageSizeOptions={[5, 10, 20, 50]}
         defaultPageSize={10}
       />
+
+      {/* Add Product Modal */}
+      {isAddingProduct && (
+        <EditProductModal
+          key="add-product-modal"
+          product={null}
+          onClose={handleCloseModals}
+        />
+      )}
 
       {/* Edit Product Modal */}
       {editingProduct && (

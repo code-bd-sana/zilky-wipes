@@ -30,6 +30,7 @@ const productSchema = z.object({
         stock: z.number().min(0, 'Stock must be positive'),
         subscriptionEligible: z.boolean().optional(),
         subscriptionDiscount: z.number().min(0).max(100).optional(),
+        stripePriceId: z.string().nullable().optional(),
       }),
     )
     .min(1, 'Add at least one variant'),
@@ -69,6 +70,7 @@ export default function AddProductPage() {
           stock: 0,
           subscriptionEligible: false,
           subscriptionDiscount: 0,
+          stripePriceId: '',
         },
       ],
     },
@@ -413,11 +415,22 @@ export default function AddProductPage() {
                       </label>
                       <input
                         type='number'
+                        step='0.01'
                         {...register(`variants.${index}.subscriptionDiscount`, {
                           valueAsNumber: true,
                         })}
                         className='w-full px-3 py-2 border rounded-md text-sm'
                       />
+                    </div>
+                    <div className='sm:col-span-2'>
+                      <label className='block text-[12px] font-medium text-gray-700 mb-1'>Stripe Price ID</label>
+                      <input
+                        type='text'
+                        {...register(`variants.${index}.stripePriceId`)}
+                        className='w-full px-3 py-2 border rounded-md text-sm'
+                        placeholder='e.g. price_1P...'
+                      />
+                      <p className='text-[11px] text-gray-500 mt-1'>Required for subscriptions. Find this in your Stripe Dashboard.</p>
                     </div>
                   </div>
                   <div className='mt-3 flex items-center gap-2'>

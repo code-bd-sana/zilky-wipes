@@ -237,6 +237,14 @@ export default function ViewProductModal({ product, onClose }: ViewProductModalP
                     {v.subscriptionEligible ? `Yes (${v.subscriptionDiscount}%)` : 'No'}
                   </p>
                 </div>
+                <div className='col-span-2 sm:col-span-4 border-t border-gray-100 pt-2 mt-1'>
+                  <p className='text-[11px] text-gray-500 font-medium uppercase tracking-wider mb-1'>
+                    Stripe Price ID
+                  </p>
+                  <p className='text-[13px] font-medium text-gray-900 font-mono'>
+                    {v.stripePriceId || <span className="text-gray-400 italic">Not configured</span>}
+                  </p>
+                </div>
               </div>
             ))}
             {(!product.variants || product.variants.length === 0) && (
