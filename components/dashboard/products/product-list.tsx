@@ -294,14 +294,7 @@ export default function ProductListPage() {
         defaultPageSize={10}
       />
 
-      {/* Add Product Modal */}
-      {isAddingProduct && (
-        <EditProductModal
-          key="add-product-modal"
-          product={null}
-          onClose={handleCloseModals}
-        />
-      )}
+
 
       {/* Edit Product Modal */}
       {editingProduct && (

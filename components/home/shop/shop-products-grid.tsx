@@ -47,6 +47,7 @@ export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
               imageLoading={index < 3 ? "eager" : "lazy"}
               stock={stock}
               hasMultipleVariants={hasMultipleVariants}
+              hasSubscriptionOption={maxDiscount > 0}
             />
           );
         })}
