@@ -81,5 +81,10 @@ export const subscriptionApi = {
   resumeSubscription: async (id: string) => {
     const response = await api.post(`/subscriptions/${id}/resume`);
     return response.data;
+  },
+
+  deleteSubscription: async (id: string) => {
+    const response = await api.delete(`/subscriptions/${id}`);
+    return response.data;
   }
 };

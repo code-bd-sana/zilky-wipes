@@ -17,19 +17,21 @@ import {
   Settings2,
   PencilLine,
   Forward,
+  Trash2,
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import EditSubscriptionModal from "./edit-subscription-modal";
-import { useGetAllSubscriptions } from "@/hooks/useSubscriptions";
+import { useGetAllSubscriptions, useDeleteSubscription } from "@/hooks/useSubscriptions";
 import type { BackendSubscription } from "@/lib/api/subscriptions";
 
 export default function SubscriptionList() {
   const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>();
   const [selectedSubscriptionId, setSelectedSubscriptionId] = useState<string | null>(null);
+  const [subscriptionToDelete, setSubscriptionToDelete] = useState<string | null>(null);
   
-  // We fetch a large limit so the client-side DashboardDataTable can handle pagination properly
   const { data: response, isLoading } = useGetAllSubscriptions({ limit: 1000 });
   const subscriptions = useMemo(() => response?.data || [], [response?.data]);
+  const { mutate: deleteSub } = useDeleteSubscription();
 
   const handleEditDetails = (row: BackendSubscription) => {
     setSelectedSubscriptionId(row.id);
@@ -93,6 +95,15 @@ export default function SubscriptionList() {
             <PencilLine className='h-3.5 w-3.5' color='#262626' />
             <span>Edit</span>
           </button>
+          
+          {['UNPAID', 'PAST_DUE', 'CANCELED'].includes(row.status) && (
+            <button
+              type='button'
+              onClick={() => setSubscriptionToDelete(row.id)}
+              className='inline-flex items-center gap-1 rounded-md border border-red-200 bg-red-50 px-2.5 py-1 text-sm text-red-600 transition-colors hover:bg-red-100 cursor-pointer'>
+              <Trash2 className='h-3.5 w-3.5' />
+            </button>
+          )}
         </div>
       ),
     },
@@ -137,6 +148,7 @@ export default function SubscriptionList() {
           { id: "canceled", label: "CANCELED" },
           { id: "paused", label: "PAUSED" },
           { id: "past_due", label: "PAST_DUE" },
+          { id: "unpaid", label: "UNPAID" },
         ],
       },
     ],
@@ -169,6 +181,39 @@ export default function SubscriptionList() {
           subscription={selectedSubscription}
           onClose={handleCloseModal}
         />
+      )}
+
+      {subscriptionToDelete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setSubscriptionToDelete(null)} />
+          <div className="relative z-10 w-full max-w-sm bg-white rounded-xl shadow-xl overflow-hidden p-6 text-center">
+            <div className="mx-auto w-12 h-12 flex items-center justify-center rounded-full bg-red-100 mb-4">
+              <Trash2 className="h-6 w-6 text-red-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Delete Subscription</h3>
+            <p className="text-sm text-gray-500 mb-6">Are you sure you want to delete this subscription record? This action cannot be undone.</p>
+            <div className="flex gap-3 justify-center">
+              <button 
+                type="button" 
+                onClick={() => setSubscriptionToDelete(null)}
+                className="flex-1 px-4 py-2 rounded-lg font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                type="button" 
+                onClick={() => {
+                  deleteSub(subscriptionToDelete, {
+                    onSuccess: () => setSubscriptionToDelete(null)
+                  });
+                }}
+                className="flex-1 px-4 py-2 rounded-lg font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );
