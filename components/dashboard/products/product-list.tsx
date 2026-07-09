@@ -286,8 +286,6 @@ export default function ProductListPage() {
         data={productsData}
         columns={columns}
         getRowId={(row) => row.id}
-        addButton="Add Product"
-        onAddClick={() => setIsAddingProduct(true)}
         searchPredicate={(row, query) => {
           const text = `${row.name} ${row.price} ${row.stock} ${row.status ?? ""} ${row.sku ?? ""} ${row.category ?? ""}`;
           return text.toLowerCase().includes(query);
