@@ -48,7 +48,7 @@ export type SubscriptionsResponse = {
 };
 
 export const subscriptionApi = {
-  createSubscription: async (payload: { productVariantId: string; frequency: string }) => {
+  createSubscription: async (payload: { productVariantId: string; frequency: string; quantity?: number }) => {
     const response = await api.post('/subscriptions', payload);
     return response.data;
   },
