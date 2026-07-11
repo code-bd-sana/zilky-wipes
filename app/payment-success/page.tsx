@@ -1,28 +1,34 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import CheckoutSuccessModal from "@/components/home/checkout/checkout-success-modal";
-import CheckoutReviewModal from "@/components/home/checkout/checkout-review-modal";
-import CheckoutReferFriendModal from "@/components/home/checkout/checkout-refer-friend-modal";
-import { useCartStore } from "@/store/useCartStore";
+import CheckoutReviewModal from '@/components/home/checkout/checkout-review-modal';
+import CheckoutSuccessModal from '@/components/home/checkout/checkout-success-modal';
+import { useCartStore } from '@/store/useCartStore';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function PaymentSuccessPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const clearCart = useCartStore((state) => state.clearCart);
-  
+
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(true);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [isReferModalOpen, setIsReferModalOpen] = useState(false);
 
   useEffect(() => {
     // Clear the cart on successful payment
     clearCart();
-  }, [clearCart]);
+
+    // Invalidate orders and subscriptions to fetch the newly created ones
+    queryClient.invalidateQueries({ queryKey: ['my-orders'] });
+    queryClient.invalidateQueries({ queryKey: ['my-subscriptions'] });
+    queryClient.invalidateQueries({ queryKey: ['review-eligibility'] });
+  }, [clearCart, queryClient]);
 
   const handleCloseSuccess = () => {
     setIsSuccessModalOpen(false);
-    router.push("/");
+    router.push('/');
   };
 
   const handleOpenReviewModal = () => {
@@ -30,25 +36,20 @@ export default function PaymentSuccessPage() {
     setIsReviewModalOpen(true);
   };
 
-  const handleOpenReferModal = () => {
-    setIsReviewModalOpen(false);
-    setIsReferModalOpen(true);
-  };
-
   const handleCloseReview = () => {
     setIsReviewModalOpen(false);
-    router.push("/");
-  };
-  
-  const handleCloseRefer = () => {
-    setIsReferModalOpen(false);
-    router.push("/");
+    router.push('/');
   };
 
   return (
-    <div className="min-h-[70vh] bg-[#f8f8f8] flex items-center justify-center p-4" style={{ paddingTop: "6rem" }}>
-      <div className="text-center">
-        <h1 className="text-3xl md:text-5xl font-heading text-(--text-primary) mb-4">Processing...</h1>
+    <div
+      className='min-h-[70vh] bg-[#f8f8f8] flex items-center justify-center p-4'
+      style={{ paddingTop: '6rem' }}
+    >
+      <div className='text-center'>
+        <h1 className='text-3xl md:text-5xl font-heading text-(--text-primary) mb-4'>
+          Processing...
+        </h1>
       </div>
 
       <CheckoutSuccessModal
@@ -57,16 +58,7 @@ export default function PaymentSuccessPage() {
         onOpenReview={handleOpenReviewModal}
       />
 
-      <CheckoutReviewModal
-        open={isReviewModalOpen}
-        onClose={handleCloseReview}
-        onOpenReferFriend={handleOpenReferModal}
-      />
-
-      <CheckoutReferFriendModal
-        open={isReferModalOpen}
-        onClose={handleCloseRefer}
-      />
+      <CheckoutReviewModal open={isReviewModalOpen} onClose={handleCloseReview} />
     </div>
   );
 }

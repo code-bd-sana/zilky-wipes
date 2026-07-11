@@ -1,12 +1,13 @@
 'use client';
 
+import type { BackendProduct, BackendVariant } from '@/components/dashboard/products/product-list';
+import ReviewsSection from '@/components/reviews/reviews-section';
+import { useCreateSubscription } from '@/hooks/useSubscriptions';
+import { useCartStore } from '@/store/useCartStore';
 import { Minus, Plus, X } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { useCartStore } from '@/store/useCartStore';
-import { useCreateSubscription } from '@/hooks/useSubscriptions';
-import type { BackendProduct, BackendVariant } from '@/components/dashboard/products/product-list';
 
 type ProductDetailsViewProps = {
   product: BackendProduct;
@@ -280,6 +281,8 @@ export default function ProductDetailsView({ product }: ProductDetailsViewProps)
           </div>
         </div>
       </div>
+
+      <ReviewsSection productId={product.id} />
     </section>
   );
 }

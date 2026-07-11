@@ -36,6 +36,13 @@ export const useGetOrders = (params?: Record<string, unknown>) => {
   });
 };
 
+export const useGetMyOrders = () => {
+  return useQuery({
+    queryKey: ['my-orders'],
+    queryFn: () => orderApi.getMyOrders(),
+  });
+};
+
 export const useUpdateOrderStatus = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
 
