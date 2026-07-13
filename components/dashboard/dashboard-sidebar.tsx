@@ -19,6 +19,7 @@ import {
   FileChartLine,
   LogOut,
   Ticket,
+  Truck,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -99,6 +100,12 @@ const otherItems: SidebarItem[] = [
     key: "settings",
     href: "/dashboard/settings",
     icon: Settings,
+  },
+  {
+    label: "Shipping",
+    key: "shipping",
+    href: "/dashboard/shipping",
+    icon: Truck,
   },
 ];
 
