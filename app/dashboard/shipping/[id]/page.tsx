@@ -8,10 +8,12 @@ export const metadata = {
 };
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default function ShippingRulesPage({ params }: Props) {
+export default async function ShippingRulesPage({ params }: Props) {
+  const { id } = await params;
+
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center gap-4">
@@ -24,7 +26,7 @@ export default function ShippingRulesPage({ params }: Props) {
         <h2 className="text-2xl font-bold tracking-tight text-gray-800">Shipping Rules</h2>
       </div>
       
-      <ShippingRuleList methodId={params.id} />
+      <ShippingRuleList methodId={id} />
     </div>
   );
 }

@@ -171,6 +171,8 @@ export default function ReviewsSection({ productId }: ReviewsSectionProps) {
                           key={idx}
                           src={img}
                           alt='Review attachment'
+                          width={96}
+                          height={96}
                           className='w-24 h-24 object-cover rounded-xl border border-gray-200'
                         />
                       ))}
