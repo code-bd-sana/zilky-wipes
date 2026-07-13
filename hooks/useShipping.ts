@@ -67,3 +67,55 @@ export const useDeleteShippingMethod = () => {
     },
   });
 };
+
+// ----------------------
+// Shipping Rules Hooks
+// ----------------------
+
+export const useCreateShippingRule = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: import("@/lib/api/shipping").CreateShippingRuleDto) => import("@/lib/api/shipping").then(m => m.createShippingRule(data)),
+    onSuccess: () => {
+      toast.success("Shipping rule created successfully");
+      queryClient.invalidateQueries({ queryKey: ["shipping-methods"] });
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to create shipping rule");
+    },
+  });
+};
+
+export const useUpdateShippingRule = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { id: string; data: import("@/lib/api/shipping").UpdateShippingRuleDto }) => import("@/lib/api/shipping").then(m => m.updateShippingRule(data)),
+    onSuccess: () => {
+      toast.success("Shipping rule updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["shipping-methods"] });
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to update shipping rule");
+    },
+  });
+};
+
+export const useDeleteShippingRule = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => import("@/lib/api/shipping").then(m => m.deleteShippingRule(id)),
+    onSuccess: () => {
+      toast.success("Shipping rule deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["shipping-methods"] });
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to delete shipping rule");
+    },
+  });
+};

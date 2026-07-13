@@ -1,3 +1,5 @@
+ 
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import { useCreateShippingMethod, useUpdateShippingMethod } from '@/hooks/useShipping';
@@ -33,14 +35,14 @@ export default function ShippingMethodModal({
 
   useEffect(() => {
     if (methodToEdit) {
-      setName(methodToEdit.name || '');
-      setDescription(methodToEdit.description || '');
-      setEstimatedDeliveryTime(methodToEdit.estimatedDeliveryTime || '');
+      setName(methodToEdit.name || "");
+      setDescription(methodToEdit.description || "");
+      setEstimatedDeliveryTime(methodToEdit.estimatedDeliveryTime || "");
       setIsActive(methodToEdit.isActive);
     } else {
-      setName('');
-      setDescription('');
-      setEstimatedDeliveryTime('');
+      setName("");
+      setDescription("");
+      setEstimatedDeliveryTime("");
       setIsActive(true);
     }
   }, [methodToEdit, open]);
