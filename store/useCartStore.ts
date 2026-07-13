@@ -24,6 +24,8 @@ type CartState = {
   appliedCoupon: Coupon | null;
   applyCoupon: (coupon: Coupon) => void;
   removeCoupon: () => void;
+  shippingMethod: { methodId: string; name: string; cost: number } | null;
+  setShippingMethod: (method: { methodId: string; name: string; cost: number } | null) => void;
 };
 
 export const useCartStore = create<CartState>()(
@@ -101,6 +103,8 @@ export const useCartStore = create<CartState>()(
       appliedCoupon: null,
       applyCoupon: (coupon) => set({ appliedCoupon: coupon }),
       removeCoupon: () => set({ appliedCoupon: null }),
+      shippingMethod: null,
+      setShippingMethod: (method) => set({ shippingMethod: method }),
     }),
     {
       name: 'zilky-cart-storage',

@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { X, Ticket } from 'lucide-react';
 
 export default function CheckoutRightPanel() {
-  const { items, appliedCoupon, applyCoupon, removeCoupon } = useCartStore();
+  const { items, appliedCoupon, applyCoupon, removeCoupon, shippingMethod } = useCartStore();
   const [mounted, setMounted] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   const [isApplying, setIsApplying] = useState(false);
@@ -34,7 +34,8 @@ export default function CheckoutRightPanel() {
     }
   }
 
-  const total = Math.max(0, subtotal - discount); // Assume free shipping for now
+  const shippingCost = shippingMethod?.cost || 0;
+  const total = Math.max(0, subtotal - discount + shippingCost);
 
   const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -166,7 +167,9 @@ export default function CheckoutRightPanel() {
           </div>
           <div className='flex items-center justify-between'>
             <dt className='text-(--checkbox-muted-subtext)'>Shipping</dt>
-            <dd className='text-(--checkout-muted-text)'>Free</dd>
+            <dd className='text-(--checkout-muted-text)'>
+              {mounted && shippingMethod ? (shippingMethod.cost === 0 ? 'Free' : `$${shippingMethod.cost.toFixed(2)}`) : 'Calculated at next step'}
+            </dd>
           </div>
           {mounted && hasSubscription && (
             <div className='flex items-center justify-between'>

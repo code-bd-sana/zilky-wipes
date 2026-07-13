@@ -6,6 +6,8 @@ import { Search, Store, Truck } from 'lucide-react';
 import { useId } from 'react';
 import { useForm, useWatch, type SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
+import { useEstimateShipping } from '@/hooks/useShipping';
+import { useEffect, useMemo } from 'react';
 
 type DeliveryMethod = 'ship' | 'pickup';
 
@@ -20,15 +22,16 @@ type CheckoutFormValues = {
   state: string;
   zipCode: string;
   phoneNumber: string;
+  shippingMethodId?: string;
 };
 
 const inputBaseClass =
   'w-full rounded-[8px] border border-(--checkout-divider) bg-white px-3 py-4 text-base text-(--checkout-muted-text) placeholder:text-(--checkbox-muted-subtext) focus:border-(--text-primary) focus:outline-none';
 
 export default function CheckoutLeftPanel() {
-  const { items, appliedCoupon } = useCartStore();
+  const { items, appliedCoupon, shippingMethod, setShippingMethod } = useCartStore();
   const createOrder = useCreateOrder();
-  const { register, control, handleSubmit } = useForm<CheckoutFormValues>({
+  const { register, control, handleSubmit, setValue } = useForm<CheckoutFormValues>({
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: {
@@ -42,9 +45,51 @@ export default function CheckoutLeftPanel() {
       state: '',
       zipCode: '',
       phoneNumber: '',
+      shippingMethodId: '',
     },
   });
   const deliveryMethod = useWatch({ control, name: 'deliveryMethod' });
+  const country = useWatch({ control, name: 'country' });
+  const state = useWatch({ control, name: 'state' });
+  const zipCode = useWatch({ control, name: 'zipCode' });
+  const shippingMethodId = useWatch({ control, name: 'shippingMethodId' });
+
+  const estimatePayload = useMemo(() => ({
+    items: items.map((item) => ({
+      productVariantId: item.productVariantId,
+      quantity: item.quantity,
+      isSubscription: item.isSubscription
+    })),
+    country,
+    state,
+    zipCode
+  }), [items, country, state, zipCode]);
+
+  const canEstimate = items.length > 0 && !!country; 
+  const { data: estimateData, isLoading: isEstimating } = useEstimateShipping(estimatePayload, canEstimate);
+
+  useEffect(() => {
+    if (estimateData?.methods && estimateData.methods.length > 0) {
+      // If currently selected method is not in the list or no method selected, select the first one
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const isValidCurrentMethod = estimateData.methods.some((m: any) => m.methodId === shippingMethodId);
+      
+      if (!isValidCurrentMethod) {
+        const firstMethod = estimateData.methods[0];
+        setValue('shippingMethodId', firstMethod.methodId);
+        setShippingMethod({ methodId: firstMethod.methodId, name: firstMethod.name, cost: firstMethod.cost });
+      } else {
+        // Sync the cost in case it changed
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const currentMethod = estimateData.methods.find((m: any) => m.methodId === shippingMethodId);
+        if (currentMethod) {
+          setShippingMethod({ methodId: currentMethod.methodId, name: currentMethod.name, cost: currentMethod.cost });
+        }
+      }
+    } else {
+      setShippingMethod(null);
+    }
+  }, [estimateData?.methods, shippingMethodId, setValue, setShippingMethod]);
 
   const onSubmit: SubmitHandler<CheckoutFormValues> = (data) => {
     if (items.length === 0) {
@@ -73,7 +118,8 @@ export default function CheckoutLeftPanel() {
         phone: data.phoneNumber || undefined,
       },
       subtotal,
-      shippingCost: 0,
+      shippingCost: shippingMethod?.cost || 0,
+      shippingMethodId: data.shippingMethodId || undefined,
       total,
       ...(appliedCoupon && { couponCode: appliedCoupon.code }),
     };
@@ -290,15 +336,65 @@ export default function CheckoutLeftPanel() {
           </div>
         </section>
 
-        {/* <section className='space-y-3'>
+        <section className='space-y-3'>
           <h2 className='text-xl md:text-2xl leading-none text-(--checkout-muted-text)'>
             Shipping method
           </h2>
 
-          <div className='flex items-center justify-center rounded-[8px] bg-(--checkout-panel-bg) px-4 py-4 text-center text-base text-(--checkbox-muted-subtext)'>
-            <span>Enter your shipping address to view available shipping methods.</span>
-          </div>
-        </section> */}
+          {!country ? (
+            <div className='flex items-center justify-center rounded-[8px] bg-(--checkout-panel-bg) px-4 py-4 text-center text-base text-(--checkbox-muted-subtext)'>
+              <span>Enter your shipping address to view available shipping methods.</span>
+            </div>
+          ) : isEstimating ? (
+            <div className='flex items-center justify-center rounded-[8px] border border-(--checkout-divider) px-4 py-4'>
+              <span className="text-(--checkbox-muted-subtext)">Calculating...</span>
+            </div>
+          ) : estimateData?.methods?.length ? (
+            <div className='rounded-[8px] border border-(--checkout-divider)'>
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {estimateData.methods.map((method: any, idx: number) => (
+                <label
+                  key={method.methodId}
+                  className={`flex cursor-pointer items-center justify-between p-4 transition ${
+                    idx === 0 ? 'rounded-t-[8px]' : ''
+                  } ${
+                    idx === estimateData.methods.length - 1 ? 'rounded-b-[8px]' : 'border-b border-(--checkout-divider)'
+                  } ${
+                    shippingMethodId === method.methodId
+                      ? 'bg-[#f7f2f3]'
+                      : 'bg-white hover:bg-(--checkout-panel-bg)'
+                  }`}
+                  onClick={() => {
+                    setValue('shippingMethodId', method.methodId);
+                    setShippingMethod({ methodId: method.methodId, name: method.name, cost: method.cost });
+                  }}
+                >
+                  <span className='flex items-center gap-3'>
+                    <input
+                      type='radio'
+                      {...register('shippingMethodId')}
+                      value={method.methodId}
+                      className='h-4 w-4 accent-(--text-primary)'
+                    />
+                    <span className='flex flex-col'>
+                      <span className='text-base text-(--checkout-muted-text)'>{method.name}</span>
+                      {method.estimatedDeliveryTime && (
+                        <span className="text-xs text-(--checkbox-muted-subtext)">{method.estimatedDeliveryTime}</span>
+                      )}
+                    </span>
+                  </span>
+                  <span className='text-base font-medium text-(--checkout-muted-text)'>
+                    {method.cost === 0 ? 'Free' : `$${method.cost.toFixed(2)}`}
+                  </span>
+                </label>
+              ))}
+            </div>
+          ) : (
+            <div className='flex items-center justify-center rounded-[8px] bg-(--checkout-panel-bg) px-4 py-4 text-center text-base text-red-500'>
+              <span>No shipping methods available for this address.</span>
+            </div>
+          )}
+        </section>
 
         <button
           type='submit'
