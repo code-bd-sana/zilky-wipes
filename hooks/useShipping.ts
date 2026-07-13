@@ -13,6 +13,15 @@ import {
 // Shipping Methods Hooks
 // ----------------------
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const useEstimateShipping = (payload: any, enabled: boolean) => {
+  return useQuery({
+    queryKey: ["estimate-shipping", payload],
+    queryFn: () => import("@/lib/api/shipping").then(m => m.estimateShipping(payload)),
+    enabled,
+  });
+};
+
 export const useShippingMethods = () => {
   return useQuery({
     queryKey: ["shipping-methods"],

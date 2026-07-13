@@ -55,6 +55,13 @@ export const getShippingMethods = async () => {
   return data.data;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const estimateShipping = async (payload: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await api.post<{ success: boolean; data: { message: string, methods: any[] } }>("/shipping/estimate", payload);
+  return data.data;
+};
+
 export const createShippingMethod = async (payload: CreateShippingMethodDto) => {
   const { data } = await api.post<{ success: boolean; data: ShippingMethod }>("/shipping/methods", payload);
   return data.data;

@@ -4,8 +4,9 @@ import { useCartStore } from '@/store/useCartStore';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useProducts } from '@/hooks/useProducts';
+import { useEstimateShipping } from '@/hooks/useShipping';
 import { toast } from 'sonner';
 
 type CartDrawerProps = {
@@ -17,6 +18,16 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
   const { items, removeItem, updateQuantity, clearCart, syncStock } = useCartStore();
   const [mounted, setMounted] = useState(false);
   const { data: liveProducts, isSuccess: liveProductsSuccess } = useProducts({ limit: 100 });
+
+  const estimatePayload = useMemo(() => ({
+    items: items.map((item) => ({
+      productVariantId: item.productVariantId,
+      quantity: item.quantity,
+      isSubscription: item.isSubscription
+    }))
+  }), [items]);
+
+  const { data: estimateData } = useEstimateShipping(estimatePayload, open && items.length > 0);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -156,6 +167,11 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           )}
         </div>
         <div className='mt-auto pt-6 border-t border-white/35'>
+          {estimateData?.message && (
+            <div className="mb-4 bg-[#7BB5A3]/20 text-[#7BB5A3] px-4 py-2 rounded-lg text-sm font-medium text-center border border-[#7BB5A3]/30">
+              {estimateData.message}
+            </div>
+          )}
           <div className='flex justify-between items-center mb-6 text-xl md:text-3xl font-medium'>
             <span>Subtotal</span>
             <span>
