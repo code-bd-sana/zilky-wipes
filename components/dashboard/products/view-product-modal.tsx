@@ -207,7 +207,7 @@ export default function ViewProductModal({ product, onClose }: ViewProductModalP
             {product.variants?.map((v: BackendVariant, idx: number) => (
               <div
                 key={v.id || idx}
-                className='bg-white border border-[#E5E5E5] rounded-md p-3 grid grid-cols-2 sm:grid-cols-4 gap-4'
+                className='bg-white border border-[#E5E5E5] rounded-md p-3 grid grid-cols-2 sm:grid-cols-5 gap-4'
               >
                 <div>
                   <p className='text-[11px] text-gray-500 font-medium uppercase tracking-wider mb-1'>
@@ -231,13 +231,19 @@ export default function ViewProductModal({ product, onClose }: ViewProductModalP
                 </div>
                 <div>
                   <p className='text-[11px] text-gray-500 font-medium uppercase tracking-wider mb-1'>
+                    Weight
+                  </p>
+                  <p className='text-[13px] font-medium text-gray-900'>{(v as any).weight || 0} kg</p>
+                </div>
+                <div>
+                  <p className='text-[11px] text-gray-500 font-medium uppercase tracking-wider mb-1'>
                     Subscription
                   </p>
                   <p className='text-[13px] font-medium text-gray-900'>
                     {v.subscriptionEligible ? `Yes (${v.subscriptionDiscount}%)` : 'No'}
                   </p>
                 </div>
-                <div className='col-span-2 sm:col-span-4 border-t border-gray-100 pt-2 mt-1'>
+                <div className='col-span-2 sm:col-span-5 border-t border-gray-100 pt-2 mt-1'>
                   <p className='text-[11px] text-gray-500 font-medium uppercase tracking-wider mb-1'>
                     Stripe Price ID
                   </p>

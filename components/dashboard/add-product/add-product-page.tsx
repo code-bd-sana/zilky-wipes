@@ -28,6 +28,7 @@ const productSchema = z.object({
         name: z.string().min(1, 'Variant name is required'),
         price: z.number().min(0, 'Price must be positive'),
         stock: z.number().min(0, 'Stock must be positive'),
+        weight: z.number().min(0, 'Weight must be non-negative').optional(),
         subscriptionEligible: z.boolean().optional(),
         subscriptionDiscount: z.number().min(0).max(100).optional(),
         stripePriceId: z.string().nullable().optional(),
@@ -68,6 +69,7 @@ export default function AddProductPage() {
           name: 'Default',
           price: 0,
           stock: 0,
+          weight: 0,
           subscriptionEligible: false,
           subscriptionDiscount: 0,
           stripePriceId: '',
@@ -349,6 +351,7 @@ export default function AddProductPage() {
                     name: '',
                     price: 0,
                     stock: 0,
+                    weight: 0,
                     subscriptionEligible: false,
                     subscriptionDiscount: 0,
                   })
@@ -406,6 +409,15 @@ export default function AddProductPage() {
                       <input
                         type='number'
                         {...register(`variants.${index}.stock`, { valueAsNumber: true })}
+                        className='w-full px-3 py-2 border rounded-md text-sm'
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-xs font-medium text-gray-700 mb-1'>Weight</label>
+                      <input
+                        type='number'
+                        step='0.01'
+                        {...register(`variants.${index}.weight`, { valueAsNumber: true })}
                         className='w-full px-3 py-2 border rounded-md text-sm'
                       />
                     </div>

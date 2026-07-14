@@ -37,6 +37,7 @@ const productSchema = z.object({
         name: z.string().min(1, 'Variant name is required'),
         price: z.number().min(0, 'Price must be positive'),
         stock: z.number().min(0, 'Stock must be positive'),
+        weight: z.number().min(0, 'Weight must be non-negative').optional(),
         subscriptionEligible: z.boolean().optional(),
         subscriptionDiscount: z.number().min(0).max(100).optional(),
         stripePriceId: z.string().nullable().optional(),
@@ -83,10 +84,11 @@ export default function EditProductModal({
       categoryIds: product.categories?.map(c => c.id) || [],
       tagIds: product.tags?.map(t => t.id) || [],
       accordionDetails: product.accordionDetails?.length ? product.accordionDetails : [],
-      variants: product.variants?.length ? product.variants : [{
+      variants: product.variants?.length ? product.variants.map((v: any) => ({ ...v, weight: v.weight ?? 0 })) : [{
         name: 'Default',
         price: 0,
         stock: 0,
+        weight: 0,
         subscriptionEligible: false,
         subscriptionDiscount: 0,
         stripePriceId: '',
@@ -380,7 +382,7 @@ export default function EditProductModal({
               <button
                 type='button'
                 onClick={() =>
-                  appendVariant({ name: '', price: 0, stock: 0, subscriptionEligible: false, subscriptionDiscount: 0 })
+                  appendVariant({ name: '', price: 0, stock: 0, weight: 0, subscriptionEligible: false, subscriptionDiscount: 0 })
                 }
                 className='flex items-center gap-1 text-[12px] font-medium bg-black text-white px-2.5 py-1.5 rounded-md hover:bg-gray-800'
               >
@@ -424,6 +426,15 @@ export default function EditProductModal({
                       <input
                         type='number'
                         {...register(`variants.${index}.stock`, { valueAsNumber: true })}
+                        className='w-full px-3 py-2 border border-[#E5E5E5] rounded-md text-[13px]'
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-[12px] font-medium text-gray-700 mb-1'>Weight (kg)</label>
+                      <input
+                        type='number'
+                        step='0.01'
+                        {...register(`variants.${index}.weight`, { valueAsNumber: true })}
                         className='w-full px-3 py-2 border border-[#E5E5E5] rounded-md text-[13px]'
                       />
                     </div>
