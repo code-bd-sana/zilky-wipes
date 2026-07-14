@@ -108,7 +108,7 @@ export default function TagModal({ isOpen, onClose, tag }: TagModalProps) {
             <button
               type="submit"
               disabled={isPending}
-              className="flex items-center gap-2 px-4 py-2 text-[14px] font-medium text-white bg-[#1e2d4a] hover:bg-[#152036] rounded-[8px] transition-colors disabled:opacity-70"
+              className="flex items-center gap-2 px-4 py-2 text-[14px] font-medium text-white bg-[#010101] hover:bg-black/90 rounded-[8px] transition-colors disabled:opacity-70"
             >
               {isPending && <Loader2 size={16} className="animate-spin" />}
               {isPending ? "Saving..." : "Save Tag"}

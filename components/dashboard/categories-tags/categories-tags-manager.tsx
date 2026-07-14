@@ -27,7 +27,7 @@ export default function CategoriesTagsManager() {
           onClick={() => setActiveTab('categories')}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-[8px] text-[15px] font-medium transition-all ${
             activeTab === 'categories'
-              ? 'bg-[#1e2d4a] text-white shadow-sm'
+              ? 'bg-[#010101] text-white shadow-sm'
               : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
           }`}
         >
@@ -39,7 +39,7 @@ export default function CategoriesTagsManager() {
           onClick={() => setActiveTab('tags')}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-[8px] text-[15px] font-medium transition-all ${
             activeTab === 'tags'
-              ? 'bg-[#1e2d4a] text-white shadow-sm'
+              ? 'bg-[#010101] text-white shadow-sm'
               : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
           }`}
         >

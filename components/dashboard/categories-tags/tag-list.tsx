@@ -59,7 +59,7 @@ export default function TagList() {
         </div>
         <button
           onClick={openAddModal}
-          className='flex items-center gap-2 bg-[#1e2d4a] text-white px-5 py-2.5 rounded-[8px] text-[14px] font-medium hover:bg-[#152036] transition-colors'
+          className="flex items-center gap-2 bg-[#010101] text-white px-5 py-2.5 rounded-[8px] text-[14px] font-medium hover:bg-black/90 transition-colors"
         >
           <Plus size={18} />
           Add Tag
@@ -90,7 +90,7 @@ export default function TagList() {
               <tr>
                 <td colSpan={4} className='px-6 py-12 text-center text-gray-400'>
                   <div className='flex flex-col items-center justify-center gap-3'>
-                    <Loader2 className='w-6 h-6 animate-spin text-[#1e2d4a]' />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#010101]" />
                     <span className='text-[14px]'>Loading tags...</span>
                   </div>
                 </td>
