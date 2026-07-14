@@ -97,6 +97,11 @@ export default function CheckoutLeftPanel() {
       return;
     }
 
+    if (!data.shippingMethodId) {
+      toast.error('Please select a shipping method');
+      return;
+    }
+
     const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const discount = 10;
     const total = Math.max(0, subtotal - discount);
@@ -215,6 +220,7 @@ export default function CheckoutLeftPanel() {
                 type='text'
                 autoComplete='given-name'
                 placeholder='First Name'
+                required
                 {...register('firstName')}
                 className={inputBaseClass}
               />
@@ -228,6 +234,7 @@ export default function CheckoutLeftPanel() {
                 type='text'
                 autoComplete='family-name'
                 placeholder='Last Name'
+                required
                 {...register('lastName')}
                 className={inputBaseClass}
               />
@@ -243,6 +250,7 @@ export default function CheckoutLeftPanel() {
               type='text'
               autoComplete='street-address'
               placeholder='Address'
+              required
               {...register('address')}
               className={`${inputBaseClass} pr-10`}
             />
@@ -273,6 +281,7 @@ export default function CheckoutLeftPanel() {
                 type='text'
                 autoComplete='address-level2'
                 placeholder='City'
+                required
                 {...register('city')}
                 className={inputBaseClass}
               />
@@ -287,6 +296,7 @@ export default function CheckoutLeftPanel() {
                 type='text'
                 autoComplete='address-level1'
                 placeholder='State / Province'
+                required
                 {...register('state')}
                 className={inputBaseClass}
               />
@@ -301,6 +311,7 @@ export default function CheckoutLeftPanel() {
                 type='text'
                 autoComplete='postal-code'
                 placeholder='Zip Code'
+                required
                 {...register('zipCode')}
                 className={inputBaseClass}
               />
@@ -316,6 +327,7 @@ export default function CheckoutLeftPanel() {
               type='text'
               autoComplete='country-name'
               placeholder='Country or region'
+              required
               {...register('country')}
               className={inputBaseClass}
             />
@@ -330,6 +342,7 @@ export default function CheckoutLeftPanel() {
               type='tel'
               autoComplete='tel'
               placeholder='Phone Number'
+              required
               {...register('phoneNumber')}
               className={inputBaseClass}
             />
