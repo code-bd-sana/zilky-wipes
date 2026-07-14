@@ -233,7 +233,7 @@ export default function ViewProductModal({ product, onClose }: ViewProductModalP
                   <p className='text-[11px] text-gray-500 font-medium uppercase tracking-wider mb-1'>
                     Weight
                   </p>
-                  <p className='text-[13px] font-medium text-gray-900'>{(v as any).weight || 0} kg</p>
+                  <p className='text-[13px] font-medium text-gray-900'>{(v as unknown as { weight?: number }).weight || 0} kg</p>
                 </div>
                 <div>
                   <p className='text-[11px] text-gray-500 font-medium uppercase tracking-wider mb-1'>

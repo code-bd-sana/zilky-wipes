@@ -20,6 +20,7 @@ import {
   LogOut,
   Ticket,
   Truck,
+  Tag,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -48,6 +49,12 @@ const operationItems: SidebarItem[] = [
     key: "add-product",
     href: "/dashboard/add-product",
     icon: FileText,
+  },
+  {
+    label: "Categories & Tags",
+    key: "categories-tags",
+    href: "/dashboard/categories-tags",
+    icon: Tag,
   },
   { label: "Orders", key: "orders", href: "/dashboard/orders", icon: Package },
   {

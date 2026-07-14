@@ -84,7 +84,7 @@ export default function EditProductModal({
       categoryIds: product.categories?.map(c => c.id) || [],
       tagIds: product.tags?.map(t => t.id) || [],
       accordionDetails: product.accordionDetails?.length ? product.accordionDetails : [],
-      variants: product.variants?.length ? product.variants.map((v: any) => ({ ...v, weight: v.weight ?? 0 })) : [{
+      variants: product.variants?.length ? product.variants.map((v) => ({ ...v, weight: (v as unknown as { weight?: number }).weight ?? 0 })) : [{
         name: 'Default',
         price: 0,
         stock: 0,
