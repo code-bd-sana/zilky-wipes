@@ -21,6 +21,7 @@ import {
   Ticket,
   Truck,
   Tag,
+  Shield,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -86,6 +87,12 @@ const operationItems: SidebarItem[] = [
     key: "coupons",
     href: "/dashboard/coupons",
     icon: Ticket,
+  },
+  {
+    label: "User Management",
+    key: "users",
+    href: "/dashboard/users",
+    icon: Shield,
   },
 ];
 
