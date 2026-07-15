@@ -114,3 +114,20 @@ export const useDeleteSubscription = (onSuccess?: () => void) => {
     },
   });
 };
+
+export const useCancelSubscription = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: subscriptionApi.cancelSubscription,
+    onSuccess: () => {
+      toast.success('Subscription canceled successfully');
+      queryClient.invalidateQueries({ queryKey: ['subscriptions'] });
+      if (onSuccess) onSuccess();
+    },
+    onError: (error: unknown) => {
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to cancel subscription';
+      toast.error(message);
+    },
+  });
+};

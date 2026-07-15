@@ -83,6 +83,11 @@ export const subscriptionApi = {
     return response.data;
   },
 
+  cancelSubscription: async (id: string) => {
+    const response = await api.post(`/subscriptions/${id}/cancel`);
+    return response.data;
+  },
+
   deleteSubscription: async (id: string) => {
     const response = await api.delete(`/subscriptions/${id}`);
     return response.data;

@@ -74,4 +74,9 @@ export const orderApi = {
     const response = await api.patch(`/orders/${id}/tracking`, { trackingNumber });
     return response.data;
   },
+
+  deleteOrder: async (id: string) => {
+    const response = await api.delete(`/orders/${id}`);
+    return response.data;
+  },
 };

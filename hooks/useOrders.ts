@@ -76,3 +76,20 @@ export const useUpdateOrderTracking = (onSuccess?: () => void) => {
     },
   });
 };
+
+export const useDeleteOrder = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: orderApi.deleteOrder,
+    onSuccess: () => {
+      toast.success('Order deleted successfully');
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      if (onSuccess) onSuccess();
+    },
+    onError: (error: unknown) => {
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to delete order';
+      toast.error(message);
+    },
+  });
+};

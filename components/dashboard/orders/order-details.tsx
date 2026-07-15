@@ -12,12 +12,14 @@ import {
   UserRound,
   Wallet,
   X,
+  Trash2,
   type LucideIcon,
   Package,
 } from 'lucide-react';
 import type { BackendOrder } from '@/lib/api/orders';
 import { useUpdateOrderStatus, useUpdateOrderTracking } from '@/hooks/useOrders';
 import Image from 'next/image';
+import DeleteOrderModal from './delete-order-modal';
 
 type OrderDetailPanelProps = {
   order: BackendOrder | null;
@@ -56,6 +58,7 @@ export default function OrderDetail({ order, onClose }: OrderDetailPanelProps) {
   const [trackingNumber, setTrackingNumber] = useState(order?.trackingNumber || '');
   const updateStatus = useUpdateOrderStatus();
   const updateTracking = useUpdateOrderTracking();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   if (!order) return null;
 
@@ -65,6 +68,10 @@ export default function OrderDetail({ order, onClose }: OrderDetailPanelProps) {
 
   const handleSaveTracking = () => {
     updateTracking.mutate({ id: order.id, trackingNumber });
+  };
+
+  const handleDeleteOrder = () => {
+    setIsDeleteModalOpen(true);
   };
 
   const getRowValue = (key: InfoRowKey): string => {
@@ -227,7 +234,24 @@ export default function OrderDetail({ order, onClose }: OrderDetailPanelProps) {
             </div>
           ))}
         </div>
+        
+        <div className='px-5 py-4 mt-auto border-t border-[#E5E5E5] bg-gray-50'>
+          <button
+            onClick={handleDeleteOrder}
+            className='flex items-center justify-center w-full gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-md hover:bg-red-50 hover:border-red-300 transition-colors'
+          >
+            <Trash2 className='w-4 h-4' />
+            Delete Order
+          </button>
+        </div>
       </div>
+
+      <DeleteOrderModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onSuccessCallback={onClose}
+        order={order}
+      />
     </section>
   );
 }
