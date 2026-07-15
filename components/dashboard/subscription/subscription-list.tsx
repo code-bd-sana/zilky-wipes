@@ -23,10 +23,13 @@ import { useState, useMemo } from "react";
 import EditSubscriptionModal from "./edit-subscription-modal";
 import { useGetAllSubscriptions, useDeleteSubscription } from "@/hooks/useSubscriptions";
 import type { BackendSubscription } from "@/lib/api/subscriptions";
+import ViewSubscriptionModal from "./view-subscription-modal";
+import { Eye } from "lucide-react";
 
 export default function SubscriptionList() {
   const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>();
   const [selectedSubscriptionId, setSelectedSubscriptionId] = useState<string | null>(null);
+  const [viewSubscriptionId, setViewSubscriptionId] = useState<string | null>(null);
   const [subscriptionToDelete, setSubscriptionToDelete] = useState<string | null>(null);
   
   const { data: response, isLoading } = useGetAllSubscriptions({ limit: 1000 });
@@ -44,6 +47,10 @@ export default function SubscriptionList() {
   const selectedSubscription = useMemo(() => {
     return subscriptions.find(s => s.id === selectedSubscriptionId) || null;
   }, [subscriptions, selectedSubscriptionId]);
+
+  const viewSubscription = useMemo(() => {
+    return subscriptions.find(s => s.id === viewSubscriptionId) || null;
+  }, [subscriptions, viewSubscriptionId]);
 
   const columns: DashboardTableColumn<BackendSubscription>[] = useMemo(() => [
     {
@@ -88,6 +95,14 @@ export default function SubscriptionList() {
       widthClassName: "w-[16%]",
       cell: (row) => (
         <div className='flex items-center gap-2'>
+          <button
+            type='button'
+            onClick={() => setViewSubscriptionId(row.id)}
+            className='inline-flex items-center gap-1 rounded-md border border-[#E5E7EB] bg-[#FAFAF9] px-2.5 py-1 text-sm text-[#262626] transition-colors hover:bg-[#efefef] cursor-pointer'>
+            <Eye className='h-3.5 w-3.5' color='#262626' />
+            <span>View</span>
+          </button>
+          
           <button
             type='button'
             onClick={() => handleEditDetails(row)}
@@ -180,6 +195,14 @@ export default function SubscriptionList() {
           key={selectedSubscription.id}
           subscription={selectedSubscription}
           onClose={handleCloseModal}
+        />
+      )}
+
+      {viewSubscription && (
+        <ViewSubscriptionModal
+          isOpen={viewSubscriptionId !== null}
+          onClose={() => setViewSubscriptionId(null)}
+          subscription={viewSubscription}
         />
       )}
 
