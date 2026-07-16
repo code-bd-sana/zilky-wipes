@@ -30,6 +30,7 @@ export type BackendSubscription = {
   stripeSubscriptionId: string;
   frequency: string;
   status: 'ACTIVE' | 'PAST_DUE' | 'CANCELED' | 'PAUSED' | 'UNPAID';
+  quantity: number;
   startingDate: string;
   nextBillingDate: string | null;
   createdAt: string;

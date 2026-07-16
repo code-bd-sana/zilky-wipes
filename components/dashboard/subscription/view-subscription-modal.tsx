@@ -38,6 +38,7 @@ export default function ViewSubscriptionModal({
   };
 
   const finalPrice = calculateDiscountedPrice();
+  const totalPrice = finalPrice * subscription.quantity;
 
   return (
     <div className='fixed inset-0 z-60 flex justify-end p-3' onClick={onClose}>
@@ -142,6 +143,28 @@ export default function ViewSubscriptionModal({
               <div className='flex justify-between items-center'>
                 <span className='text-sm text-gray-500'>Email</span>
                 <span className='text-sm font-medium text-gray-900'>{user?.email}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Billing Info */}
+          <div>
+            <h3 className='text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2'>
+              <Package size={16} className='text-gray-400' />
+              Billing Information
+            </h3>
+            <div className='p-4 border border-gray-100 rounded-lg space-y-3 bg-white'>
+              <div className='flex justify-between items-center'>
+                <span className='text-sm text-gray-500'>Quantity</span>
+                <span className='text-sm font-medium text-gray-900'>{subscription.quantity}</span>
+              </div>
+              <div className='flex justify-between items-center'>
+                <span className='text-sm text-gray-500'>Price / Cycle</span>
+                <span className='text-sm font-medium text-gray-900'>${finalPrice.toFixed(2)}</span>
+              </div>
+              <div className='flex justify-between items-center pt-2 border-t border-gray-100'>
+                <span className='text-sm font-medium text-gray-900'>Total / Cycle</span>
+                <span className='text-base font-semibold text-[#1D3A5F]'>${totalPrice.toFixed(2)}</span>
               </div>
             </div>
           </div>
