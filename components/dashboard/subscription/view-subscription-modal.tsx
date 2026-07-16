@@ -39,6 +39,7 @@ export default function ViewSubscriptionModal({
 
   const finalPrice = calculateDiscountedPrice();
   const totalPrice = finalPrice * subscription.quantity;
+  const address = user?.addresses?.[0];
 
   return (
     <div className='fixed inset-0 z-60 flex justify-end p-3' onClick={onClose}>
@@ -144,6 +145,20 @@ export default function ViewSubscriptionModal({
                 <span className='text-sm text-gray-500'>Email</span>
                 <span className='text-sm font-medium text-gray-900'>{user?.email}</span>
               </div>
+              {address && (
+                <>
+                  <div className='flex justify-between items-center'>
+                    <span className='text-sm text-gray-500'>Phone</span>
+                    <span className='text-sm font-medium text-gray-900'>{address.phone || 'N/A'}</span>
+                  </div>
+                  <div className='flex justify-between items-start'>
+                    <span className='text-sm text-gray-500'>Address</span>
+                    <span className='text-sm font-medium text-gray-900 text-right max-w-[200px]'>
+                      {address.streetAddress}, {address.city}, {address.state} {address.postalCode}, {address.country}
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
