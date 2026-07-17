@@ -8,6 +8,7 @@ export interface OrderItem {
   productVariant?: {
     id: string;
     name: string;
+    subscriptionEligible: boolean;
     product: {
       id: string;
       name: string;
@@ -33,6 +34,8 @@ export interface BackendOrder {
   shippingPostalCode: string;
   shippingCountry: string;
   shippingPhone?: string;
+  shippingCarrier?: string;
+  shippingMethodName?: string;
   items: OrderItem[];
   createdAt: string;
   updatedAt: string;
@@ -62,6 +65,11 @@ export const orderApi = {
 
   getMyOrders: async () => {
     const response = await api.get<{ success: boolean; data: BackendOrder[] }>('/orders/me');
+    return response.data;
+  },
+
+  getOrderById: async (id: string) => {
+    const response = await api.get<{ success: boolean; data: BackendOrder }>(`/orders/${id}`);
     return response.data;
   },
 

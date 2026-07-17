@@ -43,6 +43,14 @@ export const useGetMyOrders = () => {
   });
 };
 
+export const useGetOrderById = (id: string | null) => {
+  return useQuery({
+    queryKey: ['order', id],
+    queryFn: () => orderApi.getOrderById(id!),
+    enabled: !!id,
+  });
+};
+
 export const useUpdateOrderStatus = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
 

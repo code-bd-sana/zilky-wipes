@@ -352,12 +352,7 @@ export default function Navbar() {
                             className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors'>
                             Profile
                           </Link>
-                          <Link
-                            href='/account/track-order'
-                            onClick={() => setIsProfileDropdownOpen(false)}
-                            className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors'>
-                            Track Order
-                          </Link>
+
                           <Link
                             href='/account/settings'
                             onClick={() => setIsProfileDropdownOpen(false)}
