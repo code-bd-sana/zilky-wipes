@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import {
-  Bell,
+  // Bell,
   ChevronsLeft,
   CircleDollarSign,
   FileText,
@@ -259,7 +259,7 @@ export default function DashboardSidebar({
         />
       </div>
 
-      <div
+      {/* <div
         className={cn(
           "mt-3 flex items-center justify-between rounded-md px-1.5 py-1.5",
           isCollapsed ? "xl:justify-center" : "",
@@ -277,7 +277,7 @@ export default function DashboardSidebar({
           )}>
           1
         </span>
-      </div>
+      </div> */}
 
       <div className='mt-4'>
         <p
