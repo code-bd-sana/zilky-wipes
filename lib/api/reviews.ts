@@ -60,4 +60,9 @@ export const reviewsApi = {
     const response = await api.get(`/reviews/product/${productId}/stats`);
     return response.data as { success: boolean; data: ReviewStats };
   },
+
+  getTopReviews: async (limit: number = 4) => {
+    const response = await api.get('/reviews/top', { params: { limit } });
+    return response.data as { success: boolean; data: Review[] };
+  }
 };
