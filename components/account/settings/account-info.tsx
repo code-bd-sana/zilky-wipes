@@ -212,7 +212,9 @@ export default function AccountInfo() {
         </button>
       </form>
 
-      {/* Phone Number */}
+      {/* Static Info Hidden for now */}
+      {false && (
+        <>
       <div className='mb-11 border-b border-[#F0F0F0] pb-10'>
         <div className='flex items-center mb-3'>
           <p className='text-sm font-base text-[#474747]'>Phone Number</p>
@@ -322,6 +324,8 @@ export default function AccountInfo() {
           Cancel My Subscription
         </button>
       </div>
+      </>
+      )}
     </section>
   );
 }
