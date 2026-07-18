@@ -272,9 +272,9 @@ const Footer = () => {
 
           {/* GET NOTIFIED */}
           <div className='lg:col-span-3'>
-            <h4 className='text-2xl lg:text-3xl font-semibold text-white mb-4 font-heading'>
+            <p className='text-2xl lg:text-3xl font-semibold text-white mb-4 font-heading'>
               {subscription.title}
-            </h4>
+            </p>
             <div className='relative max-w-full'>
               <input
                 type='email'
