@@ -156,6 +156,7 @@ export default function CrmNavbar({ onToggleMobileSidebar, isMobileSidebarOpen }
           </button>
 
           <nav
+            aria-label='CRM Navigation'
             ref={scrollRef}
             onMouseDown={handleMouseDown}
             onMouseLeave={handleMouseLeave}

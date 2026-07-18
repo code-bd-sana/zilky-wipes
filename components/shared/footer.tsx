@@ -180,6 +180,7 @@ const Footer = () => {
                     href={ensureAbsoluteUrl(item.href)}
                     target='_blank'
                     rel='noopener noreferrer'
+                    aria-label={item.platform}
                     className='inline-flex items-center gap-2 text-white hover:text-white/90 transition-colors duration-300'
                   >
                     <Icon className='h-8 w-8 shrink-0 border rounded-full p-1' />
@@ -198,9 +199,9 @@ const Footer = () => {
           >
             {/* Pages */}
             <div>
-              <h4 className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
+              <p className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
                 Pages
-              </h4>
+              </p>
 
               <ul className='flex flex-col gap-2.5 text-xl text-white'>
                 {pagesLinks.map((item: { href: string; label: string }) => (
@@ -217,9 +218,9 @@ const Footer = () => {
             </div>
             {/* Others */}
             <div>
-              <h4 className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
+              <p className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
                 Others
-              </h4>
+              </p>
 
               <ul className='flex flex-col gap-2.5 text-xl text-white md:max-w-55'>
                 {otherLinks.map((item: { href: string; label: string }) => (
@@ -236,9 +237,9 @@ const Footer = () => {
             </div>
             {/* Contact */}
             <div>
-              <h4 className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
+              <p className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
                 Contact Us
-              </h4>
+              </p>
 
               <ul className='flex flex-col gap-4 text-xl text-white'>
                 {contactInfo.email && (

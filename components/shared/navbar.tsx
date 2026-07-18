@@ -251,7 +251,7 @@ export default function Navbar() {
             : "bg-transparent"
         }`}
         style={{ height: "var(--navbar-height)" }}>
-        <nav className='relative h-full px-4 md:px-6 lg:px-10 xl:px-12.5'>
+        <nav aria-label='Primary Navigation' className='relative h-full px-4 md:px-6 lg:px-10 xl:px-12.5'>
           <div className='grid h-full grid-cols-[auto_1fr_auto] items-center gap-3 lg:gap-6'>
             <motion.div
               variants={shouldAnimate ? navItemVariants : undefined}
