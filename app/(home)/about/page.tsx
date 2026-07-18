@@ -17,8 +17,25 @@ async function getAboutPageData() {
   }
 }
 
+async function getTopReviews() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/top?limit=4`, {
+      next: { revalidate: 60, tags: ['top-reviews'] }
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data || [];
+  } catch (e) {
+    console.error("Failed to fetch top reviews", e);
+    return [];
+  }
+}
+
 export default async function About() {
-  const pageData = await getAboutPageData();
+  const [pageData, topReviews] = await Promise.all([
+    getAboutPageData(),
+    getTopReviews()
+  ]);
   const sections = (pageData?.sections || []).reduce((acc: Record<string, Record<string, unknown>>, sec: { sectionKey: string; content: Record<string, unknown> }) => {
     acc[sec.sectionKey] = sec.content;
     return acc;
@@ -29,7 +46,7 @@ export default async function About() {
       <AboutBanner data={sections['hero']} />
       <AboutSection1 data={sections['section-1']} />
       <AboutSection2 data={sections['section-2']} />
-      <AboutPeople data={sections['testimonial']} />
+      <AboutPeople data={sections['testimonial']} reviews={topReviews} />
     </>
   );
 }
