@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import {
-  Bell,
+  // Bell,
   ChevronsLeft,
   CircleDollarSign,
   FileText,
@@ -18,12 +18,17 @@ import {
   LibraryBig,
   FileChartLine,
   LogOut,
+  Ticket,
+  Truck,
+  Tag,
+  Shield,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ComponentType } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 type SidebarItem = {
   label: string;
@@ -45,6 +50,12 @@ const operationItems: SidebarItem[] = [
     key: "add-product",
     href: "/dashboard/add-product",
     icon: FileText,
+  },
+  {
+    label: "Categories & Tags",
+    key: "categories-tags",
+    href: "/dashboard/categories-tags",
+    icon: Tag,
   },
   { label: "Orders", key: "orders", href: "/dashboard/orders", icon: Package },
   {
@@ -71,6 +82,18 @@ const operationItems: SidebarItem[] = [
     href: "/dashboard/analytics",
     icon: FileChartLine,
   },
+  {
+    label: "Coupons",
+    key: "coupons",
+    href: "/dashboard/coupons",
+    icon: Ticket,
+  },
+  {
+    label: "User Management",
+    key: "users",
+    href: "/dashboard/users",
+    icon: Shield,
+  },
 ];
 
 const otherItems: SidebarItem[] = [
@@ -91,6 +114,12 @@ const otherItems: SidebarItem[] = [
     key: "settings",
     href: "/dashboard/settings",
     icon: Settings,
+  },
+  {
+    label: "Shipping",
+    key: "shipping",
+    href: "/dashboard/shipping",
+    icon: Truck,
   },
 ];
 
@@ -145,9 +174,12 @@ export default function DashboardSidebar({
   const pathname = usePathname();
   const activeView =
     pathname === "/dashboard" ? "home" : (pathname.split("/")[2] ?? "home");
+  const queryClient = useQueryClient();
 
   const handleLogout = () => {
     localStorage.removeItem("zilky_user");
+    localStorage.removeItem("accessToken");
+    queryClient.setQueryData(['me'], null);
     toast.info("Logged out successfully");
     router.push("/");
   };
@@ -227,7 +259,7 @@ export default function DashboardSidebar({
         />
       </div>
 
-      <div
+      {/* <div
         className={cn(
           "mt-3 flex items-center justify-between rounded-md px-1.5 py-1.5",
           isCollapsed ? "xl:justify-center" : "",
@@ -245,7 +277,7 @@ export default function DashboardSidebar({
           )}>
           1
         </span>
-      </div>
+      </div> */}
 
       <div className='mt-4'>
         <p

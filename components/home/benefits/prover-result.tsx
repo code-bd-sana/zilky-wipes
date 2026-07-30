@@ -3,65 +3,57 @@
 import { FlaskConical, Timer, FlaskRound, UserCheck } from "lucide-react";
 import PageTitle from "@/components/shared/page-title/page-title";
 
-const stats = [
-  {
-    icon: FlaskConical,
-    iconColor: "#4ECBA4",
-    iconBg: "rgba(78,203,164,0.12)",
-    value: "99.9%",
-    valueColor: "#4ECBA4",
-    title: "Bacteria Removal Rate",
-    description: "Breaks down 4x faster than leading competitor wet wipes.",
-    accentColor: "#4ECBA4",
-  },
-  {
-    icon: Timer,
-    iconColor: "#A78BFA",
-    iconBg: "rgba(167,139,250,0.12)",
-    value: "4×",
-    valueColor: "#A78BFA",
-    title: "Faster Breakdown",
-    description: "Breaks down 4x faster than leading competitor wet wipes.",
-    accentColor: "#A78BFA",
-  },
-  {
-    icon: FlaskRound,
-    iconColor: "#F87171",
-    iconBg: "rgba(248,113,113,0.12)",
-    value: "0%",
-    valueColor: "#F87171",
-    title: "Harsh Chemicals or Alcohol",
-    description: "Pure water-based formula, nothing irritating or synthetic.",
-    accentColor: "#F87171",
-  },
-  {
-    icon: UserCheck,
-    iconColor: "#FBBF24",
-    iconBg: "rgba(251,191,36,0.12)",
-    value: "100%",
-    valueColor: "#FBBF24",
-    title: "Dermatologist Approved",
-    description:
-      "Every formulation reviewed and certified by leading dermatologists.",
-    accentColor: "#FBBF24",
-  },
+const iconConfigs = [
+  { icon: FlaskConical, iconColor: "#4ECBA4", iconBg: "rgba(78,203,164,0.12)", accentColor: "#4ECBA4", valueColor: "#4ECBA4" },
+  { icon: Timer, iconColor: "#A78BFA", iconBg: "rgba(167,139,250,0.12)", accentColor: "#A78BFA", valueColor: "#A78BFA" },
+  { icon: FlaskRound, iconColor: "#F87171", iconBg: "rgba(248,113,113,0.12)", accentColor: "#F87171", valueColor: "#F87171" },
+  { icon: UserCheck, iconColor: "#FBBF24", iconBg: "rgba(251,191,36,0.12)", accentColor: "#FBBF24", valueColor: "#FBBF24" },
 ];
 
-export default function ProvenResults() {
+export default function ProvenResults({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Scientifically Proven Results';
+  
+  const defaultStats = [
+    {
+      value: "99.9%",
+      title: "Bacteria Removal Rate",
+      description: "Breaks down 4x faster than leading competitor wet wipes.",
+    },
+    {
+      value: "4×",
+      title: "Faster Breakdown",
+      description: "Breaks down 4x faster than leading competitor wet wipes.",
+    },
+    {
+      value: "0%",
+      title: "Harsh Chemicals or Alcohol",
+      description: "Pure water-based formula, nothing irritating or synthetic.",
+    },
+    {
+      value: "100%",
+      title: "Dermatologist Approved",
+      description:
+        "Every formulation reviewed and certified by leading dermatologists.",
+    },
+  ];
+
+  const stats = (data?.statList as {value: string, title: string, description: string}[])?.length ? (data?.statList as {value: string, title: string, description: string}[]) : defaultStats;
+
   return (
     <section
       className='px-4 md:px-14 lg:px-40 py-10 md:py-16 font-serif mb-10 lg:mb-20'
       style={{ background: "#1D3A5F" }}>
       {/* Heading */}
       <PageTitle
-        title=' Scientifically Proven Results'
+        title={title}
         titleClassName='max-w-600! mx-auto text-[40px]! leading-[1.1]! md:text-[54px]! text-white! mb-14'
       />
 
       {/* Cards grid */}
       <div className='max-w-480 mx-auto  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
+        {stats.map((stat: {value: string, title: string, description: string}, index: number) => {
+          const config = iconConfigs[index % iconConfigs.length];
+          const Icon = config.icon;
           return (
             <div
               key={index}
@@ -74,18 +66,18 @@ export default function ProvenResults() {
               {/* Icon */}
               <div
                 className='w-9 h-9 rounded-lg flex items-center justify-center'
-                style={{ background: stat.iconBg }}>
+                style={{ background: config.iconBg }}>
                 <Icon
                   size={18}
                   strokeWidth={1.5}
-                  style={{ color: stat.iconColor }}
+                  style={{ color: config.iconColor }}
                 />
               </div>
 
               {/* Value */}
               <span
                 className='text-4xl md:text-[42px] font-serif font-normal leading-none'
-                style={{ color: stat.valueColor }}>
+                style={{ color: config.valueColor }}>
                 {stat.value}
               </span>
 
@@ -105,7 +97,7 @@ export default function ProvenResults() {
               <div className='mt-auto pt-4'>
                 <div
                   className='h-px w-8 rounded-full'
-                  style={{ background: stat.accentColor, opacity: 0.6 }}
+                  style={{ background: config.accentColor, opacity: 0.6 }}
                 />
               </div>
             </div>

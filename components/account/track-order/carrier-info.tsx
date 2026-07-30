@@ -1,16 +1,18 @@
-export default function CarrierInformation() {
+import { BackendOrder } from "@/lib/api/orders";
+
+export default function CarrierInformation({ order }: { order: BackendOrder }) {
   const carrierData = [
     {
       title: "Carrier",
-      stat: "USPS",
+      stat: order.shippingCarrier || "TBD",
     },
     {
       title: "Tracking Number",
-      stat: "9400111899562347891234",
+      stat: order.trackingNumber || "Pending",
     },
     {
       title: "Service ",
-      stat: "Priority Mail",
+      stat: order.shippingMethodName || "Standard",
     },
   ];
   return (

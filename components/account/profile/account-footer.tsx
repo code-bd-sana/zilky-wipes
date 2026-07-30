@@ -3,9 +3,29 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import CancelSubscriptionModal from "./cancel-subscription-modal";
+import { useGetMySubscriptions, useCancelSubscription } from "@/hooks/useSubscriptions";
+import { toast } from "sonner";
 
 export default function AccountFooter() {
   const [showModal, setShowModal] = useState(false);
+  const { data: response } = useGetMySubscriptions();
+  const { mutate: cancelSubscription } = useCancelSubscription();
+  const subscriptions = response?.data || [];
+  const activeSubscription = subscriptions.find((sub) => sub.status === "ACTIVE" || sub.status === "PAUSED");
+
+  const handleCancel = () => {
+    if (!activeSubscription) {
+      toast.error("No active subscription found to cancel");
+      setShowModal(false);
+      return;
+    }
+    
+    cancelSubscription(activeSubscription.id, {
+      onSuccess: () => {
+        setShowModal(false);
+      }
+    });
+  };
 
   return (
     <>
@@ -32,11 +52,7 @@ export default function AccountFooter() {
       <CancelSubscriptionModal
         open={showModal}
         onClose={() => setShowModal(false)}
-        onConfirm={() => {
-          // TODO: wire-up cancellation action
-          console.log("User confirmed cancellation");
-          setShowModal(false);
-        }}
+        onConfirm={handleCancel}
       />
     </>
   );

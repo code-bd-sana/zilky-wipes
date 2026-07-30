@@ -34,55 +34,9 @@ const COLS: {
   },
 ];
 
-type CellValue =
-  | "stars-5"
-  | "stars-2"
-  | "stars-4"
-  | "check-circle"
-  | "x-most-arent"
-  | "x-separate-dispenser"
-  | "x-often-harmful"
-  | "warn-can-irritate"
-  | "warn-often-harsh"
-  | "warn-deforestation";
 
-const benefitData: {
-  label: string;
-  zilky: CellValue;
-  toiletPaper: CellValue;
-  wetWipes: CellValue;
-}[] = [
-  {
-    label: "Cleanliness Level",
-    zilky: "stars-5",
-    toiletPaper: "stars-2",
-    wetWipes: "stars-4",
-  },
-  {
-    label: "Flushable & Safe",
-    zilky: "check-circle",
-    toiletPaper: "check-circle",
-    wetWipes: "x-most-arent",
-  },
-  {
-    label: "Convenience",
-    zilky: "check-circle",
-    toiletPaper: "check-circle",
-    wetWipes: "x-separate-dispenser",
-  },
-  {
-    label: "Skin-Friendly",
-    zilky: "check-circle",
-    toiletPaper: "warn-can-irritate",
-    wetWipes: "warn-often-harsh",
-  },
-  {
-    label: "Environmental Impact",
-    zilky: "check-circle",
-    toiletPaper: "warn-deforestation",
-    wetWipes: "x-often-harmful",
-  },
-];
+
+
 
 // ── Star renderer ──────────────────────────────────────────────────────────────
 function Stars({ filled, total = 5 }: { filled: number; total?: number }) {
@@ -104,71 +58,82 @@ function Stars({ filled, total = 5 }: { filled: number; total?: number }) {
 }
 
 // ── Cell renderer ──────────────────────────────────────────────────────────────
-function renderCell(value: CellValue) {
-  switch (value) {
-    case "stars-5":
-      return <Stars filled={5} />;
-    case "stars-4":
-      return <Stars filled={3} />;
-    case "stars-2":
-      return <Stars filled={2} />;
-    case "check-circle":
+function renderCell(data: { type: string; text?: string }) {
+  if (!data) return null;
+  const { type, text } = data;
+
+  switch (type) {
+    case "stars":
+      const count = parseInt(text || "5", 10);
+      return <Stars filled={count || 5} />;
+    case "check":
       return <Check />;
-
-    case "x-most-arent":
+    case "cross":
       return (
         <span className='inline-flex items-center gap-1 text-[#BA1A1A] text-xs md:text-sm font-sans'>
           <span className='border border-[#BA1A1A] rounded-full w-4 h-4 p-0.5 flex items-center justify-center'>
-            <X />{" "}
+            <X className="w-3 h-3" />
           </span>
-          Most aren&apos;t
+          {text}
         </span>
       );
-    case "x-separate-dispenser":
-      return (
-        <span className='inline-flex items-center gap-1 text-[#BA1A1A] text-xs md:text-sm font-sans'>
-          <span className='border border-[#BA1A1A] rounded-full w-4 h-4 p-0.5 flex items-center justify-center'>
-            <X />{" "}
-          </span>
-          Separate dispenser
-        </span>
-      );
-    case "x-often-harmful":
-      return (
-        <span className='inline-flex items-center gap-1 text-[#BA1A1A] text-xs md:text-sm font-sans'>
-          <span className='border border-[#BA1A1A] rounded-full w-4 h-4 p-0.5 flex items-center justify-center'>
-            <X />{" "}
-          </span>
-          Often harmful
-        </span>
-      );
-
-    case "warn-can-irritate":
+    case "warn":
       return (
         <span className='inline-flex items-center gap-1 text-[#C47A00] text-xs md:text-sm font-sans'>
-          <TriangleAlert className='h-5 w-5' /> Can irritate
+          <TriangleAlert className='h-5 w-5' /> {text}
         </span>
       );
-    case "warn-often-harsh":
-      return (
-        <span className='inline-flex items-center gap-1 text-[#C47A00] text-xs md:text-sm font-sans'>
-          <TriangleAlert className='h-5 w-5' /> Often harsh
-        </span>
-      );
-    case "warn-deforestation":
-      return (
-        <span className='inline-flex items-center gap-1 text-[#C47A00] text-xs md:text-sm font-sans'>
-          <TriangleAlert className='h-5 w-5' /> Deforestation
-        </span>
-      );
-
     default:
       return null;
   }
 }
 
-export default function ZilkyAdvantage() {
+export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown> }) {
   const [hoveredCol, setHoveredCol] = useState<ColKey | null>(null);
+
+  const title = (data?.title as string) || 'The ZilkyWipes Advantage';
+
+  const defaultBenefitData = [
+    {
+      label: "Cleanliness Level",
+      zilky: { type: "stars", text: "5" },
+      toiletPaper: { type: "stars", text: "2" },
+      wetWipes: { type: "stars", text: "4" },
+    },
+    {
+      label: "Flushable & Safe",
+      zilky: { type: "check" },
+      toiletPaper: { type: "check" },
+      wetWipes: { type: "cross", text: "Most aren't" },
+    },
+    {
+      label: "Convenience",
+      zilky: { type: "check" },
+      toiletPaper: { type: "check" },
+      wetWipes: { type: "cross", text: "Separate dispenser" },
+    },
+    {
+      label: "Skin-Friendly",
+      zilky: { type: "check" },
+      toiletPaper: { type: "warn", text: "Can irritate" },
+      wetWipes: { type: "warn", text: "Often harsh" },
+    },
+    {
+      label: "Environmental Impact",
+      zilky: { type: "check" },
+      toiletPaper: { type: "warn", text: "Deforestation" },
+      wetWipes: { type: "cross", text: "Often harmful" },
+    },
+  ];
+
+  const parsedAdvantageList = (data?.advantageList as { label: string, zilkyType: string, zilkyText: string, tpType: string, tpText: string, wwType: string, wwText: string }[])?.length 
+    ? (data?.advantageList as { label: string, zilkyType: string, zilkyText: string, tpType: string, tpText: string, wwType: string, wwText: string }[]).map((item) => ({
+        label: item.label,
+        zilky: { type: item.zilkyType, text: item.zilkyText },
+        toiletPaper: { type: item.tpType, text: item.tpText },
+        wetWipes: { type: item.wwType, text: item.wwText },
+      }))
+    : defaultBenefitData;
 
   const getFlex = (key: ColKey) => {
     if (!hoveredCol) return "flex-1";
@@ -181,7 +146,7 @@ export default function ZilkyAdvantage() {
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div className='my-10 md:mb-25 text-center'>
         <PageTitle
-          title='The ZilkyWipes Advantage'
+          title={title}
           titleClassName='max-w-200! mx-auto text-[40px]! leading-[1.1]! md:text-[56px]!'
         />
       </div>
@@ -269,8 +234,8 @@ export default function ZilkyAdvantage() {
         </div>
 
         {/* Data rows */}
-        {benefitData.map((row, index) => {
-          const isLast = index === benefitData.length - 1;
+        {parsedAdvantageList.map((row: { label: string, zilky: { type: string, text?: string }, toiletPaper: { type: string, text?: string }, wetWipes: { type: string, text?: string } }, index: number) => {
+          const isLast = index === parsedAdvantageList.length - 1;
           return (
             <div key={index} className='flex'>
               <div
@@ -369,8 +334,8 @@ export default function ZilkyAdvantage() {
               </div>
 
               {/* Card rows */}
-              {benefitData.map((row, index) => {
-                const isLast = index === benefitData.length - 1;
+              {parsedAdvantageList.map((row: { label: string, zilky: { type: string, text?: string }, toiletPaper: { type: string, text?: string }, wetWipes: { type: string, text?: string } }, index: number) => {
+                const isLast = index === parsedAdvantageList.length - 1;
                 return (
                   <div
                     key={index}

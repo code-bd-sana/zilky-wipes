@@ -1,19 +1,39 @@
-import HaveQuestions from "@/components/account/help/have-questions";
-import HelpTitle from "@/components/account/help/help-title";
-import ManagingSubscription from "@/components/account/help/managing-subscription";
-import PaymentAndBilling from "@/components/account/help/payment-billing";
-import Product from "@/components/account/help/product";
-import ShippingAndDelivery from "@/components/account/help/shipping-delivery";
+import HaveQuestions from '@/components/account/help/have-questions';
+import HelpTitle from '@/components/account/help/help-title';
+import FaqCategory from '@/components/home/faq/faq-category';
 
-export default function Help() {
+async function getHelpPageData() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages/help`, {
+      next: { revalidate: 60, tags: ['page-help'] },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data;
+  } catch (e) {
+    console.error('Failed to fetch help page data', e);
+    return null;
+  }
+}
+
+export default async function Help() {
+  const pageData = await getHelpPageData();
+  const sections = (pageData?.sections || []).reduce((acc: Record<string, Record<string, unknown>>, sec: { sectionKey: string; content: Record<string, unknown> }) => {
+    acc[sec.sectionKey] = sec.content;
+    return acc;
+  }, {} as Record<string, Record<string, unknown>>);
+
+  const faqs = (sections['faqs']?.topics as { name?: string; questions?: { id?: string; question: string; answer: string; }[] }[]) || [];
+
   return (
     <>
-      <HelpTitle />
-      <ManagingSubscription />
-      <ShippingAndDelivery />
-      <PaymentAndBilling />
-      <Product />
-      <HaveQuestions />
+      <HelpTitle data={sections['hero']} />
+
+      {faqs.map((topic: { name?: string; questions?: { id?: string; question: string; answer: string; }[] }, index: number) => (
+        <FaqCategory key={topic.name || index} data={topic} />
+      ))}
+
+      <HaveQuestions data={sections['cta']} />
     </>
   );
 }

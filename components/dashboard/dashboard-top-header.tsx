@@ -16,6 +16,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type { ComponentType } from "react";
 
 // Define types for header actions and configuration
@@ -112,8 +113,6 @@ const headerByView: Record<string, HeaderConfig> = {
   feedback: {
     label: "Feedback",
     icon: Star,
-    badge: "Feedback List",
-    badgeIcon: ListOrdered,
   },
   settings: {
     label: "Settings",
@@ -169,6 +168,8 @@ export default function DashboardTopHeader({
   const LeadingIcon = config.icon;
   const BadgeIcon = config.badgeIcon ?? config.icon;
   const headerActions = getHeaderActions(activeView, onAddSubscription);
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get("tab") || "general";
 
   return (
     <header className='mt-1 border-b border-[#dedede] bg-white px-4 py-3 md:px-8'>
@@ -189,7 +190,33 @@ export default function DashboardTopHeader({
           {/* Top Header */}
           <LeadingIcon className='h-4 w-4 text-[#3b3b3b]' />
           <span className='text-base'>{config.label}</span>
-          {config.badge ? (
+          
+          {activeView === "feedback" ? (
+            <div className="flex gap-2 ml-4">
+              <Link 
+                href="?tab=general" 
+                className={cn(
+                  "inline-flex items-center rounded-lg border px-3 py-1 text-sm transition-colors", 
+                  currentTab === "general" 
+                    ? "border-[#E5E7EB] bg-[#F5F5F4] text-[#3a3a3a]" 
+                    : "border-transparent text-gray-500 hover:bg-gray-50"
+                )}
+              >
+                General Feedback
+              </Link>
+              <Link 
+                href="?tab=market" 
+                className={cn(
+                  "inline-flex items-center rounded-lg border px-3 py-1 text-sm transition-colors", 
+                  currentTab === "market" 
+                    ? "border-[#E5E7EB] bg-[#F5F5F4] text-[#3a3a3a]" 
+                    : "border-transparent text-gray-500 hover:bg-gray-50"
+                )}
+              >
+                Market Research Survey
+              </Link>
+            </div>
+          ) : config.badge ? (
             <span className='ml-1 inline-flex items-center rounded-lg border border-[#E5E7EB] bg-[#F5F5F4] px-3 py-1 text-sm text-[#3a3a3a]'>
               <BadgeIcon className='mr-2 h-4 w-4 text-[#262626]' />
               {config.badge}

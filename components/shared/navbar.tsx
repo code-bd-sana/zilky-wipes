@@ -7,7 +7,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ChevronDown } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useGetMe } from "@/hooks/useAuth";
+import { ChevronDown, ShoppingBag } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -25,32 +27,15 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [user, setUser] = useState<{
-    name: string;
-    email: string;
-    role: string;
-  } | null>(null);
+  const queryClient = useQueryClient();
+  
+  const { data: meData } = useGetMe();
+  const user = meData?.data;
 
   const shouldReduceMotion = useReducedMotion();
   const shouldAnimate = !shouldReduceMotion;
   const pathname = usePathname();
   const easing = [0.22, 1, 0.36, 1] as const;
-
-  useEffect(() => {
-    const checkUser = () => {
-      const storedUser = localStorage.getItem("zilky_user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      } else {
-        setUser(null);
-      }
-    };
-
-    checkUser();
-    // Listen for storage changes (for multiple tabs)
-    window.addEventListener("storage", checkUser);
-    return () => window.removeEventListener("storage", checkUser);
-  }, [pathname]); // Re-check on navigation
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -67,7 +52,8 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("zilky_user");
-    setUser(null);
+    localStorage.removeItem("accessToken");
+    queryClient.setQueryData(['me'], null);
     setIsProfileDropdownOpen(false);
     toast.info("Logged out successfully");
     router.push("/");
@@ -265,7 +251,7 @@ export default function Navbar() {
             : "bg-transparent"
         }`}
         style={{ height: "var(--navbar-height)" }}>
-        <nav className='relative h-full px-4 md:px-6 lg:px-10 xl:px-12.5'>
+        <nav aria-label='Primary Navigation' className='relative h-full px-4 md:px-6 lg:px-10 xl:px-12.5'>
           <div className='grid h-full grid-cols-[auto_1fr_auto] items-center gap-3 lg:gap-6'>
             <motion.div
               variants={shouldAnimate ? navItemVariants : undefined}
@@ -306,6 +292,20 @@ export default function Navbar() {
             </motion.div>
 
             <div className='flex items-center justify-end gap-2 sm:gap-2.5 md:gap-3'>
+              {user && (
+                <motion.div {...ctaMotionProps}>
+                  <button
+                    type='button'
+                    onClick={() => setIsCartOpen(true)}
+                    className='flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm md:text-base lg:text-lg font-medium leading-none rounded-full bg-white px-3 sm:px-4 md:px-5 lg:px-6 py-2 sm:py-2.5 md:py-3 text-[#1D3A5F] transition-all hover:bg-[#f7fbff] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D3A5F]/30'
+                    aria-label='Open Cart'
+                  >
+                    <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className="hidden sm:inline">Cart</span>
+                  </button>
+                </motion.div>
+              )}
+
               {!user ? (
                 <motion.div {...ctaMotionProps}>
                   <Link
@@ -314,7 +314,7 @@ export default function Navbar() {
                     Login
                   </Link>
                 </motion.div>
-              ) : user.role === "admin" ? (
+              ) : user.role === "ADMIN" ? (
                 <motion.div {...ctaMotionProps}>
                   <Link
                     href='/dashboard'
@@ -330,10 +330,10 @@ export default function Navbar() {
                   <button
                     type='button'
                     onClick={() => setIsProfileDropdownOpen((prev) => !prev)}
-                    className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm md:text-base lg:text-lg font-medium leading-none rounded-sm bg-white px-3 sm:px-4 md:px-4 lg:px-6 py-2 sm:py-2.5 md:py-3 text-[#1D3A5F] transition-all hover:bg-[#f7fbff] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D3A5F]/30'>
+                    className='flex items-center gap-1 sm:gap-2 text-xs sm:text-sm md:text-base lg:text-lg font-medium leading-none rounded-full bg-white px-3 sm:px-4 md:px-5 lg:px-6 py-2 sm:py-2.5 md:py-3 text-[#1D3A5F] transition-all hover:bg-[#f7fbff] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D3A5F]/30'>
                     Profile{" "}
                     <span>
-                      <ChevronDown />
+                      <ChevronDown className="h-4 w-4" />
                     </span>
                   </button>
 
@@ -352,12 +352,7 @@ export default function Navbar() {
                             className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors'>
                             Profile
                           </Link>
-                          <Link
-                            href='/account/track-order'
-                            onClick={() => setIsProfileDropdownOpen(false)}
-                            className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors'>
-                            Track Order
-                          </Link>
+
                           <Link
                             href='/account/settings'
                             onClick={() => setIsProfileDropdownOpen(false)}

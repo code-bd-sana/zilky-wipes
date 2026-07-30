@@ -1,6 +1,38 @@
+"use client";
+
 import PageTitle from "@/components/shared/page-title/page-title";
+import { useGetMySubscriptions } from "@/hooks/useSubscriptions";
+import { format } from "date-fns";
 
 export default function AccountTitle() {
+  const { data: response } = useGetMySubscriptions();
+  const subscriptions = response?.data || [];
+  const activeSubscription = subscriptions.find((sub) => sub.status === "ACTIVE" || sub.status === "PAUSED");
+
+  let title = "Welcome back to Zilky Wipes!";
+  let subtitle = "Manage your account, track orders, and update subscriptions.";
+  let badgeText = "No active subscription";
+
+  if (activeSubscription) {
+    badgeText = activeSubscription.status === "PAUSED" ? "Paused subscription" : "Active subscription";
+    
+    if (activeSubscription.nextBillingDate) {
+      const formattedDate = format(new Date(activeSubscription.nextBillingDate), "MMMM d");
+      title = `Your next delivery is scheduled for ${formattedDate}`;
+      
+      const frequency = activeSubscription.frequency.toLowerCase();
+      const frequencyMap: Record<string, string> = {
+        '1-month': 'month',
+        '2-months': '2 months',
+        '3-months': '3 months',
+        '1-week': 'week',
+        '2-weeks': '2 weeks'
+      };
+      
+      const freqText = frequencyMap[frequency] || frequency;
+      subtitle = `You're set for the next ${freqText}`;
+    }
+  }
   return (
     <section className='mt-30 mx-6'>
       <div className='flex justify-center'>
@@ -12,16 +44,16 @@ export default function AccountTitle() {
               aria-hidden='true'
               className='list-none h-2 w-2 rounded-full bg-(--text-primary)'
             />
-            <li className='list-none text-sm'>Active subscription</li>
+            <li className='list-none text-sm'>{badgeText}</li>
           </ul>
         </button>
       </div>
       <div className='my-8'>
         <PageTitle
           align='center'
-          title='Your next delivery is scheduled for March 15'
+          title={title}
           titleClassName='text-[#474747]!'
-          subtitle={["You're set for the next 6 weeks"]}
+          subtitle={[subtitle]}
           subtitleClassName='text-[#474747]! text-base! mt-6'
         />
       </div>

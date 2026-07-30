@@ -1,51 +1,78 @@
-export default function DeliveryTrack() {
-  const steps = [
-    {
-      date: "Feb 01, 2026 · 08:14 AM",
-      label: "Order placed",
-      sub: "ZilkyWipes fulfillment center",
-      done: true,
-    },
-    {
-      date: "Feb 01, 2026 · 02:37 PM",
-      label: "Picked and packed",
-      sub: "Brooklyn, NY facility",
-      done: true,
-    },
-    {
-      date: "Feb 02, 2026 · 06:22 AM",
-      label: "In transit",
-      sub: "USPS regional facility",
-      done: true,
-    },
-    {
-      date: "Feb 03, 2026 · 07:45 AM",
-      label: "Out for delivery",
-      sub: "Local post office",
-      done: true,
-    },
-    {
-      date: "Expected today by 8:00 PM",
-      label: "Delivery",
-      sub: "123 Oak Street, Brooklyn",
-      done: false,
-    },
-  ];
+import { BackendOrder } from "@/lib/api/orders";
+import { format } from "date-fns";
+import { XCircle } from "lucide-react";
+
+export default function DeliveryTrack({ order }: { order: BackendOrder }) {
+  const getSteps = () => {
+    if (order.status === 'CANCELLED') {
+      return [
+        {
+          date: format(new Date(order.updatedAt), "MMM dd, yyyy · hh:mm a"),
+          label: "Order Cancelled",
+          sub: "Your order has been cancelled",
+          done: true,
+          icon: <XCircle size={16} className="text-red-500" />
+        }
+      ];
+    }
+
+    const isProcessing = ['PROCESSING', 'SHIPPED', 'DELIVERED'].includes(order.status);
+    const isShipped = ['SHIPPED', 'DELIVERED'].includes(order.status);
+    const isDelivered = order.status === 'DELIVERED';
+
+    return [
+      {
+        date: format(new Date(order.createdAt), "MMM dd, yyyy · hh:mm a"),
+        label: "Order placed",
+        sub: "We have received your order",
+        done: true,
+      },
+      {
+        date: isProcessing ? "In Progress" : "Pending",
+        label: "Processing",
+        sub: "Preparing your order",
+        done: isProcessing,
+      },
+      {
+        date: isShipped ? "Shipped" : "Waiting",
+        label: "In transit",
+        sub: "Handed over to carrier",
+        done: isShipped,
+      },
+      {
+        date: isDelivered ? format(new Date(order.updatedAt), "MMM dd, yyyy · hh:mm a") : "Expected soon",
+        label: "Delivered",
+        sub: "Delivered to your address",
+        done: isDelivered,
+      }
+    ];
+  };
+
+  const steps = getSteps();
+  
+  const getStatusColor = () => {
+    switch (order.status) {
+      case 'DELIVERED': return 'bg-green-600';
+      case 'CANCELLED': return 'bg-red-600';
+      case 'SHIPPED': return 'bg-blue-600';
+      default: return 'bg-yellow-500';
+    }
+  };
   return (
     <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 my-6 md:my-12'>
       <div className='mb-6'>
         <p className='text-[#979191]'>Order Tracking</p>
         <p className='text-(--text-primary) text-3xl font-heading font-semibold'>
-          #ZW-2026-00472
+          {order.orderNumber}
         </p>
       </div>
 
       <div className='bg-white rounded-2xl border border-neutral-200 px-7 py-6'>
         {/* Status badge */}
         <div className='inline-flex items-center gap-2 border border-neutral-200 rounded-full px-4 py-1.5 mb-7'>
-          <span className='w-2 h-2 rounded-full bg-[#008236]' />
-          <span className='text-sm text-(--text-primary)'>
-            Out for delivery
+          <span className={`w-2 h-2 rounded-full ${getStatusColor()}`} />
+          <span className='text-sm text-(--text-primary) capitalize'>
+            {order.status.toLowerCase()}
           </span>
         </div>
 
