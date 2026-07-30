@@ -1,8 +1,19 @@
-import PageTitle from "@/components/shared/page-title/page-title";
-import SplitContentSection from "@/components/shared/split-content-section";
-import { Button } from "@/components/ui/button";
+import PageTitle from '@/components/shared/page-title/page-title';
+import SplitContentSection from '@/components/shared/split-content-section';
+import { Button } from '@/components/ui/button';
+import { isVideo } from '@/lib/utils';
+import Image from 'next/image';
 
-export default function Section1() {
+export default function Section1({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || '.....Because dry paper was never the answer!';
+  const subtitle = (data?.subtitle as string)?.split('\n') || [
+    'Water cleans. Dry paper spreads.',
+    'ZilkyWipes leaves you genuinely clean — safely,',
+    'gently, responsibly.',
+  ];
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/1.mp4';
+  const renderVideo = isVideo(mediaSrc);
+
   return (
     <section>
       <SplitContentSection
@@ -11,13 +22,9 @@ export default function Section1() {
         content={
           <>
             <PageTitle
-              title='.....Because dry paper was never the answer!'
+              title={title}
               titleClassName='max-w-250! text-[40px]! leading-[1.1]! md:text-[56px]!'
-              subtitle={[
-                "Water cleans. Dry paper spreads.",
-                "ZilkyWipes leaves you genuinely clean — safely,",
-                "gently, responsibly.",
-              ]}
+              subtitle={subtitle}
               subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]!'
             />
             <div className='flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-8'>
@@ -31,15 +38,22 @@ export default function Section1() {
           </>
         }
         media={
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
-            <source src='/video/1.mp4' type='video/mp4' />
-            Your browser does not support the video tag.
-          </video>
+          renderVideo ? (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'
+            >
+              <source src={mediaSrc} type='video/mp4' />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <div className='relative w-full aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] overflow-hidden'>
+              <Image src={mediaSrc} alt='Section Image' fill className='object-cover' />
+            </div>
+          )
         }
       />
     </section>

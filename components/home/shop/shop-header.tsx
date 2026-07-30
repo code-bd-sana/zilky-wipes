@@ -1,24 +1,24 @@
 import {
-  type ShopCategory,
-  type ShopPurchaseType,
-  shopCategoryFilters,
   shopPurchaseTypeTabs,
 } from "@/constants/shop-products";
 import PageTitle from "@/components/shared/page-title/page-title";
+import type { BackendCategory } from "@/components/dashboard/products/product-list";
 
 type ShopHeaderProps = {
-  activePurchaseType: ShopPurchaseType;
-  onPurchaseTypeChange: (purchaseType: ShopPurchaseType) => void;
-  activeCategory: ShopCategory;
-  onCategoryChange: (category: ShopCategory) => void;
+  activePurchaseType: string;
+  onPurchaseTypeChange: (purchaseType: string) => void;
+  activeCategoryId: string;
+  onCategoryChange: (categoryId: string) => void;
+  categories: BackendCategory[];
   titleContent?: React.ReactNode;
 };
 
 export default function ShopHeader({
   activePurchaseType,
   onPurchaseTypeChange,
-  activeCategory,
+  activeCategoryId,
   onCategoryChange,
+  categories,
   titleContent,
 }: ShopHeaderProps) {
   return (
@@ -60,19 +60,19 @@ export default function ShopHeader({
             />
 
             <div className='flex flex-wrap items-center gap-2 md:justify-end'>
-              {shopCategoryFilters.map((filter) => {
-                const isActive = activeCategory === filter.value;
+              {categories.map((category) => {
+                const isActive = activeCategoryId === category.id;
                 return (
                   <button
-                    key={filter.value}
+                    key={category.id}
                     type='button'
-                    onClick={() => onCategoryChange(filter.value)}
+                    onClick={() => onCategoryChange(category.id)}
                     className={`rounded-full px-4 sm:px-5 md:px-6 py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-xl font-medium transition-colors ${
                       isActive
                         ? "bg-(--text-primary) text-white"
                         : "border border-(--text-primary)/35 text-(--text-primary) hover:bg-white/80"
                     }`}>
-                    {filter.label}
+                    {category.name}
                   </button>
                 );
               })}

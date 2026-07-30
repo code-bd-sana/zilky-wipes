@@ -1,8 +1,19 @@
 import PageTitle from "@/components/shared/page-title/page-title";
 import SplitContentSection from "@/components/shared/split-content-section";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { isVideo } from "@/lib/utils";
 
-export default function AboutSection2() {
+export default function AboutSection2({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || "Questions, feedback, or just curious? we'd love to hear from you.";
+  const subtitle = (data?.subtitle as string)?.split('\n') || [
+    "Your experience matters to us.",
+    "Good or bad - we're listening.",
+    "It helps us do better.",
+  ];
+  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/1.mp4';
+  const renderVideo = isVideo(mediaSrc);
+
   return (
     <section>
       <SplitContentSection
@@ -11,13 +22,9 @@ export default function AboutSection2() {
         content={
           <>
             <PageTitle
-              title="Questions, feedback, or just curious? we'd love to hear from you."
+              title={title}
               titleClassName='max-w-250! text-[40px]! leading-[1.1]! md:text-[56px]!'
-              subtitle={[
-                "Your experience matters to us.",
-                "Good or bad - we're listening.",
-                "It helps us do better.",
-              ]}
+              subtitle={subtitle}
               subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]!'
             />
             <div className='flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-8'>
@@ -31,17 +38,27 @@ export default function AboutSection2() {
           </>
         }
         media={
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster='/home/banner.png'
-            className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
-            <source src='/video/1.mp4' type='video/mp4' />
-            Your browser does not support the video tag.
-          </video>
+          renderVideo ? (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster='/home/banner.png'
+              className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
+              <source src={mediaSrc} type='video/mp4' />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <Image
+              src={mediaSrc}
+              alt={title}
+              fill
+              className='w-full h-full aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover relative'
+            />
+          )
         }
+        mediaClassName={renderVideo ? "relative" : "relative aspect-37/45 overflow-hidden rounded-[36px] sm:rounded-[72px] lg:rounded-[120px]"}
       />
     </section>
   );

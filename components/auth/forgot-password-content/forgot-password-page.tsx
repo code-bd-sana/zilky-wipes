@@ -6,13 +6,12 @@ export default function ForgotPasswordPageContent() {
     <section className='relative w-full overflow-hidden'>
       <div className='absolute inset-0 w-full h-full overflow-hidden'>
         <Image
-          src='/auth/auth.png'
+          src='/ZilkyWipes/1000308870.png'
           alt='Forgot password'
           fill
           className='absolute inset-0 w-full h-full object-cover'
         />
-
-        <div className='absolute inset-0' />
+        <div className='absolute inset-0 bg-black/50' />  
       </div>
 
       <div className='relative z-10 mx-4 md:mx-11.5 h-svh overflow-y-auto py-6 md:py-10'>

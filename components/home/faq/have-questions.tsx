@@ -1,18 +1,19 @@
 import PageTitle from "@/components/shared/page-title/page-title";
 import { Button } from "@/components/ui/button";
 
-export default function HaveQuestions() {
+export default function HaveQuestions({ data }: { data?: Record<string, unknown> }) {
+  const title = (data?.title as string) || 'Still have questions?';
+  const subtitle = (data?.subtitle as string) || 'Our support team is here to help Monday–Friday, 9am–5pm EST';
+
   return (
     <section className='mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 py-20'>
       <div className='bg-[#FBFAF9] border border-[#F2F2F2] rounded-[10px] py-8'>
         <div className=''>
           <PageTitle
             align='center'
-            title='Still have questions?'
+            title={title}
             titleClassName='text-[#474747]! text-3xl! font-bold!'
-            subtitle={[
-              "Our support team is here to help Monday–Friday, 9am–5pm EST",
-            ]}
+            subtitle={[subtitle]}
             subtitleClassName='text-[#979191]! text-base! mt-3'
           />
         </div>

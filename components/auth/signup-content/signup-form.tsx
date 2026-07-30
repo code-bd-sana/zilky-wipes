@@ -4,8 +4,11 @@ import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useRegister } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 export default function SignupForm() {
+  const { mutate: register, isPending } = useRegister();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -21,8 +24,16 @@ export default function SignupForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    console.log("Form submitted:", formData);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formData.password !== formData.repeatPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { repeatPassword, ...submitData } = formData;
+    register(submitData);
   };
 
   return (
@@ -56,7 +67,7 @@ export default function SignupForm() {
           </div>
 
           {/* Form Fields */}
-          <div className='space-y-3 '>
+          <form onSubmit={handleSubmit} className='space-y-3 '>
             {/* First Name */}
             <div>
               <label className='block text-sm text-(--text-primary) mb-1.5'>
@@ -65,9 +76,10 @@ export default function SignupForm() {
               <input
                 type='text'
                 name='firstName'
+                required
                 value={formData.firstName}
                 onChange={handleChange}
-                placeholder='Pedro Duarte'
+                placeholder='Pedro'
                 className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-600 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
               />
             </div>
@@ -80,9 +92,10 @@ export default function SignupForm() {
               <input
                 type='text'
                 name='lastName'
+                required
                 value={formData.lastName}
                 onChange={handleChange}
-                placeholder='Pedro Duarte'
+                placeholder='Duarte'
                 className='w-full px-3 py-2.5 sm:py-3 border border-[#E7E5E4] rounded-md text-sm text-gray-600 placeholder-[#979191] focus:outline-none focus:ring-1 focus:ring-[#1e2d4a] focus:border-[#1e2d4a] transition-colors'
               />
             </div>
@@ -95,6 +108,7 @@ export default function SignupForm() {
               <input
                 type='email'
                 name='email'
+                required
                 value={formData.email}
                 onChange={handleChange}
                 placeholder='pedro@duarte.com'
@@ -110,6 +124,7 @@ export default function SignupForm() {
               <input
                 type='text'
                 name='username'
+                required
                 value={formData.username}
                 onChange={handleChange}
                 placeholder='@peduarte'
@@ -126,6 +141,8 @@ export default function SignupForm() {
                 <input
                   type={showPassword ? "text" : "password"}
                   name='password'
+                  required
+                  minLength={8}
                   value={formData.password}
                   onChange={handleChange}
                   placeholder='Enter your password'
@@ -150,6 +167,7 @@ export default function SignupForm() {
                 <input
                   type={showRepeatPassword ? "text" : "password"}
                   name='repeatPassword'
+                  required
                   value={formData.repeatPassword}
                   onChange={handleChange}
                   placeholder='Repeat your password'
@@ -170,14 +188,15 @@ export default function SignupForm() {
                 </button>
               </div>
             </div>
-          </div>
 
-          {/* Sign Up Button */}
-          <button
-            onClick={handleSubmit}
-            className='w-full mt-7 sm:mt-8 py-3.5 sm:py-4 bg-(--cart-panel-bg) text-white font-semibold rounded-full hover:bg-[#16253d] active:scale-[0.98] transition-all duration-150 text-base'>
-            Sign Up
-          </button>
+            {/* Sign Up Button */}
+            <button
+              type='submit'
+              disabled={isPending}
+              className='w-full mt-7 sm:mt-8 py-3.5 sm:py-4 bg-(--cart-panel-bg) text-white font-semibold rounded-full hover:bg-[#16253d] active:scale-[0.98] transition-all duration-150 text-base disabled:opacity-50 disabled:cursor-not-allowed'>
+              {isPending ? "Signing Up..." : "Sign Up"}
+            </button>
+          </form>
 
           {/* Sign In Link */}
           <p className='text-center text-sm text-[#262626] mt-5 sm:mt-6'>

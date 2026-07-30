@@ -3,9 +3,10 @@
 import DashboardSidebar from "@/components/dashboard/dashboard-sidebar";
 import CrmNavbar from "@/components/dashboard/crm/crm-navbar";
 import DashboardTopHeader from "@/components/dashboard/dashboard-top-header";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import SubscriptionModal from "@/components/dashboard/subscription/subscription-modal";
+import { useGetMe } from "@/hooks/useAuth";
 
 type DashboardLayoutProps = Readonly<{
   children: React.ReactNode;
@@ -22,6 +23,18 @@ function DashboardLayoutContent({ children }: DashboardLayoutProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   // For Subscription Modal
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
+  
+  const router = useRouter();
+  const { data: meData, isLoading, isError } = useGetMe();
+  const user = meData?.data;
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (isError || !user || user.role !== "ADMIN") {
+        router.push("/");
+      }
+    }
+  }, [isLoading, isError, user, router]);
 
   useEffect(() => {
     if (!isMobileSidebarOpen) {
@@ -45,6 +58,14 @@ function DashboardLayoutContent({ children }: DashboardLayoutProps) {
   const handleCloseSubscriptionModal = () => {
     setIsSubscriptionModalOpen(false);
   };
+
+  if (isLoading || !user || user.role !== "ADMIN") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f5f5f5]">
+        <div className="text-xl font-medium text-gray-500">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className='min-h-screen bg-[#f5f5f5] xl:flex'>
