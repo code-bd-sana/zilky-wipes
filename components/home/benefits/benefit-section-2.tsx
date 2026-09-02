@@ -2,7 +2,8 @@ import PageTitle from "@/components/shared/page-title/page-title";
 import SplitContentSection from "@/components/shared/split-content-section";
 import { Droplet, Package, Recycle } from "lucide-react";
 import Image from "next/image";
-import { isVideo } from "@/lib/utils";
+import { isVideo, getMediaUrl } from "@/lib/utils";
+
 
 const iconMap = [
   { icon: Recycle, iconColor: "#4CAF7A", iconBg: "#4CAF7A1A" },
@@ -36,8 +37,9 @@ export default function BenefitSection2({ data }: { data?: Record<string, unknow
 
   const environmentalBenefits = (data?.detailList as {title: string, description: string}[])?.length ? (data?.detailList as {title: string, description: string}[]) : defaultEnvironmentalBenefits;
 
-  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/1.mp4';
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/video/1.mp4');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section>

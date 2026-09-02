@@ -3,7 +3,7 @@ import SplitContentSection from "@/components/shared/split-content-section";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { isVideo } from "@/lib/utils";
+import { isVideo, getMediaUrl } from "@/lib/utils";
 
 export default function AboutSection2({ data }: { data?: Record<string, unknown> }) {
   const title = (data?.title as string) || "Questions, feedback, or just curious? we'd love to hear from you.";
@@ -12,8 +12,9 @@ export default function AboutSection2({ data }: { data?: Record<string, unknown>
     "Good or bad - we're listening.",
     "It helps us do better.",
   ];
-  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/1.mp4';
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/video/1.mp4');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section>

@@ -1,6 +1,6 @@
 import PageTitle from '@/components/shared/page-title/page-title';
 import SplitContentSection from '@/components/shared/split-content-section';
-import { isVideo } from '@/lib/utils';
+import { isVideo, getMediaUrl } from '@/lib/utils';
 import Image from 'next/image';
 
 export default function SubsSection1({ data }: { data?: Record<string, unknown> }) {
@@ -25,8 +25,9 @@ export default function SubsSection1({ data }: { data?: Record<string, unknown> 
     'Just the right amount, on your schedule.',
   ];
 
-  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308869.png';
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308869.png');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section>

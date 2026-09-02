@@ -1,9 +1,10 @@
-import { isVideo } from '@/lib/utils';
+import { isVideo, getMediaUrl } from '@/lib/utils';
 import Image from 'next/image';
 
 export default function FooterVideo({ data }: { data?: Record<string, unknown> }) {
-  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/2.mp4';
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/video/2.mp4');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section className='bg-(--text-primary) relative overflow-hidden'>

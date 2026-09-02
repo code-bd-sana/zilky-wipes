@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { uploadMedia } from "@/lib/api/pages";
-import { isVideo } from "@/lib/utils";
+import { isVideo, getMediaUrl } from "@/lib/utils";
 
 type FormValues = {
   title: string;
@@ -188,21 +188,23 @@ export default function CRMHomeEditModal({
               <div className="mt-4 space-y-3">
                 {/* Existing media */}
                 {existingPaths.map((path, idx) => {
-                  const renderVideo = isVideo(path);
+                  const mediaUrl = getMediaUrl(path);
+                  const renderVideo = isVideo(mediaUrl);
                   return (
                   <div key={`existing-${idx}`} className="flex items-center justify-between p-2 border rounded-md bg-white">
                     <div className="flex items-center gap-3 overflow-hidden">
                       <div className="w-10 h-10 bg-gray-100 shrink-0 border rounded flex items-center justify-center overflow-hidden relative">
                          {renderVideo ? (
-                           <video src={path} className="object-cover w-full h-full" muted playsInline />
+                           <video src={mediaUrl} className="object-cover w-full h-full" muted playsInline />
                          ) : (
-                           <Image src={path.startsWith('/') || path.startsWith('http') ? path : '/ZilkyWipes/1000308870.png'} alt="preview" fill className="object-cover w-full h-full" />
+                           <Image src={mediaUrl.startsWith('/') || mediaUrl.startsWith('http') ? mediaUrl : '/ZilkyWipes/1000308870.png'} alt="preview" fill className="object-cover w-full h-full" />
                          )}
                       </div>
-                      <p className="text-sm text-gray-600 truncate max-w-50" title={path}>
-                        {path.split('/').pop()}
+                      <p className="text-sm text-gray-600 truncate max-w-50" title={mediaUrl}>
+                        {mediaUrl.split('/').pop()}
                       </p>
                     </div>
+
                     <button
                       type="button"
                       onClick={() => removeExistingPath(idx)}

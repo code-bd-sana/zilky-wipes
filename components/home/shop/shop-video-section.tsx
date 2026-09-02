@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { isVideo } from "@/lib/utils";
+import { isVideo, getMediaUrl } from "@/lib/utils";
 
 type ShopVideoSectionProps = {
   imageSrc?: string;
@@ -10,8 +10,9 @@ export default function ShopVideoSection({
   imageSrc,
   imageAlt = "Shop section media",
 }: ShopVideoSectionProps) {
-  const mediaSrc = imageSrc || '/video/4.mp4';
+  const mediaSrc = getMediaUrl(imageSrc || '/video/4.mp4');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section className='relative w-full h-[30vh] sm:h-[45vh] md:h-[60vh] lg:h-[75vh] xl:h-svh min-h-55 sm:min-h-80 md:min-h-115 lg:min-h-145 xl:min-h-175 overflow-hidden bg-[#1D3A5F]'>

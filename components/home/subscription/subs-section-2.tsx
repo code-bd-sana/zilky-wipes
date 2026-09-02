@@ -1,7 +1,7 @@
 import PageTitle from '@/components/shared/page-title/page-title';
 import SplitContentSection from '@/components/shared/split-content-section';
 import { Button } from '@/components/ui/button';
-import { isVideo } from '@/lib/utils';
+import { isVideo, getMediaUrl } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -12,8 +12,9 @@ export default function SubsSection2({ data }: { data?: Record<string, unknown> 
     'You can change this anytime.',
   ];
 
-  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308869.png';
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308869.png');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section>

@@ -1,7 +1,7 @@
 import PageTitle from '@/components/shared/page-title/page-title';
 import SplitContentSection from '@/components/shared/split-content-section';
 import { Button } from '@/components/ui/button';
-import { isVideo } from '@/lib/utils';
+import { isVideo, getMediaUrl } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -11,8 +11,9 @@ export default function Section2({ data }: { data?: Record<string, unknown> }) {
     'Everyday moments. Private spaces.',
     'ZilkyWipes, exactly where it belongs.',
   ];
-  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/3.mp4';
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/video/3.mp4');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section>

@@ -1,7 +1,7 @@
 import PageTitle from "@/components/shared/page-title/page-title";
 import SplitContentSection from "@/components/shared/split-content-section";
 import { Button } from "@/components/ui/button";
-import { isVideo } from "@/lib/utils";
+import { isVideo, getMediaUrl } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -24,8 +24,9 @@ export default function BenefitSection1({ data }: { data?: Record<string, unknow
     { no: "Luxury", title: "Soft. Calm. Considered.Every day!" },
   ];
 
-  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308870.png';
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308870.png');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section>

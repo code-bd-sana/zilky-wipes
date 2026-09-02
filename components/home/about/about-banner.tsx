@@ -1,11 +1,12 @@
 import PageTitle from "@/components/shared/page-title/page-title";
-import { isVideo } from "@/lib/utils";
+import { isVideo, getMediaUrl } from "@/lib/utils";
 import Image from "next/image";
 
 export default function AboutBanner({ data }: { data?: Record<string, unknown> }) {
   const titleText = (data?.title as string) || "Made for real bathrooms.\nAnd real bodies.";
-  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/4.mp4';
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/video/4.mp4');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section className='relative w-full h-[30vh] sm:h-[45vh] md:h-[60vh] lg:h-[75vh] xl:h-svh min-h-55 sm:min-h-80 md:min-h-115 lg:min-h-145 xl:min-h-175 overflow-hidden bg-[#1D3A5F]'>

@@ -1,7 +1,7 @@
 import PageTitle from '@/components/shared/page-title/page-title';
 import SplitContentSection from '@/components/shared/split-content-section';
 import { Button } from '@/components/ui/button';
-import { isVideo } from '@/lib/utils';
+import { isVideo, getMediaUrl } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -12,8 +12,9 @@ export default function Section1({ data }: { data?: Record<string, unknown> }) {
     'ZilkyWipes leaves you genuinely clean — safely,',
     'gently, responsibly.',
   ];
-  const mediaSrc = (data?.imagePaths as string[])?.[0] || '/video/1.mp4';
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/video/1.mp4');
   const renderVideo = isVideo(mediaSrc);
+
 
   return (
     <section>
