@@ -23,63 +23,66 @@ export default function ShopHeader({
 }: ShopHeaderProps) {
   return (
     <section className='bg-white'>
-      <div className='mx-5 md:mx-12.5 pt-28 md:pt-72 pb-6 md:pb-16'>
-        <div className='h-full flex flex-col justify-end gap-5 md:gap-6'>
-          <div className='flex flex-col items-start justify-between gap-6 md:flex-row md:items-end'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5 pt-20 sm:pt-24 md:pt-32 lg:pt-40 pb-5 sm:pb-8 md:pb-12'>
+        <div className='h-full flex flex-col justify-end gap-4 sm:gap-6'>
+          <div className='flex flex-col items-start justify-between gap-4 sm:gap-6 md:flex-row md:items-end'>
             <PageTitle
               align='start'
-              titleClassName='text-3xl sm:text-4xl md:text-6xl leading-[1.08]'
+              titleClassName='text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight'
               titleContent={
                 titleContent ?? (
-                  <>
+                  <div className='flex items-center flex-wrap gap-1.5 sm:gap-2'>
                     {shopPurchaseTypeTabs.map((tab, index) => {
                       const isActive = activePurchaseType === tab.value;
 
                       return (
-                        <span key={tab.value}>
+                        <span key={tab.value} className='inline-flex items-center'>
                           <button
                             type='button'
                             onClick={() => onPurchaseTypeChange(tab.value)}
                             aria-pressed={isActive}
-                            className={`transition-colors ${
+                            className={`transition-colors text-left ${
                               isActive
-                                ? "text-(--text-primary)"
-                                : "text-[#8291a8]"
+                                ? "text-(--text-primary) font-bold"
+                                : "text-[#8291a8] hover:text-(--text-primary)/70 font-medium"
                             }`}>
                             {tab.label}
                           </button>
                           {index < shopPurchaseTypeTabs.length - 1 ? (
-                            <span className='px-1 text-[#9aa6b8]'>/</span>
+                            <span className='px-1.5 sm:px-2 text-[#9aa6b8]'>/</span>
                           ) : null}
                         </span>
                       );
                     })}
-                  </>
+                  </div>
                 )
               }
             />
 
-            <div className='flex flex-wrap items-center gap-2 md:justify-end'>
-              {categories.map((category) => {
-                const isActive = activeCategoryId === category.id;
-                return (
-                  <button
-                    key={category.id}
-                    type='button'
-                    onClick={() => onCategoryChange(category.id)}
-                    className={`rounded-full px-4 sm:px-5 md:px-6 py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-xl font-medium transition-colors ${
-                      isActive
-                        ? "bg-(--text-primary) text-white"
-                        : "border border-(--text-primary)/35 text-(--text-primary) hover:bg-white/80"
-                    }`}>
-                    {category.name}
-                  </button>
-                );
-              })}
-            </div>
+            {categories.length > 0 && (
+              <div className='w-full md:w-auto flex items-center gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible sm:pb-0 md:justify-end scrollbar-none'>
+                {categories.map((category) => {
+                  const isActive = activeCategoryId === category.id;
+                  return (
+                    <button
+                      key={category.id}
+                      type='button'
+                      onClick={() => onCategoryChange(category.id)}
+                      className={`rounded-full px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 text-xs sm:text-sm md:text-base font-medium whitespace-nowrap transition-all duration-200 shadow-2xs ${
+                        isActive
+                          ? "bg-(--text-primary) text-white"
+                          : "border border-(--text-primary)/30 text-(--text-primary) hover:bg-(--text-primary)/5 bg-white"
+                      }`}>
+                      {category.name}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
     </section>
   );
 }
+

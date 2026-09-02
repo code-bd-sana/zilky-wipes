@@ -14,19 +14,20 @@ export default function ShopVideoSection({
   const renderVideo = isVideo(mediaSrc);
 
   return (
-    <section className='h-[30vh] md:h-screen w-full overflow-hidden'>
+    <section className='relative w-full h-[30vh] sm:h-[45vh] md:h-[60vh] lg:h-[75vh] xl:h-svh min-h-55 sm:min-h-80 md:min-h-115 lg:min-h-145 xl:min-h-175 overflow-hidden bg-[#1D3A5F]'>
       {renderVideo ? (
         <video
           autoPlay
           loop
           muted
           playsInline
-          className='h-[30vh] md:h-full w-full object-cover object-center'>
+          preload='auto'
+          className='w-full h-full object-cover object-center'>
           <source src={mediaSrc} type='video/mp4' />
           Your browser does not support the video tag.
         </video>
       ) : (
-        <div className='relative h-[30vh] md:h-full w-full'>
+        <div className='relative w-full h-full'>
           <Image
             src={mediaSrc}
             alt={imageAlt}
@@ -39,3 +40,4 @@ export default function ShopVideoSection({
     </section>
   );
 }
+
