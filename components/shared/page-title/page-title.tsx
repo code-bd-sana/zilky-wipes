@@ -123,12 +123,12 @@ export default function PageTitle({
               setStartShine(true);
             }}
             className={cn(
-              "font-heading text-5xl text-(--text-primary) md:text-[58px] relative overflow-hidden",
+              "font-heading text-3xl sm:text-4xl md:text-5xl lg:text-[58px] text-(--text-primary) relative overflow-visible py-1",
               titleClassName
             )}
           >
             {canShine ? (
-              <span className="relative inline-block">
+              <span className="relative inline-block max-w-full">
                 {/* Base text (always visible) */}
                 <span className="relative z-10">
                   {resolvedTitle}

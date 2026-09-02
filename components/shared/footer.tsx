@@ -138,20 +138,21 @@ const Footer = () => {
   const copyrightText = getContent('copyright')?.text || 'All rights reserved by: ZilkyWipes© 2025';
 
   return (
-    <footer className='w-full pt-12 pb-8 bg-(--text-primary)'>
-      <div className='max-w-480 mx-auto px-6 md:px-12.5'>
+    <footer className='w-full pt-10 sm:pt-12 md:pt-14 pb-8 bg-(--text-primary)'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5'>
         {/* GRID */}
         <div
           className='
             grid
             grid-cols-1
-            gap-12
+            gap-10
             md:grid-cols-12
-            md:gap-20
+            md:gap-12
+            lg:gap-16
           '
         >
           {/* Branding */}
-          <div className='lg:col-span-3 flex flex-col gap-y-6'>
+          <div className='md:col-span-12 lg:col-span-4 flex flex-col gap-y-4 sm:gap-y-6'>
             <Link href='/' className='inline-block'>
               <Image
                 src='/Logo/logo-white.png'
@@ -159,14 +160,14 @@ const Footer = () => {
                 width={190}
                 height={52}
                 priority
-                className='h-12 md:h-16 lg:h-22 w-auto object-contain mb-4'
+                className='h-8 sm:h-10 md:h-12 w-auto object-contain mb-2'
               />
             </Link>
             <div>
-              <p className='text-white leading-relaxed'>{companyText}</p>
+              <p className='text-white/90 text-sm sm:text-base leading-relaxed max-w-lg'>{companyText}</p>
             </div>
             {/* links */}
-            <div className='mt-4 flex flex-wrap gap-4'>
+            <div className='mt-2 flex flex-wrap gap-3 sm:gap-4'>
               {affiliateItems.map((item: { platform: string; href: string }) => {
                 const Icon = getSocialIcon(item.platform);
                 const ensureAbsoluteUrl = (url: string) => {
@@ -181,34 +182,36 @@ const Footer = () => {
                     target='_blank'
                     rel='noopener noreferrer'
                     aria-label={item.platform}
-                    className='inline-flex items-center gap-2 text-white hover:text-white/90 transition-colors duration-300'
+                    className='inline-flex items-center justify-center h-9 w-9 rounded-full border border-white/30 text-white hover:bg-white/10 hover:border-white transition-all duration-300'
                   >
-                    <Icon className='h-8 w-8 shrink-0 border rounded-full p-1' />
+                    <Icon className='h-4 w-4 shrink-0' />
                   </a>
                 );
               })}
             </div>
           </div>
+
           {/* Links */}
           <div
-            className='lg:col-span-6 grid
+            className='md:col-span-7 lg:col-span-5 grid
             grid-cols-2
-            gap-12
-            md:grid-cols-3
-            md:gap-20'
+            sm:grid-cols-3
+            gap-8
+            sm:gap-6
+            md:gap-8'
           >
             {/* Pages */}
             <div>
-              <p className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
+              <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
                 Pages
               </p>
 
-              <ul className='flex flex-col gap-2.5 text-xl text-white'>
+              <ul className='flex flex-col gap-2 text-white/90'>
                 {pagesLinks.map((item: { href: string; label: string }) => (
-                  <li key={item.href} className='-mt-1'>
+                  <li key={item.href}>
                     <Link
                       href={item.href}
-                      className='text-white hover:text-white/90 transition-colors duration-300 text-base lg:text-xl'
+                      className='text-white/80 hover:text-white transition-colors duration-200 text-sm sm:text-base'
                     >
                       {item.label}
                     </Link>
@@ -216,18 +219,19 @@ const Footer = () => {
                 ))}
               </ul>
             </div>
+
             {/* Others */}
             <div>
-              <p className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
+              <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
                 Others
               </p>
 
-              <ul className='flex flex-col gap-2.5 text-xl text-white md:max-w-55'>
+              <ul className='flex flex-col gap-2 text-white/90'>
                 {otherLinks.map((item: { href: string; label: string }) => (
-                  <li key={item.href} className='-mt-1'>
+                  <li key={item.href}>
                     <a
                       href={item.href}
-                      className='text-white hover:text-white/90 transition-colors duration-300 text-base lg:text-xl'
+                      className='text-white/80 hover:text-white transition-colors duration-200 text-sm sm:text-base'
                     >
                       {item.label}
                     </a>
@@ -235,33 +239,34 @@ const Footer = () => {
                 ))}
               </ul>
             </div>
+
             {/* Contact */}
-            <div>
-              <p className='text-2xl lg:text-3xl font-semibold text-white mb-10 font-heading'>
+            <div className='col-span-2 sm:col-span-1'>
+              <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
                 Contact Us
               </p>
 
-              <ul className='flex flex-col gap-4 text-xl text-white'>
+              <ul className='flex flex-col gap-3 text-white/90 text-sm sm:text-base'>
                 {contactInfo.email && (
-                  <li className='flex items-start gap-2.5 -mt-1'>
-                    <Mail className='h-6 w-6 shrink-0 mt-0.5' />
-                    <span className='leading-[1.6] text-white max-w-63 text-base lg:text-xl'>
+                  <li className='flex items-start gap-2.5'>
+                    <Mail className='h-4 w-4 shrink-0 mt-1 text-white/70' />
+                    <span className='leading-relaxed text-white/80 break-all'>
                       {contactInfo.email}
                     </span>
                   </li>
                 )}
                 {contactInfo.phone && (
-                  <li className='flex items-start gap-2.5 -mt-1'>
-                    <Phone className='h-6 w-6 shrink-0 mt-0.5' />
-                    <span className='leading-[1.6] text-white max-w-63 text-base lg:text-xl'>
+                  <li className='flex items-start gap-2.5'>
+                    <Phone className='h-4 w-4 shrink-0 mt-1 text-white/70' />
+                    <span className='leading-relaxed text-white/80'>
                       {contactInfo.phone}
                     </span>
                   </li>
                 )}
                 {contactInfo.address && (
-                  <li className='flex items-start gap-2.5 -mt-1'>
-                    <MapPin className='h-6 w-6 shrink-0 mt-0.5' />
-                    <span className='leading-[1.6] text-white max-w-63 text-base lg:text-xl'>
+                  <li className='flex items-start gap-2.5'>
+                    <MapPin className='h-4 w-4 shrink-0 mt-1 text-white/70' />
+                    <span className='leading-relaxed text-white/80'>
                       {contactInfo.address}
                     </span>
                   </li>
@@ -271,19 +276,19 @@ const Footer = () => {
           </div>
 
           {/* GET NOTIFIED */}
-          <div className='lg:col-span-3'>
-            <p className='text-2xl lg:text-3xl font-semibold text-white mb-4 font-heading'>
+          <div className='md:col-span-5 lg:col-span-3 flex flex-col'>
+            <p className='text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 font-heading tracking-wide'>
               {subscription.title}
             </p>
-            <div className='relative max-w-full'>
+            <div className='relative w-full max-w-md'>
               <input
                 type='email'
                 placeholder='Enter your email'
-                className='w-full rounded-full bg-white text-(--text-primary) placeholder:text-(--text-secondary) h-14 pl-5 pr-34 outline-none'
+                className='w-full rounded-full bg-white text-(--text-primary) placeholder:text-(--text-secondary) h-12 sm:h-13 pl-4 sm:pl-5 pr-28 sm:pr-32 outline-none text-sm sm:text-base shadow-xs'
               />
               <button
                 type='button'
-                className='absolute right-1 top-1/2 -translate-y-1/2 rounded-full text-(--text-primary) h-12 px-5 text-sm font-semibold transition-colors duration-300'
+                className='absolute right-1 top-1/2 -translate-y-1/2 rounded-full bg-(--text-primary) sm:bg-transparent text-white sm:text-(--text-primary) h-10 px-3.5 sm:px-4 text-xs sm:text-sm font-semibold transition-all duration-300 hover:opacity-90'
               >
                 {subscription.buttonText}
               </button>
@@ -292,10 +297,10 @@ const Footer = () => {
         </div>
 
         {/* DIVIDER */}
-        <div className='w-full h-px bg-[#FFFFFF7A] my-8 mt-10' />
+        <div className='w-full h-px bg-white/15 my-6 sm:my-8' />
 
-        <div className='text-start text-[14px] font-interFont mt-4'>
-          <p className=' text-white text-base'>{copyrightText}</p>
+        <div className='text-start text-xs sm:text-sm text-white/70'>
+          <p>{copyrightText}</p>
         </div>
       </div>
     </footer>

@@ -6,10 +6,17 @@ export default function FooterVideo({ data }: { data?: Record<string, unknown> }
   const renderVideo = isVideo(mediaSrc);
 
   return (
-    <section className='bg-(--text-primary) relative'>
-      <div className='w-full h-full min-h-75'>
+    <section className='bg-(--text-primary) relative overflow-hidden'>
+      <div className='w-full min-h-50 sm:min-h-75 md:min-h-100 flex items-center justify-center'>
         {renderVideo ? (
-          <video autoPlay loop muted playsInline className='w-full h-auto object-cover'>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload='auto'
+            className='w-full h-auto min-h-50 sm:min-h-75in-h-[400px] object-cover object-center'
+          >
             <source src={mediaSrc} type='video/mp4' />
             Your browser does not support the video tag.
           </video>
@@ -19,10 +26,12 @@ export default function FooterVideo({ data }: { data?: Record<string, unknown> }
             alt='Footer Media'
             width={1920}
             height={1080}
-            className='w-full h-auto object-cover'
+            className='w-full h-auto min-h-50 sm:min-h-75 md:min-h-100 object-cover object-center'
+            sizes='100vw'
           />
         )}
       </div>
     </section>
   );
 }
+
