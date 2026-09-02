@@ -35,12 +35,14 @@ function BenefitPeopleCard({
   person: { name: string; feedback: string; stars: number };
 }) {
   return (
-    <div className="w-full bg-white rounded-sm border border-gray-100 p-6 shadow-sm min-h-[160px]">
-      <StarRating count={person.stars} />
-      <p className="text-sm text-gray-700 leading-relaxed mb-6">
-        {person.feedback}
-      </p>
-      <p className="text-sm text-gray-600">— {person.name}</p>
+    <div className="w-full bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-5 sm:p-6 shadow-sm min-h-40 flex flex-col justify-between">
+      <div>
+        <StarRating count={person.stars} />
+        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed mb-4">
+          {person.feedback}
+        </p>
+      </div>
+      <p className="text-xs sm:text-sm text-gray-500 font-medium">— {person.name}</p>
     </div>
   );
 }
@@ -81,7 +83,7 @@ export default function AboutPeople({
 
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
-  const SWIPE_THRESHOLD = 50;
+  const SWIPE_THRESHOLD = 40;
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -135,11 +137,15 @@ export default function AboutPeople({
 
   return (
     <section className="bg-[#FBFAF9]">
-      <div className="max-w-480 mx-auto px-5 md:px-12 lg:px-20 xl:px-40 mt-20 py-25">
-        <PageTitle title={title} titleClassName="max-w-250!" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5 mt-14 sm:mt-20 md:mt-28 py-12 sm:py-16 md:py-20 lg:py-24">
+        <PageTitle
+          title={title}
+          align="center"
+          titleClassName="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-(--text-primary) text-center max-w-3xl mx-auto"
+        />
 
         {/* ── MOBILE: 1 card at a time with swipe ── */}
-        <div className="block md:hidden mt-16">
+        <div className="block md:hidden mt-8 sm:mt-12">
           <div
             className="relative overflow-hidden"
             onTouchStart={handleTouchStart}
@@ -159,25 +165,30 @@ export default function AboutPeople({
           </div>
 
           {/* Mobile dots */}
-          <div className="flex justify-center gap-2 mt-8">
+          <div className="flex justify-center gap-1.5 mt-6">
             {displayTestimonials.map((_, i) => (
               <button
                 key={i}
+                type="button"
                 onClick={() => setMobileIndex(i)}
-                className={`rounded-full transition-all duration-200 ${
-                  i === mobileIndex
-                    ? "w-2.5 h-2.5 bg-[#1B2F6E]"
-                    : "w-2 h-2 bg-gray-300"
-                }`}
+                className="p-1.5 focus:outline-none"
                 aria-label={`Go to review ${i + 1}`}
-              />
+              >
+                <div
+                  className={`rounded-full transition-all duration-200 ${
+                    i === mobileIndex
+                      ? "w-4 h-2 bg-[#1B2F6E]"
+                      : "w-2 h-2 bg-gray-300"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>
 
         {/* ── TABLET: 2 cards per slide with swipe ── */}
         <div
-          className="hidden md:block lg:hidden mt-16"
+          className="hidden md:block lg:hidden mt-10 md:mt-14"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -200,25 +211,30 @@ export default function AboutPeople({
           </div>
 
           {/* Tablet dots */}
-          <div className="flex justify-center gap-2 mt-8">
+          <div className="flex justify-center gap-1.5 mt-8">
             {tabletSlides.map((_, index) => (
               <button
                 key={index}
+                type="button"
                 onClick={() => setTabletSlide(index)}
-                className={`rounded-full transition-all duration-200 ${
-                  index === tabletSlide
-                    ? "w-2.5 h-2.5 bg-[#1B2F6E]"
-                    : "w-2 h-2 bg-gray-300"
-                }`}
+                className="p-1.5 focus:outline-none"
                 aria-label={`Go to slide ${index + 1}`}
-              />
+              >
+                <div
+                  className={`rounded-full transition-all duration-200 ${
+                    index === tabletSlide
+                      ? "w-4 h-2 bg-[#1B2F6E]"
+                      : "w-2 h-2 bg-gray-300"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>
 
         {/* ── DESKTOP: 4 cards per slide (large screens) ── */}
         <div
-          className="hidden lg:block mt-16"
+          className="hidden lg:block mt-14"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -248,6 +264,7 @@ export default function AboutPeople({
             {desktopSlides.map((_, index) => (
               <button
                 key={index}
+                type="button"
                 onClick={() => setDesktopSlide(index)}
                 className={`w-2.5 h-2.5 rounded-full transition-colors duration-200 ${
                   index === desktopSlide ? "bg-[#1B2F6E]" : "bg-gray-300"
@@ -261,3 +278,4 @@ export default function AboutPeople({
     </section>
   );
 }
+
