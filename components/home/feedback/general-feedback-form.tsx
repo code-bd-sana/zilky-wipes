@@ -23,7 +23,7 @@ type FeedbackFormValues = {
 };
 
 const inputBaseClass =
-  'w-full rounded-[8px] border border-[#F2F2F2] bg-white px-4 py-3.5 text-sm md:text-base text-(--checkout-muted-text) placeholder:text-[#979191] focus:border-(--text-primary) focus:outline-none';
+  'w-full rounded-xl border border-gray-200 bg-white px-3.5 sm:px-4 py-2.5 sm:py-3.5 text-xs sm:text-sm md:text-base text-(--checkout-muted-text) placeholder:text-[#979191] focus:border-(--text-primary) focus:ring-1 focus:ring-(--text-primary) outline-none transition-all';
 
 const feedbackTypes: Array<{ label: string; value: FeedbackType }> = [
   { label: 'Website Experience', value: 'website' },
@@ -35,7 +35,7 @@ const feedbackTypes: Array<{ label: string; value: FeedbackType }> = [
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ratings: Array<{ label: string; value: ExperienceRating; icon: any }> = [
   { label: 'Excellent', value: 'excellent', icon: Smile },
-  { label: 'Good', value: 'good', icon: Smile }, // Assuming similar
+  { label: 'Good', value: 'good', icon: Smile },
   { label: 'Okay', value: 'okay', icon: Meh },
   { label: 'Needs Improvement', value: 'needs-improvement', icon: Frown },
 ];
@@ -106,11 +106,11 @@ export default function GeneralFeedbackForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='bg-white rounded-[8px] p-6 md:p-10 lg:p-12 border border-[#F2F2F2]'
+      className='bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-10 border border-gray-200/80 shadow-2xs'
     >
-      <div className='flex flex-col gap-6 md:gap-8'>
+      <div className='flex flex-col gap-5 sm:gap-7'>
         {/* Name Fields */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4'>
           <input
             type='text'
             placeholder='First Name'
@@ -130,19 +130,19 @@ export default function GeneralFeedbackForm() {
 
         {/* Feedback Type */}
         <div>
-          <p className='text-[15px] md:text-base font-medium text-[#474747] mb-4'>
+          <p className='text-xs sm:text-sm font-semibold text-(--text-primary) mb-3'>
             What type of feedback are you sharing?
           </p>
-          <div className='flex flex-wrap gap-3'>
+          <div className='flex flex-wrap gap-2 sm:gap-2.5'>
             {feedbackTypes.map((type) => (
               <button
                 key={type.value}
                 type='button'
                 onClick={() => setValue('feedbackType', type.value)}
-                className={`rounded-full px-5 py-2 text-sm transition-colors ${
+                className={`rounded-full px-4 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
                   feedbackType === type.value
-                    ? 'bg-(--text-primary) text-white'
-                    : 'border border-(--text-primary)/30 text-(--text-primary) hover:bg-(--text-primary)/5'
+                    ? 'bg-(--text-primary) text-white shadow-2xs'
+                    : 'border border-(--text-primary)/30 text-(--text-primary) hover:bg-(--text-primary)/5 bg-white'
                 }`}
               >
                 {type.label}
@@ -153,10 +153,10 @@ export default function GeneralFeedbackForm() {
 
         {/* Overall Experience */}
         <div>
-          <p className='text-[15px] md:text-base font-medium text-[#474747] mb-4'>
+          <p className='text-xs sm:text-sm font-semibold text-(--text-primary) mb-3'>
             How was your experience overall?
           </p>
-          <div className='grid grid-cols-2 md:grid-cols-4 gap-3'>
+          <div className='grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3'>
             {ratings.map((rating) => {
               const Icon = rating.icon;
               const isSelected = experienceOverall === rating.value;
@@ -165,21 +165,21 @@ export default function GeneralFeedbackForm() {
                   key={rating.value}
                   type='button'
                   onClick={() => setValue('experienceOverall', rating.value)}
-                  className={`flex flex-col items-center justify-center py-5 rounded-[8px] border transition-colors ${
+                  className={`flex flex-col items-center justify-center py-4 sm:py-5 rounded-xl border transition-all ${
                     isSelected
-                      ? 'border-(--text-primary) bg-(--text-primary)/5'
-                      : 'border-[#F2F2F2] hover:border-(--text-primary)/20'
+                      ? 'border-(--text-primary) bg-(--text-primary)/5 shadow-2xs'
+                      : 'border-gray-200 hover:border-(--text-primary)/30 bg-white'
                   }`}
                 >
                   <Icon
-                    className={`h-7 w-7 mb-2 ${
-                      isSelected ? 'text-(--text-primary)' : 'text-[#979191]'
+                    className={`h-6 w-6 sm:h-7 sm:w-7 mb-1.5 sm:mb-2 ${
+                      isSelected ? 'text-(--text-primary)' : 'text-gray-400'
                     }`}
                     strokeWidth={1.5}
                   />
                   <span
-                    className={`text-xs md:text-sm ${
-                      isSelected ? 'text-(--text-primary) font-medium' : 'text-[#979191]'
+                    className={`text-xs sm:text-sm font-medium ${
+                      isSelected ? 'text-(--text-primary)' : 'text-gray-500'
                     }`}
                   >
                     {rating.label}
@@ -192,7 +192,7 @@ export default function GeneralFeedbackForm() {
 
         {/* Message / Feedback */}
         <div>
-          <p className='text-[15px] md:text-base font-medium text-[#474747] mb-4'>
+          <p className='text-xs sm:text-sm font-semibold text-(--text-primary) mb-3'>
             Message / Feedback
           </p>
           <textarea
@@ -205,7 +205,7 @@ export default function GeneralFeedbackForm() {
 
         {/* File Upload */}
         <div>
-          <div className='relative w-full rounded-[12px] border border-dashed border-[#CCCCCC] px-6 py-10 transition-colors hover:bg-gray-50/50 cursor-pointer'>
+          <div className='relative w-full rounded-2xl border border-dashed border-gray-300 px-4 sm:px-6 py-7 sm:py-8 transition-colors hover:bg-gray-50/50 cursor-pointer text-center'>
             <input
               type='file'
               title='File Upload'
@@ -218,27 +218,27 @@ export default function GeneralFeedbackForm() {
               className='absolute inset-0 h-full w-full opacity-0 cursor-pointer z-10'
               accept='.png,.jpg,.jpeg,.pdf'
             />
-            <div className='flex flex-col items-center justify-center text-center'>
-              <CloudUpload className='h-8 w-8 text-(--text-primary) mb-3' strokeWidth={1.5} />
-              <p className='text-sm text-[#474747] font-medium'>
+            <div className='flex flex-col items-center justify-center'>
+              <CloudUpload className='h-7 w-7 sm:h-8 sm:w-8 text-(--text-primary) mb-2' strokeWidth={1.5} />
+              <p className='text-xs sm:text-sm text-gray-700 font-medium'>
                 Upload an image, screenshot, or document if it helps explain your feedback.
               </p>
-              <p className='text-xs text-[#979191] mt-1'>PNG, JPG, PDF up to 10MB</p>
+              <p className='text-[11px] sm:text-xs text-gray-400 mt-1'>PNG, JPG, PDF up to 10MB</p>
             </div>
           </div>
 
           {files.length > 0 && (
-            <div className='mt-4 flex flex-col gap-2'>
+            <div className='mt-3 flex flex-col gap-2'>
               {files.map((file, index) => (
                 <div
                   key={index}
-                  className='flex items-center justify-between bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm'
+                  className='flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs sm:text-sm'
                 >
                   <span className='truncate text-gray-600 max-w-[80%]'>{file.name}</span>
                   <button
                     type='button'
                     onClick={() => removeFile(index)}
-                    className='text-gray-400 hover:text-red-500'
+                    className='text-gray-400 hover:text-red-500 transition-colors'
                   >
                     <X size={16} />
                   </button>
@@ -249,14 +249,14 @@ export default function GeneralFeedbackForm() {
         </div>
 
         {/* Consent Checkbox */}
-        <div className='flex items-center gap-3 mt-2'>
+        <div className='flex items-center gap-2.5 mt-1'>
           <input
             type='checkbox'
             id={`consent-${idPrefix}`}
             {...register('contactConsent')}
-            className='h-4 w-4 rounded border-[#CCCCCC] accent-(--text-primary) cursor-pointer'
+            className='h-4 w-4 rounded border-gray-300 accent-(--text-primary) cursor-pointer'
           />
-          <label htmlFor={`consent-${idPrefix}`} className='text-sm text-[#474747] cursor-pointer'>
+          <label htmlFor={`consent-${idPrefix}`} className='text-xs sm:text-sm text-gray-600 cursor-pointer'>
             I&apos;m happy to be contacted if clarification is needed.
           </label>
         </div>
@@ -266,7 +266,7 @@ export default function GeneralFeedbackForm() {
           <Button
             type='submit'
             disabled={submitGeneralFeedback.isPending || isUploading}
-            className='bg-(--text-primary) px-10 py-6 text-base md:text-lg rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 font-normal disabled:opacity-50 disabled:cursor-not-allowed'
+            className='w-full sm:w-auto bg-(--text-primary) px-8 sm:px-10 py-5 sm:py-6 text-sm sm:text-base md:text-lg rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed'
           >
             {isUploading
               ? 'Uploading files...'
@@ -279,3 +279,4 @@ export default function GeneralFeedbackForm() {
     </form>
   );
 }
+

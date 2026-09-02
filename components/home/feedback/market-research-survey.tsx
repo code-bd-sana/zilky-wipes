@@ -24,7 +24,7 @@ type MarketResearchFormValues = {
 };
 
 const inputBaseClass =
-  'w-full rounded-[8px] border border-[#F2F2F2] bg-white px-4 py-3.5 text-sm md:text-base text-(--checkout-muted-text) placeholder:text-[#979191] focus:border-(--text-primary) focus:outline-none';
+  'w-full rounded-xl border border-gray-200 bg-white px-3.5 sm:px-4 py-2.5 sm:py-3.5 text-xs sm:text-sm md:text-base text-(--checkout-muted-text) placeholder:text-[#979191] focus:border-(--text-primary) focus:ring-1 focus:ring-(--text-primary) outline-none transition-all';
 
 const sectionOptions = ['Products', 'Subscription', 'Benefits', 'About', 'FAQ', 'Contact'];
 
@@ -73,7 +73,7 @@ export default function MarketResearchSurvey() {
       } catch (error) {
         console.error('Failed to upload files', error);
         setIsUploading(false);
-        return; // Don't submit the form if upload fails
+        return;
       }
       setIsUploading(false);
     }
@@ -111,19 +111,19 @@ export default function MarketResearchSurvey() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='bg-white rounded-[8px] p-6 md:p-10 lg:p-12 border border-[#F2F2F2]'
+      className='bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-10 border border-gray-200/80 shadow-2xs'
     >
-      <div className='flex flex-col gap-10 md:gap-12'>
+      <div className='flex flex-col gap-8 sm:gap-10'>
         {/* PERSONAL INFO */}
-        <section className='space-y-6'>
+        <section className='space-y-4 sm:space-y-5'>
           <div className='flex items-baseline gap-2'>
-            <h2 className='font-heading text-2xl md:text-3xl text-(--text-primary) leading-none'>
+            <h2 className='font-heading text-xl sm:text-2xl font-bold text-(--text-primary)'>
               Personal Information
             </h2>
-            <span className='text-sm text-[#979191] tracking-wide'>(Optional)</span>
+            <span className='text-xs sm:text-sm text-[#979191] tracking-wide'>(Optional)</span>
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4'>
             <input
               type='text'
               placeholder='Full Name'
@@ -138,10 +138,10 @@ export default function MarketResearchSurvey() {
             />
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-center'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 items-center'>
             <select
               {...register('ageRange')}
-              className={`${inputBaseClass} appearance-none text-[#979191]`}
+              className={`${inputBaseClass} appearance-none text-gray-500`}
             >
               <option value='' disabled>
                 Age Range
@@ -153,20 +153,20 @@ export default function MarketResearchSurvey() {
               <option value='55+'>55+</option>
             </select>
 
-            <div className='flex flex-col gap-2'>
-              <label className='text-xs uppercase tracking-widest text-[#979191] font-medium'>
+            <div className='flex flex-col gap-1.5'>
+              <label className='text-[11px] uppercase tracking-widest text-[#979191] font-semibold'>
                 Gender
               </label>
-              <div className='flex items-center gap-6'>
+              <div className='flex items-center gap-4 sm:gap-6'>
                 {['Female', 'Male', 'Other'].map((g) => (
                   <label key={g} className='flex items-center gap-2 cursor-pointer'>
                     <input
                       type='radio'
                       value={g.toLowerCase()}
                       {...register('gender')}
-                      className='h-4 w-4 accent-(--text-primary) border-[#F2F2F2]'
+                      className='h-4 w-4 accent-(--text-primary) border-gray-300'
                     />
-                    <span className='text-sm md:text-base text-[#474747]'>{g}</span>
+                    <span className='text-xs sm:text-sm text-[#474747]'>{g}</span>
                   </label>
                 ))}
               </div>
@@ -174,16 +174,16 @@ export default function MarketResearchSurvey() {
           </div>
         </section>
 
-        <div className='w-full h-px bg-[#F2F2F2]' />
+        <div className='w-full h-px bg-gray-100' />
 
         {/* WEBSITE EXPERIENCE */}
-        <section className='space-y-8 md:space-y-10'>
-          <h2 className='font-heading text-2xl md:text-3xl text-(--text-primary) leading-none'>
+        <section className='space-y-6 sm:space-y-8'>
+          <h2 className='font-heading text-xl sm:text-2xl font-bold text-(--text-primary)'>
             Website Experience
           </h2>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>
               How easy was it to navigate our website?
             </p>
             <div className='flex flex-col gap-2'>
@@ -192,24 +192,24 @@ export default function MarketResearchSurvey() {
                 min='1'
                 max='10'
                 {...register('navigationEase', { valueAsNumber: true })}
-                className='w-full h-1 bg-[#F2F2F2] rounded-lg appearance-none cursor-pointer accent-(--text-primary)'
+                className='w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-(--text-primary)'
               />
-              <div className='flex justify-between text-xs text-[#979191] font-mono'>
+              <div className='flex justify-between text-[11px] sm:text-xs text-[#979191] font-mono'>
                 <span>1 (Very Difficult)</span>
                 <span>10 (Very Easy)</span>
               </div>
             </div>
           </div>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>
               Did you find the information you were looking for?
             </p>
-            <div className='flex flex-col gap-3'>
+            <div className='flex flex-col gap-2 sm:gap-2.5'>
               {['Yes, easily', 'Somewhat, it took some time', 'No, I gave up'].map((opt) => (
                 <label
                   key={opt}
-                  className='flex items-center gap-3 w-full rounded-[8px] border border-[#F2F2F2] px-4 py-3.5 cursor-pointer hover:bg-gray-50/50 transition-colors'
+                  className='flex items-center gap-3 w-full rounded-xl border border-gray-200 px-3.5 sm:px-4 py-2.5 sm:py-3 cursor-pointer hover:bg-gray-50/50 transition-colors'
                 >
                   <input
                     type='radio'
@@ -217,27 +217,28 @@ export default function MarketResearchSurvey() {
                     {...register('informationFound')}
                     className='h-4 w-4 accent-(--text-primary)'
                   />
-                  <span className='text-sm md:text-base text-[#979191]'>{opt}</span>
+                  <span className='text-xs sm:text-sm text-gray-700'>{opt}</span>
                 </label>
               ))}
             </div>
           </div>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>
               How visually appealing did you find the site?
             </p>
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-1.5 sm:gap-2'>
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   type='button'
                   key={star}
                   onClick={() => setValue('visualAppeal', star)}
-                  className='focus:outline-none transition-colors'
+                  className='p-1 focus:outline-none transition-colors'
+                  aria-label={`Rate ${star} star`}
                 >
                   <Star
-                    className={`h-7 w-7 ${
-                      visualAppeal >= star ? 'fill-[#F2F2F2] text-[#E5E5E5]' : 'text-[#F2F2F2]'
+                    className={`h-6 w-6 sm:h-7 sm:w-7 transition-colors ${
+                      visualAppeal >= star ? 'fill-[#EAB308] text-[#EAB308]' : 'text-gray-300'
                     }`}
                     strokeWidth={1.5}
                   />
@@ -246,11 +247,11 @@ export default function MarketResearchSurvey() {
             </div>
           </div>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>
               How likely are you to recommend the ZilkyWipes website?
             </p>
-            <div className='flex flex-wrap items-center gap-2'>
+            <div className='flex flex-wrap items-center gap-1.5 sm:gap-2'>
               {Array.from({ length: 11 }, (_, i) => i).map((num) => {
                 const isSelected = recommendLikelihood === num;
                 return (
@@ -258,10 +259,10 @@ export default function MarketResearchSurvey() {
                     key={num}
                     type='button'
                     onClick={() => setValue('recommendLikelihood', num)}
-                    className={`h-9 w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center text-sm transition-colors ${
+                    className={`h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium transition-all ${
                       isSelected
-                        ? 'bg-(--text-primary) text-white'
-                        : 'bg-[#F2F2F2] text-[#979191] hover:bg-[#E5E5E5]'
+                        ? 'bg-(--text-primary) text-white shadow-2xs'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
                     {num}
@@ -272,38 +273,38 @@ export default function MarketResearchSurvey() {
           </div>
         </section>
 
-        <div className='w-full h-px bg-[#F2F2F2]' />
+        <div className='w-full h-px bg-gray-100' />
 
         {/* CONTENT FEEDBACK */}
-        <section className='space-y-8 md:space-y-10'>
-          <h2 className='font-heading text-2xl md:text-3xl text-(--text-primary) leading-none'>
+        <section className='space-y-6 sm:space-y-8'>
+          <h2 className='font-heading text-xl sm:text-2xl font-bold text-(--text-primary)'>
             Content Feedback
           </h2>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>
               Which sections did you find most useful?
             </p>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
+            <div className='grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3'>
               {sectionOptions.map((opt) => (
                 <label
                   key={opt}
-                  className='flex items-center gap-3 w-full rounded-[8px] border border-[#F2F2F2] px-4 py-3.5 cursor-pointer hover:bg-gray-50/50 transition-colors'
+                  className='flex items-center gap-2.5 w-full rounded-xl border border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3 cursor-pointer hover:bg-gray-50/50 transition-colors'
                 >
                   <input
                     type='checkbox'
                     value={opt}
                     {...register('usefulSections')}
-                    className='h-4 w-4 rounded-lg border-[#CCCCCC] accent-(--text-primary)'
+                    className='h-4 w-4 rounded border-gray-300 accent-(--text-primary)'
                   />
-                  <span className='text-sm md:text-base text-[#474747]'>{opt}</span>
+                  <span className='text-xs sm:text-sm text-[#474747]'>{opt}</span>
                 </label>
               ))}
             </div>
           </div>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>What would you improve?</p>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>What would you improve?</p>
             <textarea
               rows={4}
               placeholder='Tell us how we can make it better...'
@@ -312,8 +313,8 @@ export default function MarketResearchSurvey() {
             />
           </div>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>
               Did you Encounter Any Issues?
             </p>
             <input
@@ -325,29 +326,30 @@ export default function MarketResearchSurvey() {
           </div>
         </section>
 
-        <div className='w-full h-px bg-[#F2F2F2]' />
+        <div className='w-full h-px bg-gray-100' />
 
         {/* FINAL THOUGHTS */}
-        <section className='space-y-8 md:space-y-10'>
-          <h2 className='font-heading text-2xl md:text-3xl text-(--text-primary) leading-none'>
+        <section className='space-y-6 sm:space-y-8'>
+          <h2 className='font-heading text-xl sm:text-2xl font-bold text-(--text-primary)'>
             Final Thoughts
           </h2>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>
               Overall Experience Rating
             </p>
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-1.5 sm:gap-2'>
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   type='button'
                   key={`overall-${star}`}
                   onClick={() => setValue('overallRating', star)}
-                  className='focus:outline-none transition-colors'
+                  className='p-1 focus:outline-none transition-colors'
+                  aria-label={`Rate ${star} star`}
                 >
                   <Star
-                    className={`h-7 w-7 ${
-                      overallRating >= star ? 'fill-[#F2F2F2] text-[#E5E5E5]' : 'text-[#F2F2F2]'
+                    className={`h-6 w-6 sm:h-7 sm:w-7 transition-colors ${
+                      overallRating >= star ? 'fill-[#EAB308] text-[#EAB308]' : 'text-gray-300'
                     }`}
                     strokeWidth={1.5}
                   />
@@ -356,8 +358,8 @@ export default function MarketResearchSurvey() {
             </div>
           </div>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>Any Additional Comments?</p>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>Any Additional Comments?</p>
             <textarea
               rows={4}
               placeholder="We're all ears..."
@@ -366,12 +368,12 @@ export default function MarketResearchSurvey() {
             />
           </div>
 
-          <div className='space-y-4'>
-            <p className='text-[15px] md:text-lg text-(--text-primary)'>
+          <div className='space-y-3 sm:space-y-4'>
+            <p className='text-xs sm:text-sm md:text-base font-medium text-(--text-primary)'>
               Upload Screenshots (Optional)
             </p>
             <div
-              className='relative w-full rounded-[12px] border border-dashed border-[#CCCCCC] px-6 py-10 transition-colors hover:bg-gray-50/50 cursor-pointer'
+              className='relative w-full rounded-2xl border border-dashed border-gray-300 px-4 sm:px-6 py-7 sm:py-8 transition-colors hover:bg-gray-50/50 cursor-pointer text-center'
               onClick={() => fileInputRef.current?.click()}
             >
               <input
@@ -383,12 +385,12 @@ export default function MarketResearchSurvey() {
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-              <div className='flex flex-col items-center justify-center text-center'>
-                <CloudUpload className='h-6 w-6 text-[#979191] mb-2' strokeWidth={1.5} />
-                <p className='text-xs text-[#979191]'>
+              <div className='flex flex-col items-center justify-center'>
+                <CloudUpload className='h-6 w-6 sm:h-7 sm:w-7 text-gray-400 mb-2' strokeWidth={1.5} />
+                <p className='text-xs sm:text-sm text-gray-700 font-medium'>
                   Drag and drop files here, or click to select
                 </p>
-                <p className='text-[10px] text-[#979191] mt-1 uppercase'>
+                <p className='text-[10px] sm:text-xs text-gray-400 mt-1 uppercase'>
                   PNG, JPG, or PDF up to 5MB
                 </p>
               </div>
@@ -396,11 +398,11 @@ export default function MarketResearchSurvey() {
 
             {/* Uploaded Files Preview */}
             {uploadedFiles.length > 0 && (
-              <div className='flex flex-wrap gap-3 mt-4'>
+              <div className='flex flex-wrap gap-2 sm:gap-3 mt-3'>
                 {uploadedFiles.map((file, index) => (
                   <div
                     key={index}
-                    className='relative flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2'
+                    className='relative flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 sm:py-2 text-xs'
                   >
                     <span className='text-xs text-gray-600 truncate max-w-37.5'>{file.name}</span>
                     <button
@@ -425,7 +427,7 @@ export default function MarketResearchSurvey() {
           <Button
             type='submit'
             disabled={isPending || isUploading}
-            className='bg-(--text-primary) px-10 py-6 text-base md:text-lg rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-105 transition-all duration-300 font-normal disabled:opacity-50 disabled:cursor-not-allowed'
+            className='w-full sm:w-auto bg-(--text-primary) px-8 sm:px-10 py-5 sm:py-6 text-sm sm:text-base md:text-lg rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed'
           >
             {isPending || isUploading ? (
               <span className='flex items-center gap-2'>
@@ -441,3 +443,4 @@ export default function MarketResearchSurvey() {
     </form>
   );
 }
+
