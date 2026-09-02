@@ -40,39 +40,39 @@ export default function BenefitSection2({ data }: { data?: Record<string, unknow
   const renderVideo = isVideo(mediaSrc);
 
   return (
-    <section className='mb-10 lg:mb-30'>
+    <section>
       <SplitContentSection
         desktopDirection='media-content'
-        sectionClassName='md:mt-50'
+        sectionClassName='mt-14 sm:mt-20 md:mt-28 lg:mt-36'
         content={
           <>
             <PageTitle
               title={title}
-              titleClassName='max-w-250! text-[40px]! leading-[1.1]! md:text-[56px]!'
+              titleClassName='text-[28px]! sm:text-[36px]! md:text-[46px]! lg:text-[54px]! leading-[1.15]! sm:leading-[1.1]! font-bold!'
               subtitle={subtitle}
-              subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]! max-w-130! mx-auto text-center'
+              subtitleClassName='mt-4 sm:mt-6 text-[15px]! sm:text-[18px]! md:text-[22px]! leading-relaxed'
             />
-            <div className='mt-6'>
+            <div className='mt-6 sm:mt-8 space-y-3 sm:space-y-4'>
               {environmentalBenefits.map((benefit: {title: string, description: string}, index: number) => {
                 const iconConf = iconMap[index % iconMap.length];
                 const IconComp = iconConf.icon;
                 return (
                 <div
                   key={benefit.title + index}
-                  className='flex flex-row items-center gap-4 mt-5 px-4 border border-gray-200 rounded-xl py-5 md:py-6 hover:shadow-lg transition-shadow duration-300'>
+                  className='flex flex-row items-start sm:items-center gap-3 sm:gap-4 p-3.5 sm:p-4 border border-gray-200/80 rounded-xl bg-white shadow-2xs hover:shadow-xs transition-shadow duration-300'>
                   <div
                     style={{ backgroundColor: iconConf.iconBg }}
-                    className='p-3 rounded-[14px]'>
+                    className='p-2.5 sm:p-3 rounded-xl shrink-0 mt-0.5 sm:mt-0'>
                     <IconComp
-                      className='w-7 h-7'
+                      className='w-5 h-5 sm:w-6 sm:h-6'
                       style={{ color: iconConf.iconColor }}
                     />
                   </div>
                   <div>
-                    <h3 className='text-lg md:text-xl font-semibold text-(--text-primary)'>
+                    <h3 className='text-sm sm:text-base md:text-lg font-bold text-(--text-primary)'>
                       {benefit.title}
                     </h3>
-                    <p className='text-gray-600 max-w-200'>
+                    <p className='text-xs sm:text-sm text-gray-600 leading-relaxed mt-0.5'>
                       {benefit.description}
                     </p>
                   </div>
@@ -88,21 +88,27 @@ export default function BenefitSection2({ data }: { data?: Record<string, unknow
               loop
               muted
               playsInline
-              className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'>
+              preload='auto'
+              className='w-full h-auto aspect-37/45 max-h-125 lg:max-h-none rounded-[24px] sm:rounded-[48px] md:rounded-[72px] lg:rounded-[96px] object-cover shadow-lg'>
               <source src={mediaSrc} type='video/mp4' />
               Your browser does not support the video tag.
             </video>
           ) : (
-            <Image
-              src={mediaSrc}
-              alt='Environmental preview'
-              width={800}
-              height={1000}
-              className='w-full h-auto aspect-37/45 rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] object-cover'
-            />
+            <div className='relative w-full aspect-37/45 max-h-125 lg:max-h-none rounded-[24px] sm:rounded-[48px] md:rounded-[72px] lg:rounded-[96px] overflow-hidden shadow-lg'>
+              <Image
+                src={mediaSrc}
+                alt='Environmental preview'
+                fill
+                priority
+                quality={100}
+                sizes='(min-width: 1024px) 50vw, 100vw'
+                className='object-cover'
+              />
+            </div>
           )
         }
       />
     </section>
   );
 }
+

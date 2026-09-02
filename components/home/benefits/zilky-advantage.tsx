@@ -142,19 +142,20 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
   };
 
   return (
-    <section className='max-w-480 mx-auto px-4 md:px-14 lg:px-45 py-10 md:py-16 font-serif'>
+    <section className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5 py-10 sm:py-16 md:py-20 font-serif'>
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <div className='my-10 md:mb-25 text-center'>
+      <div className='my-6 sm:my-10 md:my-14 text-center'>
         <PageTitle
           title={title}
-          titleClassName='max-w-200! mx-auto text-[40px]! leading-[1.1]! md:text-[56px]!'
+          align='center'
+          titleClassName='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-(--text-primary) text-center max-w-3xl mx-auto'
         />
       </div>
 
       {/* ── Desktop / Tablet ─────────────────────────────────────────────── */}
-      <div className='hidden sm:block'>
+      <div className='hidden sm:block overflow-x-auto'>
         {/* Column headers */}
-        <div className='flex border-b border-gray-200 mb-2'>
+        <div className='flex border-b border-gray-200 mb-2 min-w-145'>
           <div className='w-28 md:w-48 shrink-0 flex items-end pb-4'>
             <span className='font-sans text-xs uppercase tracking-wider text-gray-400'>
               Feature
@@ -206,7 +207,7 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
 
                   {/* Label */}
                   <span
-                    className='text-xl leading-tight font-semibold'
+                    className='text-lg md:text-xl leading-tight font-semibold'
                     style={{
                       color: isZilky
                         ? BRAND
@@ -237,7 +238,7 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
         {parsedAdvantageList.map((row: { label: string, zilky: { type: string, text?: string }, toiletPaper: { type: string, text?: string }, wetWipes: { type: string, text?: string } }, index: number) => {
           const isLast = index === parsedAdvantageList.length - 1;
           return (
-            <div key={index} className='flex'>
+            <div key={index} className='flex min-w-145'>
               <div
                 className={[
                   "w-28 md:w-48 shrink-0 flex items-center py-4 md:py-5 pr-2 md:pr-4 font-sans text-xs md:text-sm text-gray-500",
@@ -280,10 +281,10 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
           return (
             <div
               key={key}
-              className='rounded-2xl border border-gray-100 bg-[#FBFAF9] overflow-hidden'>
+              className='rounded-2xl border border-gray-200/80 bg-[#FBFAF9] overflow-hidden shadow-2xs'>
               {/* Card header */}
               <div
-                className='px-4 py-3 border-b border-gray-100'
+                className='px-4 py-3 border-b border-gray-200/60'
                 style={isZilky ? { background: "#1D3A5F08" } : {}}>
                 <div className='flex items-center gap-3'>
                   {typeof icon === "string" ? (
@@ -321,7 +322,7 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
                       {label}
                     </span>
                     <span
-                      className='text-xs px-2 py-0.5 rounded-full w-fit mt-0.5'
+                      className='text-xs px-2 py-0.5 rounded-full w-fit mt-0.5 font-medium'
                       style={
                         isZilky
                           ? { background: "#1D3A5F15", color: BRAND }
@@ -343,7 +344,7 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
                       "flex items-center justify-between px-4 py-3",
                       !isLast && "border-b border-gray-100",
                     ].join(" ")}>
-                    <span className='text-xs text-gray-500 font-sans'>
+                    <span className='text-xs text-gray-500 font-sans font-medium'>
                       {row.label}
                     </span>
                     <div className='flex items-center justify-end'>
@@ -359,3 +360,4 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
     </section>
   );
 }
+
