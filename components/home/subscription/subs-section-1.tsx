@@ -32,39 +32,34 @@ export default function SubsSection1({ data }: { data?: Record<string, unknown> 
     <section>
       <SplitContentSection
         desktopDirection='content-media'
-        sectionClassName='md:mt-45'
-        innerClassName='gap-x-20 xl:gap-x-40'
+        sectionClassName='mt-14 sm:mt-20 md:mt-28 lg:mt-36'
+        innerClassName='gap-x-8 lg:gap-x-14 xl:gap-x-20'
         content={
           <>
             <PageTitle
               title={title}
-              titleClassName='max-w-180! mx-auto text-[40px]! leading-[1.1]! md:text-[56px]!'
+              titleClassName='text-[28px]! sm:text-[36px]! md:text-[46px]! lg:text-[54px]! leading-[1.15]! sm:leading-[1.1]! font-bold!'
               subtitle={subtitle}
-              subtitleClassName='mt-6 text-[18px]! sm:text-[20px]! md:mt-8 md:text-[24px]!'
+              subtitleClassName='mt-4 sm:mt-6 text-[15px]! sm:text-[18px]! md:text-[22px]! leading-relaxed'
             />
-            <div className='mt-10 md:mt-14 lg:mt-16'>
+            <div className='mt-8 sm:mt-10 md:mt-12'>
               {plans.map((plan: { no: string; title: string }, index: number) => (
                 <div
                   key={plan.no}
-                  className={`grid grid-cols-[68px_1fr] md:grid-cols-[84px_1fr] items-center gap-x-4 py-5 md:py-6 border-b border-(--checkout-divider) ${
+                  className={`grid grid-cols-[44px_1fr] sm:grid-cols-[60px_1fr] md:grid-cols-[72px_1fr] items-center gap-x-3 sm:gap-x-4 py-3.5 sm:py-4 md:py-5 border-b border-(--checkout-divider) ${
                     index === 0 ? 'border-t' : ''
                   }`}
                 >
-                  <div className='text-sm md:text-base leading-none font-medium text-(--text-primary)'>
+                  <div className='text-xs sm:text-sm md:text-base leading-none font-semibold text-(--text-primary)'>
                     / {plan.no}
                   </div>
-                  <p className='justify-self-end text-right text-base md:text-lg leading-tight text-[#4c4c4c]'>
+                  <p className='justify-self-end text-right text-xs sm:text-sm md:text-base leading-snug text-[#4c4c4c] font-medium'>
                     {plan.title}
                   </p>
                 </div>
               ))}
             </div>
           </>
-        }
-        mediaClassName={
-          renderVideo
-            ? 'relative aspect-37/45 overflow-hidden rounded-[36px] sm:rounded-[72px] lg:rounded-[120px]'
-            : ''
         }
         media={
           renderVideo ? (
@@ -73,19 +68,21 @@ export default function SubsSection1({ data }: { data?: Record<string, unknown> 
               loop
               muted
               playsInline
-              className='w-full h-full object-cover rounded-[36px] sm:rounded-[72px] lg:rounded-[120px] aspect-37/45'
+              preload='auto'
+              className='w-full h-auto aspect-37/45 max-h-125 lg:max-h-none rounded-[24px] sm:rounded-[48px] md:rounded-[72px] lg:rounded-[96px] object-cover shadow-lg'
             >
               <source src={mediaSrc} type='video/mp4' />
+              Your browser does not support the video tag.
             </video>
           ) : (
-            <div className='relative w-full aspect-37/45 overflow-hidden rounded-[36px] sm:rounded-[72px] lg:rounded-[120px]'>
+            <div className='relative w-full aspect-37/45 max-h-125 lg:max-h-none rounded-[24px] sm:rounded-[48px] md:rounded-[72px] lg:rounded-[96px] overflow-hidden shadow-lg'>
               <Image
                 src={mediaSrc}
                 alt='Subscription preview'
                 fill
                 priority
                 quality={100}
-                sizes='(min-width: 1536px) 720px, (min-width: 1024px) 45vw, 92vw'
+                sizes='(min-width: 1024px) 50vw, 100vw'
                 className='object-cover'
               />
             </div>
@@ -95,3 +92,4 @@ export default function SubsSection1({ data }: { data?: Record<string, unknown> 
     </section>
   );
 }
+

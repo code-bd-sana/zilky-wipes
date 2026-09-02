@@ -6,10 +6,17 @@ export default function SubscriptionFooter({ data }: { data?: Record<string, unk
   const renderVideo = isVideo(mediaSrc);
 
   return (
-    <section className='bg-(--text-primary)'>
-      <div className='w-full relative min-h-[30vh]'>
+    <section className='relative w-full h-[30vh] sm:h-[45vh] md:h-[60vh] lg:h-[75vh] xl:h-svh min-h-55 sm:min-h-80 md:min-h-115 lg:min-h-145 xl:min-h-175 overflow-hidden bg-[#1D3A5F]'>
+      <div className='w-full h-full'>
         {renderVideo ? (
-          <video autoPlay loop muted playsInline className='w-full h-auto object-cover'>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload='auto'
+            className='w-full h-full object-cover object-center'
+          >
             <source src={mediaSrc} type='video/mp4' />
             Your browser does not support the video tag.
           </video>
@@ -17,9 +24,8 @@ export default function SubscriptionFooter({ data }: { data?: Record<string, unk
           <Image
             src={mediaSrc}
             alt='Footer Media'
-            width={1920}
-            height={1080}
-            className='w-full h-auto object-cover'
+            fill
+            className='object-cover object-center'
             sizes='100vw'
           />
         )}
@@ -27,3 +33,4 @@ export default function SubscriptionFooter({ data }: { data?: Record<string, unk
     </section>
   );
 }
+
