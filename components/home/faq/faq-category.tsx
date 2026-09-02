@@ -15,29 +15,31 @@ export default function FaqCategory({ data }: { data: { name?: string, questions
   };
 
   return (
-    <section className="mx-8 md:mx-20 lg:mx-40 xl:mx-70 2xl:mx-150 pt-20">
-      <p className="text-[#979191] border-b border-[#F2F2F2] pb-2 font-medium">
+    <section className="max-w-3xl mx-auto px-4 sm:px-6 md:px-8 pt-8 sm:pt-10 md:pt-12">
+      <p className="text-xs sm:text-sm font-bold text-(--text-primary) uppercase tracking-wider border-b border-gray-200 pb-2">
         {data.name}
       </p>
 
-      <div className="mt-6 space-y-8">
+      <div className="mt-4 divide-y divide-gray-100">
         {data.questions.map((item: { id?: string, question: string, answer: string }, index: number) => (
-          <div key={item.id || index}>
+          <div key={item.id || index} className="py-3.5 sm:py-4">
             <button
               onClick={() => handleToggle(index)}
-              className="w-full flex items-center justify-between gap-4 text-left"
+              className="w-full flex items-center justify-between gap-4 text-left group"
             >
-              <p className="text-[#474747] text-base font-medium">{item.question}</p>
+              <p className="text-(--text-primary) text-sm sm:text-base font-medium group-hover:opacity-80 transition-opacity">
+                {item.question}
+              </p>
 
               {openIndex === index ? (
-                <X size={18} className="text-[#474747] shrink-0" />
+                <X size={18} className="text-(--text-primary) shrink-0" />
               ) : (
-                <Plus size={18} className="text-[#474747] shrink-0" />
+                <Plus size={18} className="text-(--text-primary) shrink-0" />
               )}
             </button>
 
             {openIndex === index && (
-              <p className="text-[#979191] text-sm mt-2 leading-relaxed">
+              <p className="text-(--text-secondary) text-xs sm:text-sm leading-relaxed mt-2.5">
                 {item.answer}
               </p>
             )}
@@ -47,3 +49,4 @@ export default function FaqCategory({ data }: { data: { name?: string, questions
     </section>
   );
 }
+
