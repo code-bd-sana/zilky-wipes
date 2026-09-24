@@ -22,8 +22,8 @@ export default function ShopHeader({
   titleContent,
 }: ShopHeaderProps) {
   return (
-    <section className='bg-white'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5 pt-20 sm:pt-24 md:pt-32 lg:pt-40 pb-5 sm:pb-8 md:pb-12'>
+    <section className='w-full bg-white'>
+      <div className='w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 pt-20 sm:pt-24 md:pt-28 lg:pt-32 xl:pt-36 2xl:pt-40 pb-5 sm:pb-8 md:pb-10 lg:pb-12'>
         <div className='h-full flex flex-col justify-end gap-4 sm:gap-6'>
           <div className='flex flex-col items-start justify-between gap-4 sm:gap-6 md:flex-row md:items-end'>
             <PageTitle
@@ -61,13 +61,23 @@ export default function ShopHeader({
 
             {categories.length > 0 && (
               <div className='w-full md:w-auto flex items-center gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible sm:pb-0 md:justify-end scrollbar-none'>
+                <button
+                  type='button'
+                  onClick={() => onCategoryChange('')}
+                  className={`rounded-full px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 text-xs sm:text-sm md:text-base font-medium whitespace-nowrap transition-all duration-200 shadow-2xs ${
+                    activeCategoryId === ''
+                      ? "bg-(--text-primary) text-white"
+                      : "border border-(--text-primary)/30 text-(--text-primary) hover:bg-(--text-primary)/5 bg-white"
+                  }`}>
+                  All
+                </button>
                 {categories.map((category) => {
                   const isActive = activeCategoryId === category.id;
                   return (
                     <button
                       key={category.id}
                       type='button'
-                      onClick={() => onCategoryChange(category.id)}
+                      onClick={() => onCategoryChange(isActive ? '' : category.id)}
                       className={`rounded-full px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 text-xs sm:text-sm md:text-base font-medium whitespace-nowrap transition-all duration-200 shadow-2xs ${
                         isActive
                           ? "bg-(--text-primary) text-white"

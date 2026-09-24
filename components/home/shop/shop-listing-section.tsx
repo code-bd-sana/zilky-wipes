@@ -28,8 +28,8 @@ export default function ShopListingSection({
 }: ShopListingSectionProps) {
   const [activePurchaseType, setActivePurchaseType] = useState<string>('one-time');
 
-  // Default to first category if available, otherwise empty string
-  const [activeCategoryId, setActiveCategoryId] = useState<string>(categories[0]?.id || '');
+  // Default to '' (all categories)
+  const [activeCategoryId, setActiveCategoryId] = useState<string>('');
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
@@ -38,8 +38,10 @@ export default function ShopListingSection({
 
       const matchPurchaseType = activePurchaseType === 'subscription' ? hasSubscription : true;
 
-      // Check category
-      const matchCategory = product.categories?.some((cat) => cat.id === activeCategoryId);
+      // Check category (if activeCategoryId is set, filter by category; otherwise include all)
+      const matchCategory = activeCategoryId
+        ? product.categories?.some((cat) => cat.id === activeCategoryId)
+        : true;
 
       return matchPurchaseType && matchCategory;
     });

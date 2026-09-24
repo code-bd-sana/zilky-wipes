@@ -104,7 +104,7 @@ export default function ProductCard({
       }
       transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}>
       <div
-        className='relative flex h-84 sm:h-96 md:h-120 lg:h-135 items-center justify-center px-3 sm:px-4 md:px-6 pb-3 md:pb-4 pt-4 md:pt-6 bg-(--shop-card-bg) rounded-2xl sm:rounded-3xl overflow-hidden transition-colors duration-250 group-hover:bg-(--shop-card-hover-bg)'
+        className='relative flex h-80 sm:h-88 md:h-100 lg:h-115 xl:h-130 2xl:h-145 items-center justify-center px-3 sm:px-4 md:px-6 pb-3 md:pb-4 pt-4 md:pt-6 bg-(--shop-card-bg) rounded-2xl sm:rounded-3xl overflow-hidden transition-colors duration-250 group-hover:bg-(--shop-card-hover-bg)'
         onClick={handleOpenDetails}>
         {subscribeLabel ? (
           <span className='absolute left-2.5 sm:left-3 md:left-4 top-2.5 sm:top-3 md:top-4 whitespace-nowrap rounded-[12px] sm:rounded-[15px] border border-(--shop-badge-border) bg-white px-2 sm:px-2.5 md:px-3 py-0.5 md:py-1 text-xs sm:text-sm md:text-base text-(--shop-badge-text) group-hover:hidden shadow-xs'>
@@ -123,7 +123,7 @@ export default function ProductCard({
             fill
             quality={100}
             loading={imageLoading}
-            sizes='(min-width: 1280px) 26vw, (min-width: 1024px) 30vw, (min-width: 768px) 44vw, 90vw'
+            sizes='(min-width: 1536px) 33vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'
             className='object-contain drop-shadow-md'
           />
         </div>
@@ -142,7 +142,7 @@ export default function ProductCard({
                   event.stopPropagation();
                   handleDecrease();
                 }}
-                className='text-xl sm:text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80'>
+                className='text-xl sm:text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80 cursor-pointer'>
                 -
               </button>
               <span className='text-lg sm:text-xl md:text-2xl leading-none font-medium'>{quantity}</span>
@@ -154,7 +154,7 @@ export default function ProductCard({
                   event.stopPropagation();
                   handleIncrease();
                 }}
-                className='text-xl sm:text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed'>
+                className='text-xl sm:text-2xl md:text-3xl leading-none transition-opacity hover:opacity-80 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed'>
                 +
               </button>
             </div>
@@ -171,7 +171,7 @@ export default function ProductCard({
                 handleAddToCart();
               }
             }}
-            className='h-11 sm:h-12 md:h-14 rounded-full bg-white text-sm sm:text-base md:text-lg font-medium text-(--text-primary) transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm'>
+            className='h-11 sm:h-12 md:h-14 rounded-full bg-white text-sm sm:text-base md:text-lg font-medium text-(--text-primary) transition-opacity hover:opacity-90 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm'>
             {hasMultipleVariants || hasSubscriptionOption ? "Select Options" : stock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}
           </button>
         </div>
@@ -187,7 +187,7 @@ export default function ProductCard({
               handleAddToCart();
             }
           }}
-          className='absolute inset-x-3 sm:inset-x-4 md:inset-x-5 bottom-3 sm:bottom-4 md:bottom-5 flex h-11 sm:h-13 md:h-15 items-center justify-between rounded-full bg-white px-4 sm:px-5 md:px-6 text-(--text-primary) transition-opacity group-hover:hidden disabled:opacity-50 disabled:cursor-not-allowed shadow-sm'>
+          className='absolute inset-x-3 sm:inset-x-4 md:inset-x-5 bottom-3 sm:bottom-4 md:bottom-5 flex h-11 sm:h-13 md:h-15 items-center justify-between rounded-full bg-white px-4 sm:px-5 md:px-6 text-(--text-primary) transition-opacity group-hover:hidden cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm'>
           <span className='text-sm sm:text-base md:text-lg font-medium leading-none'>{hasMultipleVariants || hasSubscriptionOption ? "Select Options" : stock === 0 ? "Out of Stock" : availableToAdd === 0 ? "Max Reached" : "Add to Cart"}</span>
           <span className='text-2xl sm:text-3xl md:text-4xl leading-none'>+</span>
         </button>

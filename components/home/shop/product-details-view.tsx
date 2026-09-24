@@ -101,7 +101,7 @@ export default function ProductDetailsView({ product }: ProductDetailsViewProps)
 
   return (
     <section
-      className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5 flex flex-col pt-20 sm:pt-24 md:pt-28 pb-8 md:pb-12'
+      className='w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 flex flex-col pt-20 sm:pt-24 md:pt-28 lg:pt-32 xl:pt-36 2xl:pt-40 pb-8 md:pb-12'
     >
       <div className='grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12 items-start'>
         <div className='relative w-full aspect-square min-h-65 sm:min-h-85 md:min-h-105 bg-(--shop-card-bg) rounded-2xl sm:rounded-3xl overflow-hidden'>

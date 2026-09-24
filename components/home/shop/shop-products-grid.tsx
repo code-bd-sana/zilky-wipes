@@ -7,7 +7,7 @@ type ShopProductsGridProps = {
 
 export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
   return (
-    <section className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5'>
+    <section className='w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16'>
       {products.length === 0 ? (
         <div className='py-16 sm:py-24 text-center'>
           <p className='text-lg sm:text-xl font-medium text-(--text-secondary)'>
@@ -15,7 +15,7 @@ export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
           </p>
         </div>
       ) : (
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 sm:gap-8 lg:gap-8 xl:gap-10 2xl:gap-10'>
           {products.map((product, index) => {
             // Find min price across variants
             const minPrice = product.variants?.length 
