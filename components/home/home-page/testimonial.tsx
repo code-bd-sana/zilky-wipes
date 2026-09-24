@@ -1,6 +1,7 @@
 "use client";
 
 import PageTitle from "@/components/shared/page-title/page-title";
+import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 
 const allTestimonials = [
@@ -125,9 +126,11 @@ function BenefitPeopleCard({
 export default function BenefitPeople({
   data,
   reviews,
+  align = "start",
 }: {
   data?: Record<string, unknown>;
   reviews?: any[];
+  align?: "center" | "start";
 }) {
   const title =
     (data?.title as string) ||
@@ -230,9 +233,12 @@ export default function BenefitPeople({
     <section className="bg-[#FBFAF9]">
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 mt-14 sm:mt-20 md:mt-28 py-12 sm:py-16 md:py-20 lg:py-24">
         <PageTitle
-
+          align={align}
           title={title}
-          titleClassName="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-(--text-primary) max-w-3xl"
+          titleClassName={cn(
+            "text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-(--text-primary) max-w-3xl",
+            align === "center" && "text-center mx-auto"
+          )}
         />
 
         {/* ── MOBILE: 1 card at a time with swipe ── */}
