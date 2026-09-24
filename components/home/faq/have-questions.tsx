@@ -7,7 +7,7 @@ export default function HaveQuestions({ data }: { data?: Record<string, unknown>
   const subtitle = (data?.subtitle as string) || 'Our support team is here to help Monday–Friday, 9am–5pm EST';
 
   return (
-    <section className='max-w-3xl mx-auto px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-20'>
+    <section className='max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-12 sm:py-16 md:py-20'>
       <div className='bg-[#FBFAF9] border border-gray-200/80 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 text-center shadow-2xs'>
         <PageTitle
           align='center'
@@ -18,12 +18,12 @@ export default function HaveQuestions({ data }: { data?: Record<string, unknown>
         />
         <div className='flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-6'>
           <a href='mailto:support@zilkywipes.com' className='w-full sm:w-auto'>
-            <Button className='w-full sm:w-auto bg-(--text-primary) text-white hover:bg-[#142e50] px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium shadow-2xs'>
+            <Button className='w-full sm:w-auto bg-(--text-primary) text-white hover:bg-[#142e50] px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium shadow-2xs cursor-pointer'>
               Email Us
             </Button>
           </a>
           <Link href='/about' className='w-full sm:w-auto'>
-            <Button className='w-full sm:w-auto bg-white text-(--text-primary) hover:bg-black/5 border border-gray-200 px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium shadow-2xs'>
+            <Button className='w-full sm:w-auto bg-white text-(--text-primary) hover:bg-black/5 border border-gray-200 px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium shadow-2xs cursor-pointer'>
               Contact Us
             </Button>
           </Link>

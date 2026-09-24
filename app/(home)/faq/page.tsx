@@ -1,6 +1,5 @@
-import FaqCategory from "@/components/home/faq/faq-category";
-import HaveQuestions from "@/components/home/faq/have-questions";
-import HelpTitle from "@/components/home/faq/help-title";
+import FaqClient from "@/components/home/faq/faq-client";
+import { defaultFaqTopics } from "@/components/home/faq/default-faqs";
 
 async function getFaqPageData() {
   try {
@@ -23,17 +22,14 @@ export default async function FaqPage() {
     return acc;
   }, {} as Record<string, Record<string, unknown>>);
 
-  const faqs = (sections['faqs']?.topics as { name?: string; questions?: { id?: string; question: string; answer: string; }[] }[]) || [];
+  const rawFaqs = sections['faqs']?.topics as { name?: string; questions?: { id?: string; question: string; answer: string; }[] }[] | undefined;
+  const faqs = rawFaqs && rawFaqs.length > 0 ? rawFaqs : defaultFaqTopics;
 
   return (
-    <>
-      <HelpTitle data={sections['hero']} />
-      
-      {faqs.map((topic: { name?: string; questions?: { id?: string; question: string; answer: string; }[] }, index: number) => (
-        <FaqCategory key={topic.name || index} data={topic} />
-      ))}
-
-      <HaveQuestions data={sections['cta']} />
-    </>
+    <FaqClient
+      heroData={sections['hero']}
+      topics={faqs}
+      ctaData={sections['cta']}
+    />
   );
 }
