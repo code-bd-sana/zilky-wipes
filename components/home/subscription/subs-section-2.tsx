@@ -29,14 +29,14 @@ export default function SubsSection2({ data }: { data?: Record<string, unknown> 
               subtitle={subtitle}
               subtitleClassName='mt-4 sm:mt-6 text-[15px]! sm:text-[18px]! md:text-[22px]! leading-relaxed'
             />
-            <div className='flex flex-col sm:flex-row justify-start gap-3 sm:gap-4 md:gap-5 mt-6 sm:mt-8'>
+            <div className='flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 md:gap-5 mt-6 sm:mt-8 w-full'>
               <Link href='/shop' className='w-full sm:w-auto'>
-                <Button className='w-full sm:w-auto bg-(--text-primary) px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg md:text-xl rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300'>
+                <Button className='w-full sm:w-auto bg-(--text-primary) px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg md:text-xl rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300 cursor-pointer'>
                   Shop ZilkyWipes
                 </Button>
               </Link>
               <Link href='/subscription' className='w-full sm:w-auto'>
-                <Button className='w-full sm:w-auto bg-white border-2 border-(--text-primary) text-(--text-primary) px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg md:text-xl rounded-full shadow-sm hover:bg-(--text-primary) hover:text-white hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300'>
+                <Button className='w-full sm:w-auto bg-white border-2 border-(--text-primary) text-(--text-primary) px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg md:text-xl rounded-full shadow-sm hover:bg-(--text-primary) hover:text-white hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300 cursor-pointer'>
                   Subscribe & Save
                 </Button>
               </Link>
@@ -51,13 +51,13 @@ export default function SubsSection2({ data }: { data?: Record<string, unknown> 
               muted
               playsInline
               preload='auto'
-              className='w-full h-auto aspect-37/45 max-h-125 lg:max-h-none rounded-[24px] sm:rounded-[48px] md:rounded-[72px] lg:rounded-[96px] object-cover shadow-lg'
+              className='w-full h-auto max-w-105 sm:max-w-115 md:max-w-120 lg:max-w-none aspect-37/45 sm:aspect-3/4 lg:aspect-37/45 rounded-[24px] sm:rounded-[36px] md:rounded-[48px] lg:rounded-[72px] xl:rounded-[96px] object-cover shadow-lg mx-auto'
             >
               <source src={mediaSrc} type='video/mp4' />
               Your browser does not support the video tag.
             </video>
           ) : (
-            <div className='relative w-full aspect-37/45 max-h-125 lg:max-h-none rounded-[24px] sm:rounded-[48px] md:rounded-[72px] lg:rounded-[96px] overflow-hidden shadow-lg'>
+            <div className='relative w-full max-w-105 sm:max-w-115 md:max-w-120 lg:max-w-none aspect-37/45 sm:aspect-3/4 lg:aspect-37/45 rounded-[24px] sm:rounded-[36px] md:rounded-[48px] lg:rounded-[72px] xl:rounded-[96px] overflow-hidden shadow-lg mx-auto'>
               <Image
                 src={mediaSrc}
                 alt='Subscription preview'

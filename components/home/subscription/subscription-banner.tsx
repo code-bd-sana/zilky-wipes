@@ -40,12 +40,12 @@ export default function SubscriptionBanner({ data }: { data?: Record<string, unk
       </div>
 
       {/* Content overlay */}
-      <div className='relative z-10 h-full w-full max-w-7xl mx-auto flex items-end justify-start text-start px-4 sm:px-6 md:px-10 lg:px-12 pb-3.5 sm:pb-7 md:pb-10 lg:pb-12 xl:pb-16 pt-16 sm:pt-20'>
+      <div className='relative z-10 h-full w-full flex items-end justify-start text-start px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 pb-4 sm:pb-7 md:pb-10 lg:pb-12 xl:pb-16 pt-16 sm:pt-20'>
         <PageTitle
           align='start'
           title={title}
           className='w-full'
-          titleClassName='text-white! text-[20px]! sm:text-[32px]! md:text-[50px]! lg:text-[72px]! xl:text-[100px]! 2xl:text-[120px]! font-bold! leading-[1.1]! sm:leading-[1.05]! md:leading-[1]! xl:leading-[0.95]! tracking-tight max-w-full drop-shadow-md'
+          titleClassName='text-white! text-[22px]! sm:text-[32px]! md:text-[44px]! lg:text-[54px]! xl:text-[72px]! 2xl:text-[100px]! font-bold! leading-[1.12]! sm:leading-[1.05]! md:leading-[1.02]! xl:leading-[1]! tracking-tight max-w-full drop-shadow-md lg:whitespace-nowrap'
         />
       </div>
     </section>

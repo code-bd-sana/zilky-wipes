@@ -91,12 +91,12 @@ export default function BenefitSection2({ data }: { data?: Record<string, unknow
               muted
               playsInline
               preload='auto'
-              className='w-full h-auto aspect-37/45 max-h-125 lg:max-h-none rounded-[24px] sm:rounded-[48px] md:rounded-[72px] lg:rounded-[96px] object-cover shadow-lg'>
+              className='w-full h-auto max-w-105 sm:max-w-115 md:max-w-120 lg:max-w-none aspect-37/45 sm:aspect-3/4 lg:aspect-37/45 rounded-[24px] sm:rounded-[36px] md:rounded-[48px] lg:rounded-[72px] xl:rounded-[96px] object-cover shadow-lg mx-auto'>
               <source src={mediaSrc} type='video/mp4' />
               Your browser does not support the video tag.
             </video>
           ) : (
-            <div className='relative w-full aspect-37/45 max-h-125 lg:max-h-none rounded-[24px] sm:rounded-[48px] md:rounded-[72px] lg:rounded-[96px] overflow-hidden shadow-lg'>
+            <div className='relative w-full max-w-105 sm:max-w-115 md:max-w-120 lg:max-w-none aspect-37/45 sm:aspect-3/4 lg:aspect-37/45 rounded-[24px] sm:rounded-[36px] md:rounded-[48px] lg:rounded-[72px] xl:rounded-[96px] overflow-hidden shadow-lg mx-auto'>
               <Image
                 src={mediaSrc}
                 alt='Environmental preview'
