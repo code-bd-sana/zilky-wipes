@@ -63,9 +63,10 @@ export default function SplitContentSection({
   return (
     <section
       className={cn(
-        "max-w-7xl mx-auto relative overflow-x-hidden px-4 sm:px-6 md:px-10 lg:px-12.5 mt-14 sm:mt-20 md:mt-28 lg:mt-36",
+        "w-full relative overflow-x-hidden px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 mt-14 sm:mt-20 md:mt-28 lg:mt-36",
         sectionClassName,
       )}>
+
       <div
         className={cn(
           "min-w-0 flex justify-between items-center gap-x-8 lg:gap-x-12 xl:gap-x-16 gap-y-8 sm:gap-y-12 md:gap-y-16",

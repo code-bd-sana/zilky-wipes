@@ -139,20 +139,25 @@ const Footer = () => {
 
   return (
     <footer className='w-full pt-10 sm:pt-12 md:pt-14 pb-8 bg-(--text-primary)'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5'>
+      <div className='w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16'>
         {/* GRID */}
+
         <div
           className='
             grid
             grid-cols-1
-            gap-10
+            gap-y-10
+            gap-x-6
             md:grid-cols-12
-            md:gap-12
-            lg:gap-16
+            md:gap-y-12
+            md:gap-x-8
+            lg:gap-x-8
+            xl:gap-x-10
+            2xl:gap-x-12
           '
         >
           {/* Branding */}
-          <div className='md:col-span-12 lg:col-span-4 flex flex-col gap-y-4 sm:gap-y-6'>
+          <div className='md:col-span-12 lg:col-span-3 xl:col-span-4 2xl:col-span-4 flex flex-col gap-y-4 sm:gap-y-6'>
             <Link href='/' className='inline-block'>
               <Image
                 src='/Logo/logo-white.png'
@@ -193,15 +198,16 @@ const Footer = () => {
 
           {/* Links */}
           <div
-            className='md:col-span-7 lg:col-span-5 grid
+            className='md:col-span-7 lg:col-span-5 xl:col-span-5 2xl:col-span-5 grid
             grid-cols-2
-            sm:grid-cols-3
-            gap-8
-            sm:gap-6
-            md:gap-8'
+            sm:flex
+            sm:justify-between
+            sm:items-start
+            gap-6
+            sm:gap-8'
           >
             {/* Pages */}
-            <div>
+            <div className='sm:shrink-0'>
               <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
                 Pages
               </p>
@@ -211,7 +217,7 @@ const Footer = () => {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className='text-white/80 hover:text-white transition-colors duration-200 text-sm sm:text-base'
+                      className='text-white/80 hover:text-white transition-colors duration-200 text-sm sm:text-base whitespace-nowrap'
                     >
                       {item.label}
                     </Link>
@@ -221,7 +227,7 @@ const Footer = () => {
             </div>
 
             {/* Others */}
-            <div>
+            <div className='sm:shrink-0'>
               <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
                 Others
               </p>
@@ -231,7 +237,7 @@ const Footer = () => {
                   <li key={item.href}>
                     <a
                       href={item.href}
-                      className='text-white/80 hover:text-white transition-colors duration-200 text-sm sm:text-base'
+                      className='text-white/80 hover:text-white transition-colors duration-200 text-sm sm:text-base whitespace-nowrap'
                     >
                       {item.label}
                     </a>
@@ -241,34 +247,61 @@ const Footer = () => {
             </div>
 
             {/* Contact */}
-            <div className='col-span-2 sm:col-span-1'>
+            <div className='col-span-2 sm:col-span-1 sm:shrink-0 min-w-0'>
               <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
                 Contact Us
               </p>
 
               <ul className='flex flex-col gap-3 text-white/90 text-sm sm:text-base'>
                 {contactInfo.email && (
-                  <li className='flex items-start gap-2.5'>
-                    <Mail className='h-4 w-4 shrink-0 mt-1 text-white/70' />
-                    <span className='leading-relaxed text-white/80 break-all'>
+                  <li className='flex items-center gap-2.5'>
+                    <Mail className='h-4 w-4 shrink-0 text-white/70' />
+                    <a
+                      href={`mailto:${contactInfo.email}`}
+                      className='leading-relaxed text-white/80 hover:text-white transition-colors duration-200 whitespace-nowrap'
+                    >
                       {contactInfo.email}
-                    </span>
+                    </a>
                   </li>
                 )}
                 {contactInfo.phone && (
-                  <li className='flex items-start gap-2.5'>
-                    <Phone className='h-4 w-4 shrink-0 mt-1 text-white/70' />
-                    <span className='leading-relaxed text-white/80'>
+                  <li className='flex items-center gap-2.5'>
+                    <Phone className='h-4 w-4 shrink-0 text-white/70' />
+                    <a
+                      href={`tel:${contactInfo.phone.replace(/[^0-9+]/g, '')}`}
+                      className='leading-relaxed text-white/80 hover:text-white transition-colors duration-200 whitespace-nowrap'
+                    >
                       {contactInfo.phone}
-                    </span>
+                    </a>
                   </li>
                 )}
                 {contactInfo.address && (
                   <li className='flex items-start gap-2.5'>
-                    <MapPin className='h-4 w-4 shrink-0 mt-1 text-white/70' />
-                    <span className='leading-relaxed text-white/80'>
-                      {contactInfo.address}
-                    </span>
+                    <MapPin className='h-4 w-4 shrink-0 mt-0.5 sm:mt-1 text-white/70' />
+                    <div className='leading-relaxed text-white/80 flex flex-col'>
+                      {(() => {
+                        const addr = String(contactInfo.address);
+                        if (addr.includes('\n')) {
+                          return addr.split('\n').map((line, idx) => (
+                            <span key={idx} className='block whitespace-nowrap'>
+                              {line.trim()}
+                            </span>
+                          ));
+                        }
+                        if (addr.includes(',')) {
+                          const firstComma = addr.indexOf(',');
+                          const line1 = addr.slice(0, firstComma).trim();
+                          const line2 = addr.slice(firstComma + 1).trim();
+                          return (
+                            <>
+                              <span className='block whitespace-nowrap'>{line1}</span>
+                              <span className='block whitespace-nowrap'>{line2}</span>
+                            </>
+                          );
+                        }
+                        return <span>{addr}</span>;
+                      })()}
+                    </div>
                   </li>
                 )}
               </ul>
@@ -276,7 +309,9 @@ const Footer = () => {
           </div>
 
           {/* GET NOTIFIED */}
-          <div className='md:col-span-5 lg:col-span-3 flex flex-col'>
+          <div className='md:col-span-5 lg:col-span-4 xl:col-span-3 2xl:col-span-3 flex flex-col'>
+
+
             <p className='text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 font-heading tracking-wide'>
               {subscription.title}
             </p>

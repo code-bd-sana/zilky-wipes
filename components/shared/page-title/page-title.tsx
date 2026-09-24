@@ -172,10 +172,11 @@ export default function PageTitle({
             )}
           >
             {subtitle.map((line, index) => (
-              <p key={index} className="leading-relaxed md:-m-2">
+              <p key={index} className="leading-relaxed">
                 {line}
               </p>
             ))}
+
           </motion.div>
         )}
       </div>

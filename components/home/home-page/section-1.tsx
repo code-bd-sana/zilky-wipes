@@ -29,7 +29,7 @@ export default function Section1({ data }: { data?: Record<string, unknown> }) {
               subtitle={subtitle}
               subtitleClassName='mt-4 sm:mt-6 text-[15px]! sm:text-[18px]! md:text-[22px]! leading-relaxed'
             />
-            <div className='flex flex-col sm:flex-row justify-start gap-3 sm:gap-4 md:gap-5 mt-6 sm:mt-8'>
+            <div className='flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 md:gap-5 mt-6 sm:mt-8 w-full'>
               <Link href='/shop' className='w-full sm:w-auto'>
                 <Button className='w-full sm:w-auto bg-(--text-primary) px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg md:text-xl rounded-full text-white shadow-sm hover:bg-[#142e50] hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300'>
                   Shop ZilkyWipes
@@ -41,6 +41,7 @@ export default function Section1({ data }: { data?: Record<string, unknown> }) {
                 </Button>
               </Link>
             </div>
+
           </>
         }
         media={

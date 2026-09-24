@@ -9,8 +9,9 @@ export default function ShopeWipes({ data }: { data?: Record<string, unknown> })
   ];
 
   return (
-    <section className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5 mt-14 sm:mt-20 md:mt-28 lg:mt-32'>
+    <section className='w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 mt-14 sm:mt-20 md:mt-28 lg:mt-32'>
       <PageTitle
+
         align='start'
         title={title}
         subtitle={subtitle}

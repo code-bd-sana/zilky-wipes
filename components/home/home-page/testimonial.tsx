@@ -147,12 +147,18 @@ export default function BenefitPeople({
     desktopSlides.push(displayTestimonials.slice(i, i + 4));
   }
 
+  const laptopSlides = [];
+  for (let i = 0; i < displayTestimonials.length; i += 3) {
+    laptopSlides.push(displayTestimonials.slice(i, i + 3));
+  }
+
   const tabletSlides = [];
   for (let i = 0; i < displayTestimonials.length; i += 2) {
     tabletSlides.push(displayTestimonials.slice(i, i + 2));
   }
 
   const [desktopSlide, setDesktopSlide] = useState(0);
+  const [laptopSlide, setLaptopSlide] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [tabletSlide, setTabletSlide] = useState(0);
 
@@ -178,14 +184,22 @@ export default function BenefitPeople({
         typeof window !== "undefined" &&
         window.innerWidth >= 768 &&
         window.innerWidth < 1024;
+      const isLaptop =
+        typeof window !== "undefined" &&
+        window.innerWidth >= 1024 &&
+        window.innerWidth < 1280;
       const isDesktop =
-        typeof window !== "undefined" && window.innerWidth >= 1024;
+        typeof window !== "undefined" && window.innerWidth >= 1280;
 
       if (diff > 0) {
         // Swipe left (next)
         if (isDesktop) {
           setDesktopSlide((prev) =>
             Math.min(prev + 1, desktopSlides.length - 1),
+          );
+        } else if (isLaptop) {
+          setLaptopSlide((prev) =>
+            Math.min(prev + 1, laptopSlides.length - 1),
           );
         } else if (isTablet) {
           setTabletSlide((prev) => Math.min(prev + 1, tabletSlides.length - 1));
@@ -198,6 +212,8 @@ export default function BenefitPeople({
         // Swipe right (prev)
         if (isDesktop) {
           setDesktopSlide((prev) => Math.max(prev - 1, 0));
+        } else if (isLaptop) {
+          setLaptopSlide((prev) => Math.max(prev - 1, 0));
         } else if (isTablet) {
           setTabletSlide((prev) => Math.max(prev - 1, 0));
         } else {
@@ -212,10 +228,11 @@ export default function BenefitPeople({
 
   return (
     <section className="bg-[#FBFAF9]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5 mt-14 sm:mt-20 md:mt-28 py-12 sm:py-16 md:py-20 lg:py-24">
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 mt-14 sm:mt-20 md:mt-28 py-12 sm:py-16 md:py-20 lg:py-24">
         <PageTitle
+
           title={title}
-          titleClassName="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-(--text-primary) max-w-3xl"
+          titleClassName="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-(--text-primary) max-w-3xl"
         />
 
         {/* ── MOBILE: 1 card at a time with swipe ── */}
@@ -306,22 +323,71 @@ export default function BenefitPeople({
           </div>
         </div>
 
-        {/* ── DESKTOP: 4 cards per slide (large screens) ── */}
+        {/* ── LAPTOP: 3 cards per slide with swipe ── */}
         <div
-          className="hidden lg:block mt-14"
+          className="hidden lg:block xl:hidden mt-14"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
           <div className="relative overflow-hidden">
             <div
-              className="flex transition-transform duration-300 ease-in-out gap-x-6"
+              className="flex transition-transform duration-300 ease-in-out"
+              style={{ transform: `translateX(-${laptopSlide * 100}%)` }}
+            >
+              {laptopSlides.map((slide, slideIdx) => (
+                <div
+                  key={slideIdx}
+                  className="w-full shrink-0 flex gap-5 px-1 justify-center"
+                >
+                  {slide.map((person, personIdx) => (
+                    <div key={personIdx} className="flex-1">
+                      <BenefitPeopleCard person={person} />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Laptop dots */}
+          <div className="flex justify-center items-center gap-2 mt-10">
+            {laptopSlides.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => setLaptopSlide(index)}
+                className="p-1.5 focus:outline-none"
+                aria-label={`Go to slide ${index + 1}`}
+              >
+                <span
+                  className={`block rounded-full transition-colors duration-200 ${
+                    index === laptopSlide
+                      ? "w-3 h-3 bg-[#1B2F6E]"
+                      : "w-2.5 h-2.5 bg-gray-300 hover:bg-gray-400"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── DESKTOP: 4 cards per slide (xl screens) ── */}
+        <div
+          className="hidden xl:block mt-14"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="relative overflow-hidden">
+            <div
+              className="flex transition-transform duration-300 ease-in-out"
               style={{ transform: `translateX(-${desktopSlide * 100}%)` }}
             >
               {desktopSlides.map((slide, slideIdx) => (
                 <div
                   key={slideIdx}
-                  className="w-full shrink-0 flex gap-x-6 justify-center"
+                  className="w-full shrink-0 flex gap-6 px-1 justify-center"
                 >
                   {slide.map((person, personIdx) => (
                     <div key={personIdx} className="flex-1">
@@ -358,4 +424,7 @@ export default function BenefitPeople({
     </section>
   );
 }
+
+
+
 
