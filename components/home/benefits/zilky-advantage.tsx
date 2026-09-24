@@ -142,7 +142,7 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
   };
 
   return (
-    <section className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5 py-10 sm:py-16 md:py-20 font-serif'>
+    <section className='w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 py-10 sm:py-16 md:py-20 lg:py-24 font-serif'>
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div className='my-6 sm:my-10 md:my-14 text-center'>
         <PageTitle
@@ -153,10 +153,10 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
       </div>
 
       {/* ── Desktop / Tablet ─────────────────────────────────────────────── */}
-      <div className='hidden sm:block overflow-x-auto'>
+      <div className='hidden sm:block overflow-x-auto max-w-6xl xl:max-w-7xl 2xl:max-w-375 mx-auto'>
         {/* Column headers */}
         <div className='flex border-b border-gray-200 mb-2 min-w-145'>
-          <div className='w-28 md:w-48 shrink-0 flex items-end pb-4'>
+          <div className='w-28 md:w-48 lg:w-60 shrink-0 flex items-end pb-4'>
             <span className='font-sans text-xs uppercase tracking-wider text-gray-400'>
               Feature
             </span>
@@ -241,7 +241,7 @@ export default function ZilkyAdvantage({ data }: { data?: Record<string, unknown
             <div key={index} className='flex min-w-145'>
               <div
                 className={[
-                  "w-28 md:w-48 shrink-0 flex items-center py-4 md:py-5 pr-2 md:pr-4 font-sans text-xs md:text-sm text-gray-500",
+                  "w-28 md:w-48 lg:w-60 shrink-0 flex items-center py-4 md:py-5 pr-2 md:pr-4 font-sans text-xs md:text-sm text-gray-500",
                   !isLast && "border-b border-gray-100",
                 ].join(" ")}>
                 {row.label}

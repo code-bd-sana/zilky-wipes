@@ -40,9 +40,9 @@ export default function ProvenResults({ data }: { data?: Record<string, unknown>
   const stats = (data?.statList as {value: string, title: string, description: string}[])?.length ? (data?.statList as {value: string, title: string, description: string}[]) : defaultStats;
 
   return (
-    <section className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12 my-10 sm:my-16 md:my-20'>
+    <section className='w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 my-10 sm:my-16 md:my-20 lg:my-24'>
       <div
-        className='px-5 sm:px-8 md:px-12 py-10 sm:py-16 md:py-20 rounded-3xl font-serif'
+        className='px-5 sm:px-8 md:px-12 lg:px-14 xl:px-16 py-10 sm:py-16 md:py-20 rounded-3xl font-serif'
         style={{ background: "#1D3A5F" }}
       >
         {/* Heading */}
@@ -53,7 +53,7 @@ export default function ProvenResults({ data }: { data?: Record<string, unknown>
         />
 
         {/* Cards grid */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 xl:gap-8'>
           {stats.map((stat: {value: string, title: string, description: string}, index: number) => {
             const config = iconConfigs[index % iconConfigs.length];
             const Icon = config.icon;

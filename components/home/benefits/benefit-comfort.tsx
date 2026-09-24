@@ -61,7 +61,7 @@ export default function BenefitComfort({ data }: { data?: Record<string, unknown
   const comfortData = (data?.detailList as {title: string, description: string}[])?.length ? (data?.detailList as {title: string, description: string}[]) : defaultComfortData;
 
   return (
-    <section className='max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12.5 py-10 sm:py-16 md:py-20'>
+    <section className='w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 py-10 sm:py-16 md:py-20 lg:py-24'>
       <div className='my-6 sm:my-10 md:my-14 text-center'>
         <PageTitle
           title={title}
@@ -69,13 +69,13 @@ export default function BenefitComfort({ data }: { data?: Record<string, unknown
           titleClassName='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-(--text-primary) text-center max-w-3xl mx-auto'
         />
       </div>
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 xl:gap-8'>
         {comfortData.map((item: {title: string, description: string}, index: number) => {
           const IconComp = iconMap[index % iconMap.length];
           return (
           <div
             key={index}
-            className='h-full min-h-35 bg-[#FBFAF9] rounded-2xl hover:scale-[1.02] transition-all duration-300 p-5 sm:p-6 flex flex-col border border-gray-100 shadow-2xs'>
+            className='h-full min-h-35 bg-[#FBFAF9] rounded-2xl hover:scale-[1.02] hover:shadow-md transition-all duration-300 p-5 sm:p-6 lg:p-7 flex flex-col border border-gray-100 shadow-2xs'>
             <IconComp className='w-5 h-5 sm:w-6 sm:h-6 text-(--text-primary) mb-3 sm:mb-4' />
             <div className='flex-1'>
               <h3 className='text-base sm:text-lg md:text-xl font-bold text-[#262626] mb-1.5'>
