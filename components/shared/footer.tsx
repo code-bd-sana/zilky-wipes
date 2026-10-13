@@ -76,13 +76,13 @@ const defaultPagesLinks = [
   { label: 'FAQ', href: '/faq' },
 ];
 
-const defaultOtherLinks = [
-  { label: 'Press & Media', href: '/' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Careers', href: '/career' },
-  { label: 'Terms & Conditions', href: '/terms' },
-  { label: 'Return Policy', href: '/return' },
-];
+// const defaultOtherLinks = [
+//   { label: 'Press & Media', href: '/' },
+//   { label: 'Blog', href: '/blog' },
+//   { label: 'Careers', href: '/career' },
+//   { label: 'Terms & Conditions', href: '/terms' },
+//   { label: 'Return Policy', href: '/return' },
+// ];
 
 const defaultAffiliateItems = [
   { platform: 'Facebook', href: 'https://www.facebook.com/ZilkyWipes' },
@@ -124,7 +124,7 @@ const Footer = () => {
     getContent('company_info')?.text ||
     'ZilkyWipes was created for everyday hygiene, done better. We make flushable, biodegradable wet wipes on a roll — designed to replace dry paper with something gentler, cleaner, and more considered.';
   const pagesLinks = getContent('links_pages')?.links || defaultPagesLinks;
-  const otherLinks = getContent('links_others')?.links || defaultOtherLinks;
+  // const otherLinks = getContent('links_others')?.links || defaultOtherLinks;
   const affiliateItems = getContent('links_social')?.links || defaultAffiliateItems;
   const contactInfo = getContent('contact_info') || {
     email: 'contact@company.com',
@@ -145,19 +145,18 @@ const Footer = () => {
         <div
           className='
             grid
-            grid-cols-1
+            grid-cols-2
             gap-y-10
             gap-x-6
-            md:grid-cols-12
-            md:gap-y-12
-            md:gap-x-8
+            sm:gap-x-8
+            lg:grid-cols-12
             lg:gap-x-8
             xl:gap-x-10
             2xl:gap-x-12
           '
         >
           {/* Branding */}
-          <div className='md:col-span-12 lg:col-span-3 xl:col-span-4 2xl:col-span-4 flex flex-col gap-y-4 sm:gap-y-6'>
+          <div className='col-span-2 lg:col-span-4 flex flex-col gap-y-4 sm:gap-y-6'>
             <Link href='/' className='inline-block'>
               <Image
                 src='/Logo/logo-white.png'
@@ -172,7 +171,7 @@ const Footer = () => {
               <p className='text-white/90 text-sm sm:text-base leading-relaxed max-w-lg'>{companyText}</p>
             </div>
             {/* links */}
-            <div className='mt-2 flex flex-wrap gap-3 sm:gap-4'>
+            <div className='mt-2 flex flex-wrap gap-2.5 sm:gap-3 xl:gap-4'>
               {affiliateItems.map((item: { platform: string; href: string }) => {
                 const Icon = getSocialIcon(item.platform);
                 const ensureAbsoluteUrl = (url: string) => {
@@ -187,131 +186,118 @@ const Footer = () => {
                     target='_blank'
                     rel='noopener noreferrer'
                     aria-label={item.platform}
-                    className='inline-flex items-center justify-center h-9 w-9 rounded-full border border-white/30 text-white hover:bg-white/10 hover:border-white transition-all duration-300'
+                    className='inline-flex items-center justify-center h-8 w-8 sm:h-8.5 sm:w-8.5 xl:h-9 xl:w-9 rounded-full border border-white/30 text-white hover:bg-white/10 hover:border-white transition-all duration-300'
                   >
-                    <Icon className='h-4 w-4 shrink-0' />
+                    <Icon className='h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0' />
                   </a>
                 );
               })}
             </div>
           </div>
 
-          {/* Links */}
-          <div
-            className='md:col-span-7 lg:col-span-5 xl:col-span-5 2xl:col-span-5 grid
-            grid-cols-2
-            sm:flex
-            sm:justify-between
-            sm:items-start
-            gap-6
-            sm:gap-8'
-          >
-            {/* Pages */}
-            <div className='sm:shrink-0'>
-              <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
-                Pages
-              </p>
+          {/* Pages */}
+          <div className='col-span-1 lg:col-span-2'>
+            <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
+              Pages
+            </p>
 
-              <ul className='flex flex-col gap-2 text-white/90'>
-                {pagesLinks.map((item: { href: string; label: string }) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className='text-white/80 hover:text-white transition-colors duration-200 text-sm sm:text-base whitespace-nowrap'
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ul className='flex flex-col gap-2 text-white/90'>
+              {pagesLinks.map((item: { href: string; label: string }) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className='text-white/80 hover:text-white transition-colors duration-200 text-xs sm:text-sm xl:text-base whitespace-nowrap'
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            {/* Others */}
-            <div className='sm:shrink-0'>
-              <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
-                Others
-              </p>
+          {/* Others (commented out for now) */}
+          {/* <div className='col-span-1 lg:col-span-1'>
+            <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
+              Others
+            </p>
 
-              <ul className='flex flex-col gap-2 text-white/90'>
-                {otherLinks.map((item: { href: string; label: string }) => (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      className='text-white/80 hover:text-white transition-colors duration-200 text-sm sm:text-base whitespace-nowrap'
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ul className='flex flex-col gap-2 text-white/90'>
+              {otherLinks.map((item: { href: string; label: string }) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    className='text-white/80 hover:text-white transition-colors duration-200 text-xs sm:text-sm xl:text-base whitespace-nowrap'
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div> */}
 
-            {/* Contact */}
-            <div className='col-span-2 sm:col-span-1 sm:shrink-0 min-w-0'>
-              <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
-                Contact Us
-              </p>
+          {/* Contact */}
+          <div className='col-span-1 lg:col-span-3 min-w-0'>
+            <p className='text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 font-heading tracking-wide'>
+              Contact Us
+            </p>
 
-              <ul className='flex flex-col gap-3 text-white/90 text-sm sm:text-base'>
-                {contactInfo.email && (
-                  <li className='flex items-center gap-2.5'>
-                    <Mail className='h-4 w-4 shrink-0 text-white/70' />
-                    <a
-                      href={`mailto:${contactInfo.email}`}
-                      className='leading-relaxed text-white/80 hover:text-white transition-colors duration-200 whitespace-nowrap'
-                    >
-                      {contactInfo.email}
-                    </a>
-                  </li>
-                )}
-                {contactInfo.phone && (
-                  <li className='flex items-center gap-2.5'>
-                    <Phone className='h-4 w-4 shrink-0 text-white/70' />
-                    <a
-                      href={`tel:${contactInfo.phone.replace(/[^0-9+]/g, '')}`}
-                      className='leading-relaxed text-white/80 hover:text-white transition-colors duration-200 whitespace-nowrap'
-                    >
-                      {contactInfo.phone}
-                    </a>
-                  </li>
-                )}
-                {contactInfo.address && (
-                  <li className='flex items-start gap-2.5'>
-                    <MapPin className='h-4 w-4 shrink-0 mt-0.5 sm:mt-1 text-white/70' />
-                    <div className='leading-relaxed text-white/80 flex flex-col'>
-                      {(() => {
-                        const addr = String(contactInfo.address);
-                        if (addr.includes('\n')) {
-                          return addr.split('\n').map((line, idx) => (
-                            <span key={idx} className='block whitespace-nowrap'>
-                              {line.trim()}
-                            </span>
-                          ));
-                        }
-                        if (addr.includes(',')) {
-                          const firstComma = addr.indexOf(',');
-                          const line1 = addr.slice(0, firstComma).trim();
-                          const line2 = addr.slice(firstComma + 1).trim();
-                          return (
-                            <>
-                              <span className='block whitespace-nowrap'>{line1}</span>
-                              <span className='block whitespace-nowrap'>{line2}</span>
-                            </>
-                          );
-                        }
-                        return <span>{addr}</span>;
-                      })()}
-                    </div>
-                  </li>
-                )}
-              </ul>
-            </div>
+            <ul className='flex flex-col gap-3 text-white/90 text-xs sm:text-sm xl:text-base'>
+              {contactInfo.email && (
+                <li className='flex items-center gap-2.5 min-w-0'>
+                  <Mail className='h-4 w-4 shrink-0 text-white/70' />
+                  <a
+                    href={`mailto:${contactInfo.email}`}
+                    className='leading-relaxed text-white/80 hover:text-white transition-colors duration-200 truncate'
+                  >
+                    {contactInfo.email}
+                  </a>
+                </li>
+              )}
+              {contactInfo.phone && (
+                <li className='flex items-center gap-2.5 min-w-0'>
+                  <Phone className='h-4 w-4 shrink-0 text-white/70' />
+                  <a
+                    href={`tel:${contactInfo.phone.replace(/[^0-9+]/g, '')}`}
+                    className='leading-relaxed text-white/80 hover:text-white transition-colors duration-200 truncate'
+                  >
+                    {contactInfo.phone}
+                  </a>
+                </li>
+              )}
+              {contactInfo.address && (
+                <li className='flex items-start gap-2.5 min-w-0'>
+                  <MapPin className='h-4 w-4 shrink-0 mt-0.5 sm:mt-1 text-white/70' />
+                  <div className='leading-relaxed text-white/80 flex flex-col min-w-0'>
+                    {(() => {
+                      const addr = String(contactInfo.address);
+                      if (addr.includes('\n')) {
+                        return addr.split('\n').map((line, idx) => (
+                          <span key={idx} className='block truncate sm:whitespace-nowrap'>
+                            {line.trim()}
+                          </span>
+                        ));
+                      }
+                      if (addr.includes(',')) {
+                        const firstComma = addr.indexOf(',');
+                        const line1 = addr.slice(0, firstComma).trim();
+                        const line2 = addr.slice(firstComma + 1).trim();
+                        return (
+                          <>
+                            <span className='block truncate sm:whitespace-nowrap'>{line1}</span>
+                            <span className='block truncate sm:whitespace-nowrap'>{line2}</span>
+                          </>
+                        );
+                      }
+                      return <span className='truncate sm:whitespace-nowrap'>{addr}</span>;
+                    })()}
+                  </div>
+                </li>
+              )}
+            </ul>
           </div>
 
           {/* GET NOTIFIED */}
-          <div className='md:col-span-5 lg:col-span-4 xl:col-span-3 2xl:col-span-3 flex flex-col'>
-
-
+          <div className='col-span-2 lg:col-span-3 flex flex-col'>
             <p className='text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 font-heading tracking-wide'>
               {subscription.title}
             </p>
@@ -319,11 +305,11 @@ const Footer = () => {
               <input
                 type='email'
                 placeholder='Enter your email'
-                className='w-full rounded-full bg-white text-(--text-primary) placeholder:text-(--text-secondary) h-12 sm:h-13 pl-4 sm:pl-5 pr-28 sm:pr-32 outline-none text-sm sm:text-base shadow-xs'
+                className='w-full rounded-full bg-white text-(--text-primary) placeholder:text-(--text-secondary) h-12 sm:h-13 pl-4 sm:pl-4.5 xl:pl-5 pr-24 xl:pr-28 outline-none text-xs sm:text-sm xl:text-base shadow-xs'
               />
               <button
                 type='button'
-                className='absolute right-1 top-1/2 -translate-y-1/2 rounded-full bg-(--text-primary) sm:bg-transparent text-white sm:text-(--text-primary) h-10 px-3.5 sm:px-4 text-xs sm:text-sm font-semibold transition-all duration-300 hover:opacity-90'
+                className='absolute right-1 top-1/2 -translate-y-1/2 rounded-full bg-(--text-primary) sm:bg-transparent text-white sm:text-(--text-primary) h-10 px-3 sm:px-3.5 xl:px-4 text-xs xl:text-sm font-semibold transition-all duration-300 hover:opacity-90'
               >
                 {subscription.buttonText}
               </button>
