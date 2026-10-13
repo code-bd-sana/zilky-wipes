@@ -4,6 +4,7 @@ import Testimonial from "@/components/home/home-page/testimonial";
 import Section1 from "@/components/home/home-page/section-1";
 import Section2 from "@/components/home/home-page/section-2";
 import ShopeWipes from "@/components/home/home-page/shop-wipes";
+import type { BackendProduct } from "@/components/dashboard/products/product-list";
 
 async function getPageData() {
   try {
@@ -33,10 +34,28 @@ async function getTopReviews() {
   }
 }
 
+async function getRecentProducts(): Promise<BackendProduct[]> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/products?limit=3&sortBy=createdAt&sortOrder=desc`,
+      {
+        next: { revalidate: 60, tags: ['products'] },
+      }
+    );
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data || [];
+  } catch (e) {
+    console.error("Failed to fetch recent products", e);
+    return [];
+  }
+}
+
 export default async function Home() {
-  const [pageData, topReviews] = await Promise.all([
+  const [pageData, topReviews, recentProducts] = await Promise.all([
     getPageData(),
-    getTopReviews()
+    getTopReviews(),
+    getRecentProducts(),
   ]);
   
   const sections = (pageData?.sections || []).reduce((acc: Record<string, Record<string, unknown>>, sec: { sectionKey: string; content: Record<string, unknown> }) => {
@@ -47,7 +66,7 @@ export default async function Home() {
   return (
     <>
       <HomeBanner data={sections['hero']} />
-      <ShopeWipes data={sections['shop']} />
+      <ShopeWipes data={sections['shop']} products={recentProducts} />
       <Section1 data={sections['feature-1']} />
       <Section2 data={sections['feature-2']} />
       <Testimonial data={sections['testimonial']} reviews={topReviews} />
