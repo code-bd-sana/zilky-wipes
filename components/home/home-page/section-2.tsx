@@ -51,13 +51,13 @@ export default function Section2({ data }: { data?: Record<string, unknown> }) {
               muted
               playsInline
               preload='auto'
-              className='w-full h-auto max-w-105 sm:max-w-115 md:max-w-120 lg:max-w-none aspect-37/45 sm:aspect-3/4 lg:aspect-37/45 rounded-[24px] sm:rounded-[36px] md:rounded-[48px] lg:rounded-[72px] xl:rounded-[96px] object-cover shadow-lg mx-auto'
+              className='w-full h-auto max-w-75 sm:max-w-90 md:max-w-100 lg:max-w-110 xl:max-w-120 2xl:max-w-140 aspect-37/45 rounded-[22px] sm:rounded-[30px] md:rounded-[38px] lg:rounded-[52px] xl:rounded-[68px] object-cover shadow-lg mx-auto'
             >
               <source src={mediaSrc} type='video/mp4' />
               Your browser does not support the video tag.
             </video>
           ) : (
-            <div className='relative w-full max-w-105 sm:max-w-115 md:max-w-120 lg:max-w-none aspect-37/45 sm:aspect-3/4 lg:aspect-37/45 rounded-[24px] sm:rounded-[36px] md:rounded-[48px] lg:rounded-[72px] xl:rounded-[96px] overflow-hidden shadow-lg mx-auto'>
+            <div className='relative w-full max-w-75 sm:max-w-90 md:max-w-100 lg:max-w-110 xl:max-w-120 2xl:max-w-140 aspect-37/45 rounded-[22px] sm:rounded-[30px] md:rounded-[38px] lg:rounded-[52px] xl:rounded-[68px] overflow-hidden shadow-lg mx-auto'>
               <Image src={mediaSrc} alt='Section Image' fill className='object-cover' sizes='(min-width: 1024px) 50vw, 100vw' />
             </div>
           )
