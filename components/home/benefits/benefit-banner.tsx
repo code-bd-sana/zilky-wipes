@@ -4,9 +4,15 @@ import Image from 'next/image';
 
 export default function BenefitBanner({ data }: { data?: Record<string, unknown> }) {
   const title = (data?.title as string) || 'A cleaner way to care.';
+  const rawSubtitle = data?.subtitle as string | undefined;
+  const subtitle = Array.isArray(data?.subtitle)
+    ? (data.subtitle as string[])
+    : typeof rawSubtitle === 'string' && rawSubtitle.trim() && rawSubtitle.trim() !== '-'
+      ? rawSubtitle.split('\n').map((line) => line.trim()).filter(Boolean)
+      : undefined;
+
   const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/video/4.mp4');
   const renderVideo = isVideo(mediaSrc);
-
 
   return (
     <section className='relative w-full h-[30vh] sm:h-[45vh] md:h-[60vh] lg:h-[75vh] xl:h-svh min-h-55 sm:min-h-80 md:min-h-115 lg:min-h-145 xl:min-h-175 overflow-hidden bg-[#1D3A5F]'>
@@ -44,8 +50,10 @@ export default function BenefitBanner({ data }: { data?: Record<string, unknown>
         <PageTitle
           align='start'
           title={title}
+          subtitle={subtitle}
           className='w-full'
-          titleClassName='text-white! text-[22px]! sm:text-[32px]! md:text-[44px]! lg:text-[54px]! xl:text-[72px]! 2xl:text-[100px]! font-bold! leading-[1.12]! sm:leading-[1.05]! md:leading-[1.02]! xl:leading-[1]! tracking-tight max-w-full drop-shadow-md lg:whitespace-nowrap'
+          titleClassName='text-white! text-[18px]! sm:text-[26px]! md:text-[36px]! lg:text-[46px]! xl:text-[60px]! 2xl:text-[80px]! font-bold! leading-[1.12]! sm:leading-[1.05]! md:leading-[1.02]! xl:leading-[1]! tracking-tight max-w-full drop-shadow-md lg:whitespace-nowrap'
+          subtitleClassName='text-white/90! font-heading! text-[14px]! sm:text-[17px]! md:text-[22px]! lg:text-[28px]! xl:text-[36px]! 2xl:text-[48px]! font-medium! leading-[1.3]! sm:leading-[1.28]! md:leading-[1.25]! xl:leading-[1.2]! max-w-3xl xl:max-w-4xl 2xl:max-w-5xl drop-shadow-sm pt-1.5! sm:pt-2.5! md:pt-3.5! lg:pt-4.5! 2xl:pt-6!'
         />
       </div>
     </section>

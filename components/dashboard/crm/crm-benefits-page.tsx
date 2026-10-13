@@ -236,6 +236,7 @@ export default function CrmBenefitsPage() {
                 points: selectedRow.points,
                 detailList: selectedRow.detailList,
                 statList: selectedRow.statList,
+                advantageList: selectedRow.advantageList,
                 imagePaths: selectedRow.imagePaths,
               }
             : null

@@ -62,8 +62,8 @@ export default function CRMDynamicEditModal({
   useEffect(() => {
     if (isOpen) {
       reset({
-        title: (initialContent?.title as string) || "",
-        subtitle: (initialContent?.subtitle as string) || "",
+        title: (initialContent?.title as string) === "-" ? "" : (initialContent?.title as string) || "",
+        subtitle: (initialContent?.subtitle as string) === "-" ? "" : (initialContent?.subtitle as string) || "",
         points: ((initialContent?.points as string[]) || []).map((p: string) => ({ value: p })),
         detailList: (initialContent?.detailList as { title: string; description: string }[]) || [],
         statList: (initialContent?.statList as { value: string; title: string; description: string }[]) || [],
@@ -136,7 +136,7 @@ export default function CRMDynamicEditModal({
   const showAdvantageList = sectionKey === "advantage" || advantageFields.length > 0;
   
   // Exclude subtitle for certain sections if desired, but we can just leave it optional
-  const hasSubtitle = sectionKey !== "hero" && sectionKey !== "footer-video" && sectionKey !== "advantage";
+  const hasSubtitle = sectionKey !== "footer-video" && sectionKey !== "advantage";
 
   return (
     <section
