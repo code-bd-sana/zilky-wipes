@@ -63,13 +63,13 @@ export default function SplitContentSection({
   return (
     <section
       className={cn(
-        "w-full relative overflow-x-hidden px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 mt-14 sm:mt-20 md:mt-28 lg:mt-36",
+        "w-full relative overflow-x-clip px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 mt-14 sm:mt-20 md:mt-28 lg:mt-36 pb-8 sm:pb-12 md:pb-16 lg:pb-20",
         sectionClassName,
       )}>
 
       <div
         className={cn(
-          "min-w-0 flex justify-between items-center gap-x-8 lg:gap-x-12 xl:gap-x-16 gap-y-8 sm:gap-y-12 md:gap-y-16",
+          "min-w-0 flex justify-between items-center gap-x-8 lg:gap-x-12 xl:gap-x-16 gap-y-8 sm:gap-y-12 md:gap-y-16 py-2 sm:py-4 md:py-6",
           desktopDirection === "content-media"
             ? "flex-col-reverse lg:flex-row"
             : "flex-col-reverse lg:flex-row-reverse",
@@ -95,7 +95,7 @@ export default function SplitContentSection({
           viewport={shouldAnimate ? { once: true, amount: 0.2 } : undefined}
           variants={mediaVariants}
           className={cn(
-            "min-w-0 w-full lg:w-1/2 flex items-center justify-center",
+            "min-w-0 w-full lg:w-1/2 flex items-center justify-center py-4 sm:py-6 md:py-8 lg:py-10",
             mediaClassName,
           )}>
           {media}
