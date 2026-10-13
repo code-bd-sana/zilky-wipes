@@ -162,7 +162,7 @@ export default function PageTitle({
           </motion.h2>
         )}
 
-        {subtitle?.length && (
+        {subtitle && subtitle.length > 0 ? (
           <motion.div
             variants={shouldAnimate ? subtitleVariants : undefined}
             className={cn(
@@ -178,7 +178,7 @@ export default function PageTitle({
             ))}
 
           </motion.div>
-        )}
+        ) : null}
       </div>
     </motion.section>
   );
