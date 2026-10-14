@@ -72,7 +72,7 @@ export default function ProductCard({
 
   return (
     <motion.div
-      className='group flex w-full cursor-pointer flex-col overflow-hidden'
+      className='group flex w-full max-w-85 sm:max-w-[320px] md:max-w-82.5 lg:max-w-none mx-auto cursor-pointer flex-col overflow-hidden'
       whileHover={
         shouldReduceMotion
           ? undefined
@@ -89,22 +89,22 @@ export default function ProductCard({
       }
       transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}>
       <div
-        className='relative flex h-80 sm:h-88 md:h-100 lg:h-115 xl:h-130 2xl:h-145 items-center justify-center px-3 sm:px-4 md:px-6 pb-3 md:pb-4 pt-4 md:pt-6 bg-(--shop-card-bg) rounded-2xl sm:rounded-3xl overflow-hidden'
+        className='relative flex aspect-square w-full items-center justify-center px-3 sm:px-4 md:px-5 pb-3 md:pb-4 pt-4 md:pt-5 bg-(--shop-card-bg) rounded-2xl sm:rounded-3xl overflow-hidden'
         onClick={handleOpenDetails}>
         {subscribeLabel ? (
-          <span className='absolute left-2.5 sm:left-3 md:left-4 top-2.5 sm:top-3 md:top-4 z-10 whitespace-nowrap rounded-[12px] sm:rounded-[15px] border border-(--shop-badge-border) bg-white px-2 sm:px-2.5 md:px-3 py-0.5 md:py-1 text-xs sm:text-sm md:text-base text-(--shop-badge-text) shadow-xs'>
+          <span className='absolute left-2.5 sm:left-3 md:left-3.5 top-2.5 sm:top-3 md:top-3.5 z-10 whitespace-nowrap rounded-full border border-(--shop-badge-border) bg-white px-2.5 py-0.5 text-[11px] sm:text-xs text-(--shop-badge-text) shadow-2xs font-medium'>
             {subscribeLabel}
           </span>
         ) : null}
 
-        <div className='relative h-[85%] w-[85%] transition-transform duration-300 ease-out group-hover:scale-108'>
+        <div className='relative h-[78%] w-[78%] transition-transform duration-300 ease-out group-hover:scale-106'>
           <Image
             src={image}
             alt={imageAlt}
             fill
             quality={100}
             loading={imageLoading}
-            sizes='(min-width: 1536px) 33vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'
+            sizes='(min-width: 1536px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'
             className='object-contain drop-shadow-md'
           />
         </div>
@@ -120,8 +120,8 @@ export default function ProductCard({
               handleAddToCart();
             }
           }}
-          className='absolute inset-x-3 sm:inset-x-4 md:inset-x-5 bottom-3 sm:bottom-4 md:bottom-5 z-10 flex h-11 sm:h-13 md:h-15 items-center justify-between rounded-full bg-white px-4 sm:px-5 md:px-6 text-(--text-primary) transition-all duration-200 hover:bg-neutral-50 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm'>
-          <span className='text-sm sm:text-base md:text-lg font-medium leading-none'>
+          className='absolute inset-x-2.5 sm:inset-x-3 md:inset-x-4 bottom-2.5 sm:bottom-3 md:bottom-3.5 z-10 flex h-9.5 sm:h-10 md:h-11 items-center justify-between rounded-full bg-white px-3.5 sm:px-4 md:px-5 text-(--text-primary) transition-all duration-200 hover:bg-neutral-50 hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-xs'>
+          <span className='text-xs sm:text-sm md:text-sm font-medium leading-none'>
             {hasMultipleVariants || hasSubscriptionOption
               ? 'Select Options'
               : stock === 0
@@ -130,16 +130,16 @@ export default function ProductCard({
                   ? 'Max Reached'
                   : 'Add to Cart'}
           </span>
-          <span className='text-2xl sm:text-3xl md:text-4xl leading-none'>+</span>
+          <span className='text-lg sm:text-xl md:text-2xl leading-none font-light'>+</span>
         </button>
       </div>
 
-      <div className='flex flex-col gap-1.5 sm:gap-2 pb-4 pt-2' onClick={handleOpenDetails}>
+      <div className='flex flex-col gap-1 sm:gap-1.5 pb-2 pt-2 sm:pt-2.5' onClick={handleOpenDetails}>
         <div>
-          <h3 className='text-lg sm:text-xl md:text-2xl font-semibold leading-snug text-(--text-primary)'>
+          <h3 className='text-base sm:text-lg md:text-xl font-semibold leading-snug text-(--text-primary) line-clamp-1'>
             {name}
           </h3>
-          <p className='mt-0.5 text-lg sm:text-xl md:text-2xl text-(--text-primary) font-medium'>
+          <p className='mt-0.5 text-base sm:text-lg md:text-xl text-(--text-primary) font-medium'>
             ${price.toFixed(2)}
           </p>
         </div>
@@ -149,7 +149,7 @@ export default function ProductCard({
             {tags.map((tag, index) => (
               <span
                 key={`${tag}-${index}`}
-                className='rounded-full border border-(--text-primary) bg-transparent px-2 sm:px-2.5 py-0.5 text-xs sm:text-sm font-medium text-(--text-primary)'>
+                className='rounded-full border border-(--text-primary) bg-transparent px-2 sm:px-2.5 py-0.5 text-[11px] sm:text-xs font-medium text-(--text-primary)'>
                 {tag}
               </span>
             ))}

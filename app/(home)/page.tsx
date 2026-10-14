@@ -37,7 +37,7 @@ async function getTopReviews() {
 async function getRecentProducts(): Promise<BackendProduct[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products?limit=3&sortBy=createdAt&sortOrder=desc`,
+      `${process.env.NEXT_PUBLIC_API_URL}/products?limit=4&sortBy=createdAt&sortOrder=desc`,
       {
         next: { revalidate: 60, tags: ['products'] },
       }

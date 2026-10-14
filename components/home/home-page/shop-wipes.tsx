@@ -14,7 +14,7 @@ export default function ShopeWipes({ data, products = [] }: ShopeWipesProps) {
     'You use it every day. You’ve just never been given a reason to question it. Until now!',
   ];
 
-  const recentProducts = products.slice(0, 3);
+  const recentProducts = products.slice(0, 4);
 
   return (
     <section className='w-full px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12.5 2xl:px-16 mt-14 sm:mt-20 md:mt-28 lg:mt-32'>
@@ -31,7 +31,7 @@ export default function ShopeWipes({ data, products = [] }: ShopeWipesProps) {
           <p className='text-base sm:text-lg'>No products available at the moment.</p>
         </div>
       ) : (
-        <div className='mt-8 sm:mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-8 xl:gap-10 2xl:gap-10'>
+        <div className='mt-8 sm:mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-6 xl:gap-8'>
           {recentProducts.map((product, index) => {
             const minPrice = product.variants?.length
               ? Math.min(...product.variants.map((v) => v.price))

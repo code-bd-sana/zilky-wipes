@@ -72,7 +72,7 @@ export default async function ProductDetailsPage({
   const productCategoryIds = product.categories?.map(c => c.id) || [];
   const relatedProducts = allProducts.filter(p => 
     p.id !== product.id && p.categories?.some(c => productCategoryIds.includes(c.id))
-  ).slice(0, 3); // max 3 related products
+  ).slice(0, 4); // max 4 related products for 4-column 2xl grid
 
   return (
     <>

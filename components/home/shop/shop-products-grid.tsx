@@ -1,5 +1,6 @@
 import ProductCard from "@/components/shared/product-card/product-card";
 import type { BackendProduct } from "@/components/dashboard/products/product-list";
+import { getMediaUrl } from "@/lib/utils";
 
 type ShopProductsGridProps = {
   products: BackendProduct[];
@@ -15,7 +16,7 @@ export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
           </p>
         </div>
       ) : (
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-6 sm:gap-8 lg:gap-8 xl:gap-10 2xl:gap-10'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-6 xl:gap-8'>
           {products.map((product, index) => {
             // Find min price across variants
             const minPrice = product.variants?.length 
@@ -39,13 +40,14 @@ export default function ShopProductsGrid({ products }: ShopProductsGridProps) {
             const firstVariantId = product.variants?.[0]?.id;
             const hasMultipleVariants = (product.variants?.length || 0) > 1;
             const stock = product.variants?.[0]?.stock || 0;
+            const imageSrc = getMediaUrl(product.images?.[0]) || product.images?.[0] || "/ZilkyWipes/p.png";
             
             return (
               <ProductCard
                 key={product.id}
                 productId={product.id}
                 variantId={firstVariantId}
-                image={product.images?.[0] || ""}
+                image={imageSrc}
                 imageAlt={product.name}
                 name={product.name}
                 price={minPrice}
