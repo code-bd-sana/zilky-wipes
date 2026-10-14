@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetMe } from "@/hooks/useAuth";
 import { ChevronDown, ShoppingBag } from "lucide-react";
+import { useCartStore } from "@/store/useCartStore";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -31,6 +32,17 @@ export default function Navbar() {
   
   const { data: meData } = useGetMe();
   const user = meData?.data;
+
+  const cartItems = useCartStore((state) => state.items);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const totalCartCount = mounted
+    ? cartItems.reduce((acc, item) => acc + item.quantity, 0)
+    : 0;
 
   const shouldReduceMotion = useReducedMotion();
   const shouldAnimate = !shouldReduceMotion;
@@ -292,19 +304,31 @@ export default function Navbar() {
             </motion.div>
 
             <div className='flex items-center justify-end gap-2 sm:gap-2.5 md:gap-3'>
-              {user && (
-                <motion.div {...ctaMotionProps}>
-                  <button
-                    type='button'
-                    onClick={() => setIsCartOpen(true)}
-                    className='flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm md:text-base lg:text-lg font-medium leading-none rounded-full bg-white px-3 sm:px-4 md:px-5 lg:px-6 py-2 sm:py-2.5 md:py-3 text-[#1D3A5F] transition-all hover:bg-[#f7fbff] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D3A5F]/30'
-                    aria-label='Open Cart'
-                  >
-                    <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
-                    <span className="hidden sm:inline">Cart</span>
-                  </button>
-                </motion.div>
-              )}
+              <motion.div {...ctaMotionProps}>
+                <button
+                  type='button'
+                  onClick={() => setIsCartOpen(true)}
+                  className='relative flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm md:text-base lg:text-lg font-medium leading-none rounded-full bg-white px-3 sm:px-4 md:px-5 lg:px-6 py-2 sm:py-2.5 md:py-3 text-[#1D3A5F] transition-all hover:bg-[#f7fbff] hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D3A5F]/30 cursor-pointer'
+                  aria-label={`Open Cart (${totalCartCount} items)`}
+                >
+                  <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span className="hidden sm:inline">Cart</span>
+                  <AnimatePresence>
+                    {mounted && totalCartCount > 0 && (
+                      <motion.span
+                        key='cart-count-badge'
+                        initial={{ scale: 0.6, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.6, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className='absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 flex h-4.5 min-w-4.5 sm:h-5 sm:min-w-5 items-center justify-center rounded-full bg-[#1D3A5F] px-1 text-[10px] sm:text-xs font-bold text-white shadow-xs ring-2 ring-white leading-none'
+                      >
+                        {totalCartCount > 99 ? '99+' : totalCartCount}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </button>
+              </motion.div>
 
               {!user ? (
                 <motion.div {...ctaMotionProps}>
