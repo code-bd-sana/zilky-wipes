@@ -83,8 +83,7 @@ export default async function ProductDetailsPage({
       {relatedProducts.length > 0 && (
         <ShopListingSection
           titleContent='Related Products'
-          footerImageSrc='/home/shop/shop-details.png'
-          footerImageAlt='Related products footer image'
+          showFooterMedia={false}
           products={relatedProducts}
           categories={categories.filter(c => productCategoryIds.includes(c.id))} // Only pass relevant category
         />

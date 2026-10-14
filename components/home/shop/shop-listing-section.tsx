@@ -17,6 +17,7 @@ type ShopListingSectionProps = {
   footerImageAlt?: string;
   products?: BackendProduct[];
   categories?: BackendCategory[];
+  showFooterMedia?: boolean;
 };
 
 export default function ShopListingSection({
@@ -25,6 +26,7 @@ export default function ShopListingSection({
   footerImageAlt,
   products = [],
   categories = [],
+  showFooterMedia = true,
 }: ShopListingSectionProps) {
   const [activePurchaseType, setActivePurchaseType] = useState<string>('one-time');
 
@@ -58,7 +60,9 @@ export default function ShopListingSection({
         titleContent={titleContent}
       />
       <ShopProductsGrid products={filteredProducts} />
-      <ShopVideoSection imageSrc={footerImageSrc} imageAlt={footerImageAlt} />
+      {showFooterMedia && (
+        <ShopVideoSection imageSrc={footerImageSrc} imageAlt={footerImageAlt} />
+      )}
     </>
   );
 }
