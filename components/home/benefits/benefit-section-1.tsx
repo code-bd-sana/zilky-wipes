@@ -8,9 +8,11 @@ import Link from "next/link";
 export default function BenefitSection1({
   data,
   mobileDirection = "content-media",
+  hideMediaOnMobile = false,
 }: {
   data?: Record<string, unknown>;
   mobileDirection?: "content-media" | "media-content";
+  hideMediaOnMobile?: boolean;
 }) {
   const title = (data?.title as string) || 'Why ZilkyWipes Are Superior to Everything Else';
   const subtitle = (data?.subtitle as string)?.split('\n') || [
@@ -40,6 +42,7 @@ export default function BenefitSection1({
         desktopDirection='content-media'
         mobileDirection={mobileDirection}
         sectionClassName='mt-14 sm:mt-20 md:mt-28 lg:mt-36'
+        mediaClassName={hideMediaOnMobile ? "hidden lg:flex" : undefined}
         content={
           <>
             <PageTitle

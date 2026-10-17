@@ -88,7 +88,10 @@ export default async function Home() {
   return (
     <>
       <HomeBanner data={sections['hero']} />
-      <BenefitSection1 data={sections['section-1'] || benefitsSections['section-1']} />
+      <BenefitSection1
+        data={sections['section-1'] || benefitsSections['section-1']}
+        hideMediaOnMobile={true}
+      />
       <ZilkyAdvantage data={sections['advantage'] || benefitsSections['advantage']} />
       <ShopeWipes data={sections['shop']} products={recentProducts} />
       <Section1 data={sections['feature-1']} />
