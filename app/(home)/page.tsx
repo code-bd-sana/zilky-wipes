@@ -4,6 +4,8 @@ import Testimonial from "@/components/home/home-page/testimonial";
 import Section1 from "@/components/home/home-page/section-1";
 import Section2 from "@/components/home/home-page/section-2";
 import ShopeWipes from "@/components/home/home-page/shop-wipes";
+import BenefitSection1 from "@/components/home/benefits/benefit-section-1";
+import ZilkyAdvantage from "@/components/home/benefits/zilky-advantage";
 import type { BackendProduct } from "@/components/dashboard/products/product-list";
 
 async function getPageData() {
@@ -16,6 +18,20 @@ async function getPageData() {
     return json.data;
   } catch (e) {
     console.error("Failed to fetch page data", e);
+    return null;
+  }
+}
+
+async function getBenefitsPageData() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages/benefits`, {
+      next: { revalidate: 60, tags: ['page-benefits'] }
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.data;
+  } catch (e) {
+    console.error("Failed to fetch benefits page data", e);
     return null;
   }
 }
@@ -52,8 +68,9 @@ async function getRecentProducts(): Promise<BackendProduct[]> {
 }
 
 export default async function Home() {
-  const [pageData, topReviews, recentProducts] = await Promise.all([
+  const [pageData, benefitsPageData, topReviews, recentProducts] = await Promise.all([
     getPageData(),
+    getBenefitsPageData(),
     getTopReviews(),
     getRecentProducts(),
   ]);
@@ -63,9 +80,16 @@ export default async function Home() {
     return acc;
   }, {} as Record<string, Record<string, unknown>>);
 
+  const benefitsSections = (benefitsPageData?.sections || []).reduce((acc: Record<string, Record<string, unknown>>, sec: { sectionKey: string; content: Record<string, unknown> }) => {
+    acc[sec.sectionKey] = sec.content;
+    return acc;
+  }, {} as Record<string, Record<string, unknown>>);
+
   return (
     <>
       <HomeBanner data={sections['hero']} />
+      <BenefitSection1 data={sections['section-1'] || benefitsSections['section-1']} />
+      <ZilkyAdvantage data={sections['advantage'] || benefitsSections['advantage']} />
       <ShopeWipes data={sections['shop']} products={recentProducts} />
       <Section1 data={sections['feature-1']} />
       <Section2 data={sections['feature-2']} />
