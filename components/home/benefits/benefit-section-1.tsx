@@ -5,7 +5,13 @@ import { isVideo, getMediaUrl } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function BenefitSection1({ data }: { data?: Record<string, unknown> }) {
+export default function BenefitSection1({
+  data,
+  mobileDirection = "content-media",
+}: {
+  data?: Record<string, unknown>;
+  mobileDirection?: "content-media" | "media-content";
+}) {
   const title = (data?.title as string) || 'Why ZilkyWipes Are Superior to Everything Else';
   const subtitle = (data?.subtitle as string)?.split('\n') || [
     "Discover the revolutionary benefits that make ZilkyWipes the ultimate ",
@@ -32,6 +38,7 @@ export default function BenefitSection1({ data }: { data?: Record<string, unknow
     <section>
       <SplitContentSection
         desktopDirection='content-media'
+        mobileDirection={mobileDirection}
         sectionClassName='mt-14 sm:mt-20 md:mt-28 lg:mt-36'
         content={
           <>

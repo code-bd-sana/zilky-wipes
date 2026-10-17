@@ -33,6 +33,7 @@ export default function SubsSection1({ data }: { data?: Record<string, unknown> 
     <section>
       <SplitContentSection
         desktopDirection='content-media'
+        mobileDirection='content-media'
         sectionClassName='mt-14 sm:mt-20 md:mt-28 lg:mt-36'
         innerClassName='gap-x-8 lg:gap-x-14 xl:gap-x-20'
         content={

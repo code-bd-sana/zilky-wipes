@@ -8,6 +8,7 @@ type SplitContentSectionProps = {
   content: ReactNode;
   media: ReactNode;
   desktopDirection?: "content-media" | "media-content";
+  mobileDirection?: "content-media" | "media-content";
   sectionClassName?: string;
   innerClassName?: string;
   contentClassName?: string;
@@ -18,6 +19,7 @@ export default function SplitContentSection({
   content,
   media,
   desktopDirection = "content-media",
+  mobileDirection = "media-content",
   sectionClassName,
   innerClassName,
   contentClassName,
@@ -70,9 +72,9 @@ export default function SplitContentSection({
       <div
         className={cn(
           "min-w-0 flex justify-between items-center gap-x-8 lg:gap-x-12 xl:gap-x-16 gap-y-8 sm:gap-y-12 md:gap-y-16 py-2 sm:py-4 md:py-6",
-          desktopDirection === "content-media"
-            ? "flex-col-reverse lg:flex-row"
-            : "flex-col-reverse lg:flex-row-reverse",
+          mobileDirection === "content-media"
+            ? (desktopDirection === "content-media" ? "flex-col lg:flex-row" : "flex-col lg:flex-row-reverse")
+            : (desktopDirection === "content-media" ? "flex-col-reverse lg:flex-row" : "flex-col-reverse lg:flex-row-reverse"),
           innerClassName,
         )}>
         {/* Content */}

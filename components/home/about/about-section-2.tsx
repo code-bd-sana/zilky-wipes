@@ -20,6 +20,7 @@ export default function AboutSection2({ data }: { data?: Record<string, unknown>
     <section>
       <SplitContentSection
         desktopDirection='media-content'
+        mobileDirection='content-media'
         sectionClassName='mt-14 sm:mt-20 md:mt-28 lg:mt-36'
         content={
           <>
