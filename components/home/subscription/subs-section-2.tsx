@@ -1,3 +1,5 @@
+"use client";
+
 import PageTitle from '@/components/shared/page-title/page-title';
 import SplitContentSection from '@/components/shared/split-content-section';
 import { Button } from '@/components/ui/button';
@@ -12,9 +14,15 @@ export default function SubsSection2({ data }: { data?: Record<string, unknown> 
     'You can change this anytime.',
   ];
 
-  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308869.png');
+  const mediaSrc = getMediaUrl((data?.imagePaths as string[])?.[0] || '/ZilkyWipes/1000308887.png');
   const renderVideo = isVideo(mediaSrc);
 
+  const handleScrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
   return (
     <section>
@@ -35,11 +43,13 @@ export default function SubsSection2({ data }: { data?: Record<string, unknown> 
                   Shop ZilkyWipes
                 </Button>
               </Link>
-              <Link href='/subscription' className='w-full sm:w-auto'>
-                <Button className='w-full sm:w-auto bg-white border-2 border-(--text-primary) text-(--text-primary) px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg md:text-xl rounded-full shadow-sm hover:bg-(--text-primary) hover:text-white hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300 cursor-pointer'>
-                  Subscribe & Save
-                </Button>
-              </Link>
+              <Button
+                type='button'
+                onClick={handleScrollToTop}
+                className='w-full sm:w-auto bg-white border-2 border-(--text-primary) text-(--text-primary) px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg md:text-xl rounded-full shadow-sm hover:bg-(--text-primary) hover:text-white hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-(--text-primary)/40 transition-all duration-300 cursor-pointer'
+              >
+                Subscribe & Save
+              </Button>
             </div>
           </>
         }
