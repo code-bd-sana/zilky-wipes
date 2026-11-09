@@ -8,7 +8,7 @@ import {
   FileText,
   GalleryVerticalEnd,
   ListTree,
-  Network,
+  // Network,
   Package,
   Search,
   Settings,
@@ -16,7 +16,7 @@ import {
   Users,
   X,
   LibraryBig,
-  FileChartLine,
+  // FileChartLine,
   LogOut,
   Ticket,
   Truck,
@@ -76,12 +76,12 @@ const operationItems: SidebarItem[] = [
     href: "/dashboard/feedback",
     icon: Star,
   },
-  {
-    label: "Analytics",
-    key: "analytics",
-    href: "/dashboard/analytics",
-    icon: FileChartLine,
-  },
+  // {
+  //   label: "Analytics",
+  //   key: "analytics",
+  //   href: "/dashboard/analytics",
+  //   icon: FileChartLine,
+  // },
   {
     label: "Coupons",
     key: "coupons",
@@ -97,12 +97,12 @@ const operationItems: SidebarItem[] = [
 ];
 
 const otherItems: SidebarItem[] = [
-  {
-    label: "Integration",
-    key: "integration",
-    href: "/dashboard/integration",
-    icon: Network,
-  },
+  // {
+  //   label: "Integration",
+  //   key: "integration",
+  //   href: "/dashboard/integration",
+  //   icon: Network,
+  // },
   {
     label: "CRM",
     key: "crm",
